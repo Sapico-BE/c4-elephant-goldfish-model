@@ -55,12 +55,14 @@ You write only:
 *   `docs/architecture/c4-tasks.md` (the ledger);
 *   `docs/architecture/decisions/*.answers.md`, append-only;
 *   the `**Status:**` line of a level document;
-*   replacement text the user approved at a resolve gate, applied verbatim.
+*   replacement text the user approved at a resolve gate, applied verbatim;
+*   under direct dispatch, each reviewer's returned findings, saved verbatim to
+    the scope's review folder (`docs/architecture/reviews/<stem>/`).
 
 Every other file is written by a round subagent or by the review skills. You do
 not draft documents, judge review findings, or write code. You may run
-read-only commands such as `git diff --name-only` for path checks; the
-orchestrator never runs builds or tests.
+read-only commands such as `git status` and `git hash-object` for path checks;
+the orchestrator never runs builds or tests.
 
 Follow `resources/execution_instructions.md`, including its `egm-c4`
 exceptions. Every gate asks one question; only a grilling round may show
@@ -100,10 +102,18 @@ directory does not move them.
 
 ## Next task
 
-Run the next ready task as `references/ledger.md` defines it, or the task the
-input forced. Set it `in-progress` before dispatching. A `blocked` task waits
-until the user says to retry it. Add tasks only by the ledger's adding rules;
-tasks a round proposes in `new_tasks` are added only after the user confirms.
+On start, if a task is `in-progress` (a session ended mid-task), resume it
+first. Rerun a round task in a fresh subagent from its files (a `grill` reruns
+from the tree and answers), rerun a `review` loop, or ask an `approve` again.
+Outputs the interrupted round had already written are re-validated: show the
+user any path in the first path-check snapshot that is outside the task's
+declared outputs and your own files, then check the new result.
+
+Otherwise run the next ready task as `references/ledger.md` defines it, or the
+task the input forced. Set it `in-progress` before dispatching. A `blocked`
+task waits until the user says to retry it. Add tasks by the ledger's adding
+and superseding rules (`references/ledger.md`); tasks a round proposes in
+`new_tasks` are added only after the user confirms.
 
 Route by scope:
 
@@ -128,9 +138,12 @@ Route by scope:
     invalid result once with a fresh subagent; if the retry is also invalid,
     mark the task `blocked` with a note and tell the user. A round that returns
     `outcome: blocked` is `blocked` too.
-4.  **Path check.** Run `git diff --name-only` and `git status --porcelain`
-    before dispatch and after every round, and compare the paths the round
-    changed with its declared output files. Show any other path to the user and
+4.  **Path check.** Before dispatch (after setting the task `in-progress` and
+    after your own writes), snapshot
+    `git status --porcelain --untracked-files=all` and the `git hash-object` of
+    every listed path. Take the same snapshot after every round. A path that
+    is new to the list, changed status, or changed hash was changed by the
+    round; compare these paths with its declared output files. Show any other path to the user and
     ask whether to keep or revert it before you use the result.
 5.  **Present.** Show the `summary` (at most five lines). For contradictions,
     stop the current work, name each one, and offer to reopen the contradicted
@@ -175,10 +188,10 @@ For C1 (`docs/architecture/c1-context.md`, playbook
     decision files and approved upper documents, with `**Status:** Draft`, and
     updates `GLOSSARY.md` and `docs/adr/`.
 3.  **Section approval.** Show the draft one section at a time. Append each
-    requested change to the answers file and add a `revise` task; a change that
-    needs a new decision gets a `grill` task first.
-4.  **Readiness.** Dispatch a `readiness` round. Gaps add a `revise` task, then
-    a new `readiness`.
+    requested change to the answers file, then add tasks by the ledger's
+    adding and superseding rules (`references/ledger.md`).
+4.  **Readiness.** Dispatch a `readiness` round. Gaps add tasks by the
+    ledger's adding and superseding rules (`references/ledger.md`).
 5.  **Goldfish review.** Read `egm-review-loop` (`../egm-review-loop/SKILL.md`
     from this skill's folder) and follow it in this thread, not through a
     Skill tool, with:
@@ -197,15 +210,18 @@ For C1 (`docs/architecture/c1-context.md`, playbook
         findings across runs. Name it as the report location to the loop, the
         synthesizer and every resolve round.
 
-    In delegated mode each loop round's resolution is a `resolve` round in a
-    fresh subagent that follows `egm-resolve` through its report and stops
-    before the gate. You show the gate, apply replacement text the user
-    approves verbatim, and add a `revise` task for findings that need more.
-    The `review` task is `done` when the loop ends.
+    Under direct dispatch (no synthesizer, as in Claude Cowork), save each
+    reviewer's returned findings verbatim as a file in the review folder; the
+    resolve round reads them there. In delegated mode each loop round's
+    resolution is a `resolve` round in a fresh subagent that follows
+    `egm-resolve` through its report and stops before the gate. You show the
+    gate and apply replacement text the user approves verbatim. Findings that
+    need more add tasks by the ledger's adding and superseding rules
+    (`references/ledger.md`). The `review` task is `done` when the loop ends.
 6.  **Approve.** Ask for explicit approval. On approval, set
     `**Status:** Approved`, mark `approve` `done`, and add the next tasks by the
-    ledger's adding rules. On rejection, add `revise` (or `grill` if a new
-    decision is needed), then `readiness`, `review` and a new `approve`.
+    ledger's adding rules. On rejection, add tasks by the ledger's adding and
+    superseding rules (`references/ledger.md`).
 
 C2 and C3 documents and the C4 step are available after a later update.
 

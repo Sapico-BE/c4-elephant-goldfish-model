@@ -50,11 +50,12 @@ Decision files are `docs/architecture/decisions/<stem>.tree.md` and
 ## Next ready task
 
 The first `todo` or `stale` task, in ID order, whose dependencies are all
-`done`.
+`done`. An `in-progress` task left by an interrupted session is resumed first.
 
 ## Status mapping
 
-Document Status follows the scope's `approve` task:
+Document Status follows the scope's highest-ID `approve` task; `approve` in
+the table means that task:
 
 | Document `**Status:**` | Ledger state |
 | :--------------------- | :----------- |
@@ -81,12 +82,20 @@ The orchestrator adds tasks only by these rules:
     the C4 grill, draft, readiness, review and approve tasks for the build plan.
 *   Build plan approved → per slice: implement, merge, verify, code-review.
 *   Section changes or review findings that need more than an approved
-    replacement → `revise`, then a new `readiness` and `review`. A change that
-    needs a new decision → `grill` first.
+    replacement → `revise`, then a new `readiness`, `review` and `approve`. A
+    change that needs a new decision → `grill` first.
 *   Blocking code-review findings or failed verification → `fix`, then `merge`,
     `verify` and `code-review` again.
 *   User rejects at `approve` → `revise` (or `grill` if a new decision is
     needed), then `readiness`, `review` and a new `approve`.
+
+**Superseding.** When a `revise` (or `grill`) chain is added for a scope, set
+that scope's pending `readiness`, `review` and `approve` tasks (`todo`,
+`stale`, or the `approve` the user just rejected) to `done` with Notes
+`superseded by Txx`, naming the new task of the same type. Point any task that
+depended on a superseded task at its replacement. Because the Status mapping
+reads the highest-ID `approve` task, a superseded `approve` never sets a
+document to `Approved`.
 
 Tasks a round proposes in `new_tasks` are added only after the user confirms.
 

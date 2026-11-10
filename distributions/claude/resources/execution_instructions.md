@@ -53,5 +53,6 @@ override the rules above where they conflict.
 *   **Orchestrator writes**: The main session writes only the files in the
     orchestrator row of the Roles table: the ledger
     `docs/architecture/c4-tasks.md`, the append-only answers files in
-    `docs/architecture/decisions/`, `**Status:**` lines, and replacement text
-    the user approved at a resolve gate, applied verbatim.
+    `docs/architecture/decisions/`, `**Status:**` lines, replacement text the
+    user approved at a resolve gate, applied verbatim, and reviewer findings
+    saved verbatim to the scope's review folder under direct dispatch.

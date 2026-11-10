@@ -123,7 +123,9 @@ upper-level contradiction; otherwise return `complete`.
 ## `resolve` round
 
 **Inputs:** `egm-resolve` with `StopBeforeGate` set, the review folder
-`docs/architecture/reviews/<scope>/` and its `goldfish_review_report.md`, the
+`docs/architecture/reviews/<scope>/` and its `goldfish_review_report.md` (under
+direct dispatch, the reviewer findings the orchestrator saved verbatim in that
+folder), the
 target document.
 
 **Instructions:** Follow `egm-resolve` through its report and stop before the
