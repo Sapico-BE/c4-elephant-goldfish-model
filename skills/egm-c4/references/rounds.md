@@ -19,6 +19,10 @@ Read nothing else; write only your output files; return one JSON result
 matching references/round-result.schema.json.
 ```
 
+Every brief gives concrete paths for the decision files, review folder and
+document. A round never derives them from the scope. `<scope>` below means the
+decision-file stem from the scope mapping in `ledger.md`.
+
 ## Result fields
 
 | Field | Content |
@@ -178,8 +182,11 @@ or cannot be resolved without changing a slice's intent.
 **Inputs:** `docs/architecture/c4-build-plan.md` (build and test commands), the
 integration branch.
 
-**Instructions:** Run the build plan's build and test commands. Return pass or
-fail with a short failure summary in `summary`. Do not fix anything.
+**Instructions:** Run the build plan's build and test commands. Do not fix
+anything. Return `outcome: complete` with a `summary` that begins `PASS` or
+`FAIL: <short failure summary>`. On `FAIL`, propose a `fix` task for the slice
+in `new_tasks`; after the user confirms it, the orchestrator adds `fix`,
+`merge`, `verify` and `code-review` as `ledger.md` describes.
 
 **Output files:** build outputs only.
 
@@ -192,8 +199,10 @@ cannot run in this environment; use `blocked` if nothing can run.
 code standards the build plan names.
 
 **Instructions:** Read-only. Check the diff against the code standards, the C3
-interfaces and the ticket. Return blocking findings in `summary` and as a `fix`
-task in `new_tasks`.
+interfaces and the ticket. Return `outcome: complete` with a `summary` that
+begins `APPROVED` or `BLOCKING: <findings>`. Blocking findings propose a `fix`
+task for the slice in `new_tasks`; the orchestrator then adds `fix`, `merge`,
+`verify` and `code-review` as `ledger.md` describes.
 
 **Output files:** none.
 
@@ -285,12 +294,12 @@ A blocked round:
   "contradictions": [],
   "new_tasks": [
     {
-      "scope": "C4:slice-02",
-      "task": "fix",
-      "depends_on": ["T12"],
-      "reason": "Ticket lists no allowed paths for the test directory."
+      "scope": "C4",
+      "task": "revise",
+      "depends_on": [],
+      "reason": "The build plan's slice 02 ticket lacks allowed paths."
     }
   ],
-  "summary": "Cannot start: the ticket has no allowed paths."
+  "summary": "Cannot start: the slice 02 ticket in the build plan has no allowed paths."
 }
 ```

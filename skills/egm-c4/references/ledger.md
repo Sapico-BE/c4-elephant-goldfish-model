@@ -16,6 +16,22 @@ orchestrator is its only writer.
 One `grill` task spans all rounds for its scope; `Notes` counts them. A
 `review` task spans one `egm-review-loop` run.
 
+## Scope mapping
+
+The orchestrator derives file names from the ledger `Scope` with this table and
+writes the concrete paths into each brief.
+
+| Ledger Scope | Decision-file stem | Review folder | Document |
+| :----------- | :----------------- | :------------ | :------- |
+| `C1` | `c1` | `docs/architecture/reviews/c1/` | `docs/architecture/c1-context.md` |
+| `C2` | `c2` | `docs/architecture/reviews/c2/` | `docs/architecture/c2-containers.md` |
+| `C3:<container>` | `c3-<container>` | `docs/architecture/reviews/c3-<container>/` | `docs/architecture/c3-<container>.md` |
+| `C4` | `c4-plan` | `docs/architecture/reviews/c4-plan/` | `docs/architecture/c4-build-plan.md` |
+| `C4:slice-NN` | none | none | `docs/architecture/slices/NN-<slice>.md` |
+
+Decision files are `docs/architecture/decisions/<stem>.tree.md` and
+`<stem>.answers.md`.
+
 ## Example after C1 approval
 
 | ID | Scope | Task | Status | Depends on | Output | Notes |
