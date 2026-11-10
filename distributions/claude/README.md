@@ -15,7 +15,7 @@
 
 Develop ideas with context and review documents with fresh eyes. EGM is an open-source plugin for AI assistants.
 
-This repository is a fork of the original [Elephant-Goldfish Model](https://github.com/google/elephant-goldfish-model). It adds the `egm-c4` skill, which takes a greenfield project through the [C4 model](https://c4model.com), and it replaces the original brainstorm and draft skills. The plugin is named `c4`, so its commands start with `/c4:` and do not clash with an installed original `egm` plugin.
+This repository is a fork of the original [Elephant-Goldfish Model](https://github.com/google/elephant-goldfish-model). It adds the `egm-c4` skill, which takes a greenfield project through the [C4 model](https://c4model.com), and it replaces the original brainstorm and draft skills. The plugin is named `c4` and appears as **c4 Elephant-Goldfish Model** in plugin lists, so its commands start with `/c4:` and it is easy to tell apart from an installed original `egm` plugin.
 
 **Elephant** holds your project context and drafts the specification. **Goldfish** reviewers examine the draft and referenced source material without the earlier conversation, helping expose unstated assumptions and blind spots. **You** make the architectural trade-offs and approve the specification before implementing.
 
@@ -49,7 +49,7 @@ codex plugin marketplace add Sapico-BE/c4-elephant-goldfish-model
 codex plugin add c4@c4
 ```
 
-Start a new session after installation. For **Claude Cowork** and **ChatGPT Work**, see the [setup guide](docs/harnesses.md).
+Start a new session after installation. The plugin shows up as **c4 Elephant-Goldfish Model**. For **Claude Cowork** and **ChatGPT Work**, see the [setup guide](docs/harnesses.md).
 
 ## Try your first design
 
