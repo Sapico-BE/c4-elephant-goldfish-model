@@ -87,8 +87,8 @@ ask one plain-text question and wait for the answer. Preserve the skill's
 readiness and section approval gates; tool unavailability is not approval.
 
 Link generated artifacts with absolute-path Markdown links such as
-`[design draft](/absolute/project/design_draft.md)`. For paths containing
-spaces use `[design draft](</absolute/my project/design_draft.md>)`.
+`[C1 context](/absolute/project/docs/architecture/c1-context.md)`. For paths containing
+spaces use `[C1 context](</absolute/my project/docs/architecture/c1-context.md>)`.
 Do not use `file://` links in Codex chat.
 
 ## Verification
