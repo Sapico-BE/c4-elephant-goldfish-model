@@ -192,3 +192,13 @@ def test_resolve_can_stop_before_gate() -> None:
 
 def test_c4_passes_report_dir() -> None:
   assert "ReportDir" in flat(SKILL / "SKILL.md")
+
+
+def test_delegated_round_reports_and_report_dir() -> None:
+  loop = flat(ROOT / "skills/egm-review-loop/SKILL.md")
+  assert "goldfish_review_report.round-" in loop
+  assert "Status: resolved" in loop
+  assert "goldfish_review_report.round-" in flat(
+      SKILL / "references/rounds.md")
+  assert "ReportDir" in flat(ROOT / "skills/egm-resolve/SKILL.md")
+  assert "ReportDir" in flat(ROOT / "docs/designs/review.md")

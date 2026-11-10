@@ -35,6 +35,8 @@ The caller or orchestration driver provides exactly these parameters:
 *   **`LineRange`**: Exact line numbers (or `full file`).
 *   **`FindingsList`**: Aggregated flat list of findings from Goldfish
     reviewers.
+*   **`ReportDir`**: Optional. Folder for the report. Default: the working
+    directory or your harness's artifact directory, as in Step 3.
 *   **`StopBeforeGate`**: Optional; default `false`. When `true`, stop after
     Step 3 (see the end of Step 3). When omitted or `false`, run every step.
 
@@ -86,7 +88,8 @@ Apply these rules:
 ### Step 3: Report Fixes
 
 Construct the final report and save it named
-`goldfish_review_report.md` in the working directory (or your harness's artifact directory, if it has one)
+`goldfish_review_report.md` in `ReportDir` if the caller gave one, otherwise in
+the working directory (or your harness's artifact directory, if it has one),
 using your file-writing tool. Use this layout:
 
 ```markdown
@@ -110,8 +113,9 @@ using your file-writing tool. Use this layout:
 ```
 
 **`StopBeforeGate: true` only.** Make each `PROPOSE FIX` Change the exact
-replacement text, so the caller can apply it verbatim. Write the report to the
-folder the caller names, if any. Then return the report path without editing
+replacement text, so the caller can apply it verbatim. Use the report file name the
+caller gives (for example `goldfish_review_report.round-2.md`) instead of
+`goldfish_review_report.md`. Then return the report path without editing
 `TargetFile`. Do not run Step 4 or Step 5: the caller runs the gate and marks
 the report resolved. Without `StopBeforeGate: true`, continue to Step 4.
 

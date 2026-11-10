@@ -137,6 +137,10 @@ file` mode is specified, confirm full-file line bounds).
         `agents/{name}.md`, then audit `TargetFile` at the resolved line range
         against its designated standard in `resources/document_standards/`,
         supplying `GoldfishContext`.
+    *   **`ReportDir`** (when given): pass it to the synthesizer as the
+        artifact directory for its reports. Under direct dispatch, save each
+        reviewer's findings verbatim as a file there. Without `ReportDir`, use
+        the artifact-directory resolution as before.
     *   Each reviewer produces findings with severity (🔴 Blocker, 🟡 Major, 🟢
         Nit), line numbers, discrepancy descriptions, and rationales.
 2.  **Consolidate Findings**: Collect all findings across reviewers into a single
@@ -164,12 +168,13 @@ file` mode is specified, confirm full-file line bounds).
     2 yourself. Dispatch a fresh subagent that follows `egm-resolve` with
     `StopBeforeGate: true`, passing it `TargetFile`, the active line range, the
     `FindingsList` and `ReportDir` (under direct dispatch, the reviewer findings
-    the caller saved verbatim in `ReportDir`). It writes
-    `goldfish_review_report.md` there and returns without editing `TargetFile`.
-    Return the report path to the caller, who runs the decision gate and
-    applies approved replacement text. Settled findings, clean rounds and
-    convergence (2.4) work as usual, using the reports in `ReportDir` across
-    rounds.
+    saved verbatim in `ReportDir`), and name the report
+    `goldfish_review_report.round-<n>.md` in `ReportDir` (`n` is the loop
+    round). The subagent writes it and returns without editing `TargetFile`.
+    Return the report path to the caller, who runs the decision gate, applies
+    approved replacement text, records the user's decision for each finding
+    verbatim in that round's report, and marks it `Status: resolved` before the
+    next round starts.
 
 #### 2.4 Iteration Check & Turn Boundary
 
@@ -192,6 +197,11 @@ is rare even when the document improves. Use these rules instead:
 *   **Cap**: 5 rounds.
 *   **Churn**: A new finding is at the scope of an applied fix, and reverting
     that fix would resolve it.
+
+In delegated mode, take the settled, fixed and clean-round inputs from the
+per-round reports (`goldfish_review_report.round-<n>.md`) in `ReportDir`: the
+proposed dispositions and the user's recorded gate decisions. The caller's gate
+is the turn-taking checkpoint.
 
 On converged, go to Step 3. On cap or churn, write a short list of the open
 findings by severity, then ask the user one question: accept and proceed,

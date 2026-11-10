@@ -215,7 +215,9 @@ For C1 (`docs/architecture/c1-context.md`, playbook
     resolve round reads them there. In delegated mode each loop round's
     resolution is a `resolve` round in a fresh subagent that follows
     `egm-resolve` through its report and stops before the gate. You show the
-    gate and apply replacement text the user approves verbatim. Findings that
+    gate, apply replacement text the user approves verbatim, record the
+    user's decision for each finding verbatim in the round report, and mark it
+    `Status: resolved` before the next round. Findings that
     need more add tasks by the ledger's adding and superseding rules
     (`references/ledger.md`). The `review` task is `done` when the loop ends.
 6.  **Approve.** Ask for explicit approval. On approval, set

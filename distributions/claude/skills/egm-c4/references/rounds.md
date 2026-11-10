@@ -123,7 +123,7 @@ upper-level contradiction; otherwise return `complete`.
 ## `resolve` round
 
 **Inputs:** `egm-resolve` with `StopBeforeGate` set, the review folder
-`docs/architecture/reviews/<scope>/` and its `goldfish_review_report.md` (under
+`docs/architecture/reviews/<scope>/` and its per-round reports (under
 direct dispatch, the reviewer findings the orchestrator saved verbatim in that
 folder), the
 target document.
@@ -131,7 +131,8 @@ target document.
 **Instructions:** Follow `egm-resolve` through its report and stop before the
 gate. Record dispositions and proposed replacement text. Do not edit the target.
 
-**Output files:** `docs/architecture/reviews/<scope>/goldfish_review_report.md`.
+**Output files:** `docs/architecture/reviews/<scope>/goldfish_review_report.round-<n>.md`
+(`n` is the loop round; the orchestrator names the file).
 
 **When to return `needs_user`:** When a finding needs a user choice before a
 disposition can be written. The orchestrator runs the gate and applies approved

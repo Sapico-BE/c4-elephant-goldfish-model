@@ -157,7 +157,9 @@ be contested, and severities cannot be changed without a contest.
 decision gate: in `delegated` mode each round's resolution is a fresh subagent
 following `egm-resolve` with `StopBeforeGate: true`, which writes
 `goldfish_review_report.md` and returns without editing the target. `ReportDir`
-names the folder for all reports of the run. Defaults leave the behavior above
+names the folder for all reports of the run (`egm-resolve` also accepts it). In
+`delegated` mode each round's report is `goldfish_review_report.round-<n>.md`;
+the caller records the user's gate decisions in it and marks it resolved. Defaults leave the behavior above
 unchanged.
 
 ### 2. User Triage Modes
