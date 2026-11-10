@@ -22,8 +22,8 @@ build = runpy.run_path(str(ROOT / "scripts/pack_plugin.py"))["build"]
 def source(tmp_path: Path) -> Path:
   root = tmp_path / "source"
   root.mkdir()
-  for name in ("plugin.json", "LICENSE", "README.md", "TESTING.md",
-               "CONTRIBUTING.md", "AI_POLICY.md"):
+  for name in ("plugin.json", "LICENSE", "README.md", "THIRD_PARTY_NOTICES.md",
+               "TESTING.md", "CONTRIBUTING.md", "AI_POLICY.md"):
     shutil.copyfile(ROOT / name, root / name)
   (root / ".github").mkdir()
   shutil.copyfile(ROOT / ".github/PULL_REQUEST_TEMPLATE.md",
@@ -71,6 +71,7 @@ def test_runtime_bundle_is_complete_and_reproducible(
     assert "docs/codex.md" in names
     assert "docs/claude.md" in names
     assert "assets/icon.svg" in names
+    assert "THIRD_PARTY_NOTICES.md" in names
     for image in re.findall(r'<img\b[^>]*\bsrc="([^"]+)"', bundle.read("README.md").decode()):
       assert image in names, f"Unbundled README image: {image}"
     assert not names.intersection({"CONTRIBUTING.md", "AI_POLICY.md", "TESTING.md",
@@ -358,6 +359,7 @@ def test_refuses_unbundled_services(source: Path, tmp_path: Path, field: str) ->
     "resources/execution_instructions.md",
     "resources/document_standards/zoom-out-standard.md",
     "docs/harnesses.md",
+    "THIRD_PARTY_NOTICES.md",
 ])
 def test_incomplete_source_fails_before_output(
     source: Path, tmp_path: Path, target: str, missing: str,
