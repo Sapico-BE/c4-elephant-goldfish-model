@@ -99,3 +99,51 @@ scenarios:
           - type: "required_pattern"
             pattern: "(subagent|fresh context|cannot run|stop)"
             message: "Without a subagent tool the orchestrator must stop instead of running rounds in its own context."
+
+  - scenario_id: "resume_next_c3"
+    description: "CUJ 2: in a new session with C1 and C2 approved and C3 tasks for web and api (db is C3: skip), shows done and open tasks and starts the grill for the first ready C3 task."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "/egm-c4 (new session; the ledger shows C1 and C2 approved, C3 grill tasks for web and api, and db marked C3: skip)"
+        assertions:
+          - type: "required_pattern"
+            pattern: "(ledger|C3:web|web|grill|done and open)"
+            message: "The orchestrator must read the ledger, show done and open tasks, and start the first ready C3 task (grilling web), not db."
+
+  - scenario_id: "force_level_reopen"
+    description: "CUJ 3: forcing an Approved C3 level confirms the document returns to Draft and dependents become stale, then grills with the existing log; forcing a level whose upper levels are not Approved is refused."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "/egm-c4 c3 api (C1, C2 and c3-api.md are Approved)"
+        assertions:
+          - type: "required_pattern"
+            pattern: "(Draft|stale|decision log|confirm|reopen)"
+            message: "Forcing an Approved level must confirm the return to Draft and the stale tasks first, then keep the existing decision log."
+
+  - scenario_id: "contradiction_reopens_c2"
+    description: "CUJ 4: a C3 grill round reports that the system needs a message queue container C2 lacks; the orchestrator stops C3 work, names the contradiction, offers to reopen C2, and reconciles C3 tasks after C2 is approved again."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "The C3 grill subagent for api returned a contradiction: the system needs a message queue container that C2 lacks."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(contradiction|reopen C2|c2.answers|stale|Reconcile)"
+            message: "A contradiction must stop C3 work, be named, and offer to reopen C2, with dependents stale and C3 tasks reconciled after C2 is approved again."
+
+  - scenario_id: "rejected_approval_revises"
+    description: "When the user rejects approval of a level, the orchestrator adds a revise (or grill) task and a new readiness, review and approve, superseding the pending ones."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "I do not approve the C2 document; the container table is missing the queue."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(revise|grill|readiness|superseded|new .approve.)"
+            message: "A rejected approval must add a revise (or grill if a new decision is needed) chain with fresh readiness, review and approve tasks, superseding the pending ones."

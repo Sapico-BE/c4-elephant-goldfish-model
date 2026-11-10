@@ -56,7 +56,7 @@ until the frontier is empty:
 
 ## System Context Diagram
 
-(C4Context diagram and Legend table)
+(`C4Context` diagram, then the `**Legend**` line and `Shape | Meaning` table)
 
 ## Quality Attributes and Constraints
 
@@ -65,7 +65,7 @@ until the frontier is empty:
 
 Notes:
 
-*   `**Status:**` is `Draft`, `In Review` or `Approved`.
+*   `**Status:**` is `Draft`, `Approved` or `Implemented`.
 *   Each CUJ mentions only people and systems that appear in the diagram.
 *   Open Questions lists unresolved items with an owner, not hidden gaps.
 
@@ -73,7 +73,8 @@ Notes:
 
 Use `C4Context`. Show the system as one `System`, every person as `Person` and
 every external system as `System_Ext`. Include no containers and no
-technology. Follow the notation rules and the Legend table in `mermaid-c4.md`.
+technology. Follow the notation rules and the legend format (a `**Legend**` line, then a
+two-column `Shape | Meaning` table) in `mermaid-c4.md`.
 
 ## Ready for review
 

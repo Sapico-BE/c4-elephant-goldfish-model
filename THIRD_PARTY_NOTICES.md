@@ -33,3 +33,4 @@ Adapted files:
 
 - `skills/egm-c4/references/grilling.md`
 - `skills/egm-c4/references/domain-language.md`
+- `skills/egm-c4/references/c3-component.md`

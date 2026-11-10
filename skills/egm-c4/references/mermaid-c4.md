@@ -20,7 +20,8 @@ same toy system: a library lending app. Syntax reference:
     A container diagram shows containers inside one system boundary. A
     component diagram shows components inside one container boundary.
 5.  **Legend.** Mermaid C4 has no legend feature, so every diagram is followed
-    by a Markdown `Legend` table that explains the shapes and line styles used.
+    by a `**Legend**` line, then a two-column `Shape | Meaning` table with one
+    row per element type and line style used.
 6.  **Layout.** Add `UpdateLayoutConfig($c4ShapeInRow="3",
     $c4BoundaryInRow="1")` as the last line when the default layout is
     cramped. Do not use it to hide an overloaded diagram; split the diagram
@@ -44,7 +45,7 @@ C4Context
   Rel(lending, mail, "Sends due-date reminders")
 ```
 
-Legend:
+**Legend**
 
 | Shape | Meaning |
 | :---- | :------ |
@@ -74,14 +75,14 @@ C4Container
   Rel(api, mail, "Sends due-date reminders", "SMTP")
 ```
 
-Legend:
+**Legend**
 
 | Shape | Meaning |
 | :---- | :------ |
-| Container | A deployable unit; the third line names its technology |
+| Container | A deployable unit; the technology argument names its technology |
 | ContainerDb | A data store |
 | Boundary | The system in scope |
-| Arrow | Relationship; label is intent, second line is protocol |
+| Arrow | Relationship; label is intent, the technology argument is the protocol |
 
 ## C4Component
 
@@ -106,11 +107,11 @@ C4Component
   Rel(store, db, "Reads and writes rows", "SQL/TCP")
 ```
 
-Legend:
+**Legend**
 
 | Shape | Meaning |
 | :---- | :------ |
-| Component | A module with an interface; the third line names its technology |
+| Component | A module with an interface; the technology argument names its technology |
 | Boundary | The container in scope |
 | Arrow | Relationship; label is intent; protocol only when it crosses a container |
 
@@ -132,13 +133,13 @@ C4Deployment
   Rel(api, db, "Reads and writes loan records", "SQL/TCP")
 ```
 
-Legend:
+**Legend**
 
 | Shape | Meaning |
 | :---- | :------ |
-| Deployment_Node | Infrastructure that hosts containers; the second line names its technology |
+| Deployment_Node | Infrastructure that hosts containers; the technology argument names its technology |
 | Container, ContainerDb | The same containers as the container diagram |
-| Arrow | Relationship; label is intent, second line is protocol |
+| Arrow | Relationship; label is intent, the technology argument is the protocol |
 
 ## Vocabulary map
 

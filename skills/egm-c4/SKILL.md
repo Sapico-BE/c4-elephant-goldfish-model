@@ -42,11 +42,15 @@ do not follow them yourself, except the answers-file format in
     `docs/architecture/c1-context.md` returns to Draft and every task that
     depends on it becomes `stale`, then reopen it (see Reopening). The grill
     round keeps the existing decision log.
-*   **`c2`, `c3 <container>`, `c4`:** available after a later update. Say so
-    and ask whether to continue the current task.
+*   **`c2`, `c3 <container>`:** run that level. `/egm-c4 c3 <container>` names
+    a container from the C2 container table. A `Draft` level resumes from its
+    ledger tasks. An `Approved` level is reopened as for `c1`, keeping its
+    decision log.
+*   **`c4`:** available after a later update. Say so and ask whether to
+    continue the current task.
 
 Forcing a level whose upper levels are not `Approved` is refused with the
-reason.
+reason: "upper levels are not Approved", naming them and their statuses.
 
 ## Role and write limits
 
@@ -117,9 +121,9 @@ and superseding rules (`references/ledger.md`); tasks a round proposes in
 
 Route by scope:
 
-*   `C1`: the Grilling loop and Level loop below.
-*   `C2`, `C3:<container>`, `C4`, `C4:slice-NN`: available after a later
-    update. Say so, show the open tasks, and stop.
+*   `C1`, `C2`, `C3:<container>`: the Grilling loop and Level loop below.
+*   `C4`, `C4:slice-NN`: available after a later update. Say so, show the open
+    tasks, and stop.
 
 ## Dispatching rounds
 
@@ -180,8 +184,16 @@ One `grill` task spans every round for its scope; count rounds in `Notes`.
 
 ## Level loop
 
-For C1 (`docs/architecture/c1-context.md`, playbook
-`references/c1-context.md`):
+Each level has a document and a playbook, found through the ledger's scope
+mapping:
+
+| Level | Document | Playbook |
+| :---- | :------- | :------- |
+| C1 | `docs/architecture/c1-context.md` | `references/c1-context.md` |
+| C2 | `docs/architecture/c2-containers.md` | `references/c2-container.md` |
+| C3 | `docs/architecture/c3-<container>.md` | `references/c3-component.md` |
+
+The loop is the same at every level:
 
 1.  **Grill** until the frontier is empty and confirmed.
 2.  **Draft.** Dispatch a `draft` round. It writes the document only from the
@@ -197,15 +209,21 @@ For C1 (`docs/architecture/c1-context.md`, playbook
     Skill tool, with:
     *   `TargetFile`: the level document; `SemanticTarget`: `full file`;
     *   `ResolveMode: delegated`;
-    *   C1 reviewers and standards: `egm-zoom-out` → `zoom-out-standard`;
-        `egm-comprehension` → no standard; `egm-design`, `egm-structural` and
-        `egm-style` → `c4-model-standard`
-        (`resources/document_standards/c4-model-standard.md`). Do not use
-        `egm-codebase-details`: no code exists yet;
+    *   reviewers and standards by level. Do not use `egm-codebase-details`:
+        no code exists yet.
+
+        | Level | Reviewer → standard |
+        | :---- | :------------------ |
+        | C1 | `egm-zoom-out` → `zoom-out-standard`; `egm-comprehension` → no standard; `egm-design`, `egm-structural`, `egm-style` → `c4-model-standard` |
+        | C2 | as C1 without `egm-comprehension` |
+        | C3 | as C2, plus `egm-implementation-readiness` → `c4-model-standard` |
+
+        `c4-model-standard` is
+        `resources/document_standards/c4-model-standard.md`;
     *   `GoldfishContext`: the scope's decision files, the approved upper
         documents, `GLOSSARY.md`, and the note "greenfield project: no
         existing code to leverage";
-    *   `ReportDir`: the scope's review folder (C1:
+    *   `ReportDir`: the scope's review folder (for example
         `docs/architecture/reviews/c1/`), which keeps the loop's settled
         findings across runs. Name it as the report location to the loop, the
         synthesizer and every resolve round.
@@ -225,17 +243,18 @@ For C1 (`docs/architecture/c1-context.md`, playbook
     ledger's adding rules. On rejection, add tasks by the ledger's adding and
     superseding rules (`references/ledger.md`).
 
-C2 and C3 documents and the C4 step are available after a later update.
+**Level order.** C2 is dispatched after C1 is `Approved`. After C2 is
+`Approved`, add C3 tasks for each container the C2 table marks `C3: required`
+(containers marked `C3: skip (<reason>)` get none). C3 for a container runs
+only when C1 and C2 are `Approved`. Reconcile the C3 tasks each time C2 is
+approved again, as described in `references/ledger.md`. The C4 step is
+available after a later update.
 
 ## Reopening
 
 When the user accepts a contradiction or forces an `Approved` level, confirm
 what returns to Draft and which tasks become `stale`. For a contradiction,
 append it (document, statement, evidence) to the reopened scope's answers
-file. Then apply the reopening rules in `references/ledger.md`:
-set the document to `Draft`, add its `grill`, `draft`, `readiness`, `review`
-and `approve` tasks, and mark every transitively dependent task `stale` with
-its dependency pointed at the new `approve` task. The new grill round starts
-from the existing tree and answers plus the contradiction. A stale `grill`
-reruns from its log; a stale `draft` becomes a `revise` of the existing
-document.
+file. Then apply the reopening and Reconcile rules in `references/ledger.md`;
+the new grill round starts from the existing tree and answers plus the
+contradiction.

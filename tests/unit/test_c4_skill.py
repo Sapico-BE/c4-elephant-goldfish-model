@@ -10,7 +10,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 SKILL = ROOT / "skills/egm-c4"
 REFS = SKILL / "references"
-ADAPTED = ("grilling.md", "domain-language.md")
+ADAPTED = ("grilling.md", "domain-language.md", "c3-component.md")
 
 
 def read(path: Path) -> str:
@@ -116,6 +116,11 @@ def test_rounds_cover_every_round_type() -> None:
 PLAYBOOKS = {
     "c1-context.md": ("People", "External Systems", "Critical User Journeys",
                       "Quality Attributes and Constraints", "C4Context"),
+    "c2-container.md": ("Containers", "C3: required", "C3: skip",
+                        "Relationships", "C4Container", "C4Deployment",
+                        "Key Decisions"),
+    "c3-component.md": ("Components", "Interfaces", "Test Seams",
+                        "Error Handling", "C4Component", "deep module"),
 }
 
 
@@ -202,3 +207,11 @@ def test_delegated_round_reports_and_report_dir() -> None:
       SKILL / "references/rounds.md")
   assert "ReportDir" in flat(ROOT / "skills/egm-resolve/SKILL.md")
   assert "ReportDir" in flat(ROOT / "docs/designs/review.md")
+
+
+def test_orchestrator_routes_all_design_levels() -> None:
+  text = flat(SKILL / "SKILL.md")
+  for phrase in ("`references/c2-container.md`", "`references/c3-component.md`",
+                 "/egm-c4 c3 <container>", "upper levels are not Approved",
+                 "Reconcile", "`stale`"):
+    assert phrase in text, phrase

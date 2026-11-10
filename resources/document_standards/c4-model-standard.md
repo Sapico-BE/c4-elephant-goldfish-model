@@ -38,6 +38,8 @@ and its level's Ready for review criteria hold.
 *   **No level mixing**: C1 shows people and systems, not containers or
     technology. C2 shows containers, not components. C3 shows the components
     of one container, not code or the internals of other containers.
+*   **Deployment diagrams**: Show C2 containers on infrastructure; add no new
+    containers.
 *   **Audience fit**: C1 is readable by non-technical staff. C2 serves
     technical staff. C3 serves developers.
 
@@ -51,7 +53,23 @@ and its level's Ready for review criteria hold.
     upper level document. A deferred question is listed in Open Questions, not
     silently decided.
 
-## 4. Ready for review
+## 4. Required Sections per Level
+
+*   **C1**: Overview, Problem, Goals, Non-Goals, People, External Systems,
+    CUJs (Given/When/Then), System Context diagram, Quality Attributes and
+    Constraints, Open Questions.
+*   **C2**: Overview, Container table (name, type, technology, responsibility,
+    data owned, `C3: required` or `C3: skip (<reason>)`), Container diagram,
+    Relationships table (from, to, intent, protocol), CUJ walkthrough,
+    Cross-cutting Concerns, Key Decisions, Alternatives Considered, Open
+    Questions. A Deployment diagram is optional.
+*   **C3**: Overview, Component table (name, responsibility, interface
+    summary, depends on), Component diagram, Interfaces, Test Seams, CUJ
+    trace, Error Handling, Open Questions.
+
+A missing section fails.
+
+## 5. Ready for review
 
 Check the Ready for review criteria of the reviewed level in its playbook. If
 the playbook is not provided, apply these:
