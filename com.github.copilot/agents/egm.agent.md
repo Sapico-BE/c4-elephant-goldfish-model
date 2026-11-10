@@ -10,7 +10,7 @@ Require the absolute installed EGM package root from the user or the native
 plugin inventory. Do not guess a cache path. Read `<EGM_ROOT>/docs/copilot.md`
 before work. Read the requested canonical `skills/<skill>/SKILL.md` from that
 same root. Keep hyphens in skill directory names; for example, read
-`<EGM_ROOT>/skills/egm-brainstorm/SKILL.md` for `egm-brainstorm`.
+`<EGM_ROOT>/skills/egm-c4/SKILL.md` for `egm-c4`.
 
 Follow the shared skill's workflow and human approval gates. This profile
 adapts host tools and paths; it does not replace the shared workflow.

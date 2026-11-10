@@ -48,7 +48,7 @@ Use the egm-review skill to review /absolute/path/design.md.
 ```
 
 Paste material into that ordinary message, or save it in a file for the agent to read.
-The generated `/egm-brainstorm`, `/egm-draft`, and `/egm-review` commands retain
+The generated `/egm-c4` and `/egm-review` commands retain
 OpenCode's native command syntax. Their arguments are not literal text: OpenCode
 evaluates shell markers (an exclamation mark followed by a command in backticks)
 before agent tool permissions apply. Do not paste untrusted review material into
@@ -83,8 +83,6 @@ Require all specified reads and actual task completion before synthesis.
 Report a missing start, completion, required read, or malformed result as incomplete.
 Stop if native delegation is unavailable. Never simulate Goldfish reviewers in the parent conversation.
 
-When brainstorm precedes draft, complete all seven brainstorm reviewers first.
-Synthesize their findings into `concepts_brief.md` before drafting.
 For review, write each completed stage report before starting the next stage.
 Before Step 8, verify `zoom_out_report.md` exists in the artifact directory.
 Pass its absolute path to the reviewer. Stop if the report is missing.
@@ -155,7 +153,7 @@ that candidate.
 Before a support claim, explicitly authorize and complete these checks:
 
 1. Record the candidate SHA, installed hashes, host version, model identifier, surface, and date.
-2. Run brainstorm, draft, and review with an actual human approval pause.
+2. Run the C4 workflow and review with an actual human approval pause.
 3. Retain native reviewer starts, completions, required reads, and produced artifacts.
 4. Probe write denial against a disposable file and inspect the effective child permissions.
 5. Place a random marker only in the parent conversation and inspect child context and output.

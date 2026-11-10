@@ -42,11 +42,11 @@ In the first message, supply the absolute package root and requested skill:
 
 ```text
 EGM package root: /absolute/path/to/elephant-goldfish-model
-Read that package's docs/copilot.md and run egm-brainstorm.
+Read that package's docs/copilot.md and run egm-c4.
 EGM artifact directory: .dev/docs
 ```
 
-Use `egm-draft` or `egm-review` in later requests. Provide the target document
+Use `egm-review` or `egm-drift-report` in later requests. Provide the target document
 for review. Use the `egm:egm` entry agent so the host mapping loads before a skill.
 Selecting a reviewer as the main session does not establish a fresh Goldfish context.
 Check `/agent` for name conflicts before use; personal profiles can override package profiles.
@@ -176,7 +176,7 @@ This historical note does not identify the tested EGM commit or installed packag
 checksum. Repeat discovery against the pinned candidate before relying on it for
 that candidate.
 
-Before a support claim, run the existing brainstorm, draft, and review scenarios
+Before a support claim, run the existing C4 and review scenarios
 from each skill's `test_scenarios.yaml` with explicit model-use authorization.
 Record these outcomes separately:
 

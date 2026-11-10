@@ -232,3 +232,24 @@ def test_orchestrator_gates_code_on_build_plan() -> None:
   for phrase in ("`references/c4-code.md`", "build-plan approval",
                  "egm-drift-report", "`Implemented`"):
     assert phrase in text, phrase
+
+
+HISTORICAL = ROOT / "docs/designs"
+SKIP_DIRS = {".git", ".venv", "node_modules", ".pytest_cache", "superpowers",
+             ".superpowers"}
+
+
+def test_removed_skills_are_not_referenced() -> None:
+  offenders = []
+  for path in ROOT.rglob("*"):
+    if not path.is_file() or SKIP_DIRS & set(path.parts):
+      continue
+    if path.suffix not in {".md", ".py", ".json", ".yaml", ".astro", ".mdc"}:
+      continue
+    if path.parent == HISTORICAL and path.name not in {"architecture.md", "README.md"}:
+      continue
+    if path == Path(__file__).resolve():
+      continue
+    if re.search(r"egm-(brainstorm|draft)\b", read(path)):
+      offenders.append(path.relative_to(ROOT).as_posix())
+  assert not offenders, offenders

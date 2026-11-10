@@ -78,13 +78,13 @@ Before the first skill, provide the installed root to the local Agent:
 ```text
 EGM_ROOT: /absolute/path/to/cursor-package
 Read /absolute/path/to/cursor-package/docs/cursor.md.
-Run /egm-brainstorm for the requested feature.
+Run /egm-c4 for the requested feature.
 ```
 
 Select the installed EGM skill from Cursor's slash menu.
 If a skill is not exposed, read its absolute `skills/<directory>/SKILL.md`
 and follow it in the parent context. Do not invent a slash-command namespace.
-Use the same process for `egm-draft`, `egm-review`, and workflow subskills.
+Use the same process for `egm-review` and workflow subskills.
 The adapter rule must be active before execution.
 
 Resolve `agents/`, `resources/`, and `docs/` against the selected package root.
@@ -155,7 +155,7 @@ Keep these results separate:
 | Gate | Required evidence | Current result |
 | --- | --- | --- |
 | Installation | Interactive discovery and actual reads of installed personas, standards, and guides | Unverified; offline native discovery passed |
-| Workflow | Brainstorm, draft, review, artifacts, and an actual human approval pause | Unverified |
+| Workflow | C4 design, review, artifacts, and an actual human approval pause | Unverified |
 | Isolation | Fresh child records, required reads, read-only denial, and every reviewer completion | Unverified |
 
 For isolation, place a random marker only in the parent conversation.

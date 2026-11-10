@@ -106,7 +106,7 @@ Do not use `file://` links in Muse chat.
 ## Verification
 
 Run the offline packaging checks with `pytest tests/unit`. The end-to-end
-workflow fixture (brainstorm, draft, and uninterrupted review through the
+workflow fixture (the former brainstorm and draft skills, and uninterrupted review through the
 installed plugin) passed on Muse 1.4.14 on 2026-10-30 with the
 general-purpose reviewer fallback described above. The prompt named this guide
 and it ran headless with approvals simulated up front, so skill routing,

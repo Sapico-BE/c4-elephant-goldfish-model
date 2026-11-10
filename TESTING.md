@@ -125,9 +125,10 @@ result separately. A failed workflow or missing native evidence is not a pass.
 
 ## Harness Test Record
 
-A harness counts as supported after `/egm-brainstorm`, `/egm-draft`, and
+A harness counts as supported after `/egm-c4` and
 `/egm-review` run end to end through its plugin install (see
-[Harnesses](docs/harnesses.md)). Add a row for each run.
+[Harnesses](docs/harnesses.md)). Add a row for each run. The Brainstorm and Draft columns record runs of the
+retired `brainstorm` and `draft` skills; record `/egm-c4` runs under Draft.
 
 | Harness | Version | Date | Install | Brainstorm | Draft | Review | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |

@@ -47,7 +47,7 @@ This integration delivers:
     (`agents/inventive_catalyst.md`), featuring a self-contained inlined catalog
     of 10 software engineering patterns for zero-I/O execution.
 2.  Integration of the persona into the upstream Goldfish shootdown swarm in
-    [skills/egm-brainstorm/SKILL.md](../../skills/egm-brainstorm/SKILL.md).
+    `skills/egm-brainstorm/SKILL.md`.
 3.  Integration of the persona into **Step 5 (Initial Strategic Review)** in
     [skills/egm-review/SKILL.md](../../skills/egm-review/SKILL.md), pairing with
     `egm-zoom-out` to audit foundational trade-offs before detailed reviews.

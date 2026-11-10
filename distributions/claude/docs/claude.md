@@ -16,7 +16,7 @@ claude plugin install egm@egm
 ```
 
 Enable the installed plugin with `claude plugin enable egm@egm`.
-Start messages with `/egm:egm-brainstorm`, `/egm:egm-draft`, or `/egm:egm-review`.
+Start messages with `/egm:egm-c4` or `/egm:egm-review`.
 Skills retain `disable-model-invocation: true`: their absence from automatic
 skill discovery is expected. The `Skill` tool refuses these skills, so to run
 another EGM skill (for example `egm-review-loop` or `egm-resolve` during review

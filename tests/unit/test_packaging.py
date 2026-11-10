@@ -51,7 +51,7 @@ def test_runtime_bundle_is_complete_and_reproducible(
   with zipfile.ZipFile(archive) as bundle:
     assert bundle.testzip() is None
     names = set(bundle.namelist())
-    assert len([p for p in names if p.endswith("/SKILL.md")]) == 8
+    assert len([p for p in names if p.endswith("/SKILL.md")]) == 6
     for skill in source.glob("skills/*/SKILL.md"):
       prefix = skill.parent.relative_to(source)
       metadata = yaml.safe_load(bundle.read((prefix / "agents/openai.yaml").as_posix()))
@@ -101,9 +101,7 @@ def test_runtime_bundle_is_complete_and_reproducible(
 
 @pytest.mark.parametrize("skill,base,facet", [
     ("bootstrap", "#1b6ef3", "#7cacf8"),
-    ("brainstorm", "#1b6ef3", "#7cacf8"),
     ("c4", "#1b6ef3", "#7cacf8"),
-    ("draft", "#1b6ef3", "#7cacf8"),
     ("resolve", "#1b6ef3", "#7cacf8"),
     ("drift_report", "#e86e00", "#ff8d41"),
     ("review", "#e86e00", "#ff8d41"),
@@ -346,9 +344,7 @@ def test_refuses_unbundled_services(source: Path, tmp_path: Path, field: str) ->
 @pytest.mark.parametrize("missing", [
     "skills",
     "skills/egm-bootstrap/SKILL.md",
-    "skills/egm-brainstorm/SKILL.md",
     "skills/egm-c4/SKILL.md",
-    "skills/egm-draft/SKILL.md",
     "skills/egm-drift-report/SKILL.md",
     "skills/egm-resolve/SKILL.md",
     "skills/egm-review/SKILL.md",
@@ -357,7 +353,6 @@ def test_refuses_unbundled_services(source: Path, tmp_path: Path, field: str) ->
     "skills/egm-review/assets/icon.svg",
     "skills/egm-bootstrap/references/worker-return.schema.json",
     "skills/egm-bootstrap/references/templates.md",
-    "skills/egm-draft/references/design_doc.md",
     "skills/egm-c4/references/round-result.schema.json",
     "agents/design_critic.md",
     "resources/execution_instructions.md",

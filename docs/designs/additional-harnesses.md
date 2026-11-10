@@ -85,8 +85,8 @@ Record unknown native isolation as unverified, never as a passing result.
 
 Preserve the gates defined in the canonical skills:
 
-- [Brainstorm](../../skills/egm-brainstorm/SKILL.md): confirm readiness before Goldfish dispatch, then approve the brief before handoff.
-- [Draft](../../skills/egm-draft/SKILL.md): confirm the intake and obtain approval to draft. Approve each section. Confirm the destination when none was supplied.
+- `skills/egm-brainstorm/SKILL.md`: confirm readiness before Goldfish dispatch, then approve the brief before handoff.
+- `skills/egm-draft/SKILL.md`: confirm the intake and obtain approval to draft. Approve each section. Confirm the destination when none was supplied.
 - [Review](../../skills/egm-review/SKILL.md): select the preset when none was supplied. Preserve its required stage checkpoints and pause/resume choices.
 - [Resolve](../../skills/egm-resolve/SKILL.md): present proposed fixes and contested findings before applying edits approved by the user.
 
@@ -152,8 +152,8 @@ Propose any required implementation separately after this assessment.
 ### Shared checks
 
 Reuse the prompts and assertions in the existing skill suites:
-[brainstorm scenarios](../../skills/egm-brainstorm/test_scenarios.yaml),
-[draft scenarios](../../skills/egm-draft/test_scenarios.yaml), and
+`skills/egm-brainstorm/test_scenarios.yaml`,
+`skills/egm-draft/test_scenarios.yaml`, and
 [review scenarios](../../skills/egm-review/test_scenarios.yaml).
 Use the marker probe and line-count workflow fixture in
 [`tests/integration/test_codex.py`](../../tests/integration/test_codex.py),

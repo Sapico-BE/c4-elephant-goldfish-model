@@ -3,22 +3,16 @@ import SkillIcon from './SkillIcon.astro';
 
 const steps = [
   {
-    name: 'Brainstorm',
-    icon: 'brainstorm',
-    command: '/egm-brainstorm',
-    body: 'Clarify a rough idea through open-ended questioning and stress-test the hypothesis into a concept brief.',
-  },
-  {
-    name: 'Draft',
-    icon: 'draft',
-    command: '/egm-draft',
-    body: 'Turn the brief into a living design doc under docs/designs/, section by section.',
+    name: 'C4',
+    icon: 'c4',
+    command: '/egm-c4',
+    body: 'Grill the idea, then design C1 context, C2 containers, and C3 components with Goldfish review at each level, and build in test-first slices.',
   },
   {
     name: 'Review',
     icon: 'review',
     command: '/egm-review',
-    body: 'Fresh zero-context Goldfish subagents check completeness, clarity, self-containment, and implementation readiness.',
+    body: 'Fresh zero-context Goldfish subagents check a standalone document for completeness, clarity, self-containment, and implementation readiness.',
   },
 ] as const;
 ---
@@ -26,7 +20,7 @@ const steps = [
 <section class="section loop">
   <div class="wrap">
     <div class="section-head">
-      <h2 class="headline">Go from an idea to a verified spec.</h2>
+      <h2 class="headline">Go from an idea to a verified design.</h2>
     </div>
     <ol class="steps">
       {
@@ -41,7 +35,7 @@ const steps = [
       }
     </ol>
     <p class="handoff muted">
-      Once you approve the spec, ask your coding agent to build it.
+      Once you approve a standalone design, ask your coding agent to build it.
     </p>
     <div class="step drift">
       <span class="marker"><SkillIcon skill="drift_report" /></span>
@@ -50,7 +44,7 @@ const steps = [
         <span class="cmd">/egm-drift-report</span>
       </div>
       <p class="muted">
-        After implementation, compare the code with the spec and report where they diverge.
+        After implementation, compare the code with the design and report where they diverge.
       </p>
     </div>
   </div>

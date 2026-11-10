@@ -1,7 +1,7 @@
 # EGM Brainstorm: Zero-Doc Upstream Ideation & Multi-Lens Shootdown
 
 *   **Author:** Brian Suchy ([@briansuchy](https://github.com/briansuchy))
-*   **Status:** Current
+*   **Status:** Superseded by [c4.md](c4.md)
 *   **Date:** 2026-07-31
 
 --------------------------------------------------------------------------------

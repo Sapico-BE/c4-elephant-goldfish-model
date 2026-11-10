@@ -82,7 +82,7 @@ use these same assets; do not copy them into `public/` or redraw them in compone
 Each decorative glyph is 28px inside a 40px circle using the existing surface
 tokens, with an adjacent skill name or command providing its accessible label.
 The workflow and skill catalog share this component. The workflow shows
-Brainstorm, Draft, and Review, followed by a short handoff to the coding agent and
+C4 and Review, followed by a short handoff to the coding agent and
 a separate Check for drift follow-up after implementation.
 
 ## Develop
