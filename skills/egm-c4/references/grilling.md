@@ -75,5 +75,6 @@ If the frontier has no `open` nodes, return `complete` with
 orchestrator asks the user to confirm a shared understanding, and the user may
 add topics. Never declare the interview finished yourself.
 
-Return the result in the shape the orchestrator specifies, with `summary` at
-most five lines.
+Return the result as described in the `grill` round section of
+`references/rounds.md`, matching `references/round-result.schema.json`: set
+`frontier_empty` to `true` or `false`, and keep `summary` at most five lines.
