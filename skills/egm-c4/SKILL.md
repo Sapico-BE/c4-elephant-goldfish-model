@@ -43,14 +43,18 @@ do not follow them yourself, except the answers-file format in
     depends on it becomes `stale`, then reopen it (see Reopening). The grill
     round keeps the existing decision log.
 *   **`c2`, `c3 <container>`:** run that level. `/egm-c4 c3 <container>` names
-    a container from the C2 container table. A `Draft` level resumes from its
+    a container from the C2 container table; for a container that is not in
+    the table or is marked `C3: skip`, refuse with that reason and list the
+    containers marked `C3: required`. A `Draft` level resumes from its
     ledger tasks. An `Approved` level is reopened as for `c1`, keeping its
     decision log.
-*   **`c4`:** available after a later update. Say so and ask whether to
-    continue the current task.
+*   **`c4`:** run the C4 code step. A `Draft` build plan resumes from its
+    ledger tasks; an `Approved` one resumes its slice tasks, and is reopened
+    as for `c1` only when the user asks.
 
 Forcing a level whose upper levels are not `Approved` is refused with the
-reason: "upper levels are not Approved", naming them and their statuses.
+reason: "upper levels are not Approved", naming them and their statuses. The
+upper levels of `c4` are C1, C2 and every `C3: required` document.
 
 ## Role and write limits
 
@@ -65,7 +69,8 @@ You write only:
 
 Every other file is written by a round subagent or by the review skills. You do
 not draft documents, judge review findings, or write code. You may run
-read-only commands such as `git status` and `git hash-object` for path checks;
+read-only commands such as `git status`, `git hash-object`, `git rev-parse`
+and `git diff --name-only` for path checks;
 the orchestrator never runs builds or tests.
 
 Follow `resources/execution_instructions.md`, including its `egm-c4`
@@ -122,8 +127,8 @@ and superseding rules (`references/ledger.md`); tasks a round proposes in
 Route by scope:
 
 *   `C1`, `C2`, `C3:<container>`: the Grilling loop and Level loop below.
-*   `C4`, `C4:slice-NN`: available after a later update. Say so, show the open
-    tasks, and stop.
+*   `C4` plan tasks: the Grilling loop and Level loop. `C4:slice-NN` tasks and
+    the `C4` `drift` task: the C4 code step below.
 
 ## Dispatching rounds
 
@@ -148,7 +153,9 @@ Route by scope:
     every listed path. Take the same snapshot after every round. A path that
     is new to the list, changed status, or changed hash was changed by the
     round; compare these paths with its declared output files. Show any other path to the user and
-    ask whether to keep or revert it before you use the result.
+    ask whether to keep or revert it before you use the result. In the C4
+    step an implement or fix round's declared outputs are its ticket's
+    Allowed Paths, and `references/c4-code.md` adds the branch checks.
 5.  **Present.** Show the `summary` (at most five lines). For contradictions,
     stop the current work, name each one, and offer to reopen the contradicted
     document (see Reopening). Show proposed `new_tasks` and add them only after
@@ -192,6 +199,7 @@ mapping:
 | C1 | `docs/architecture/c1-context.md` | `references/c1-context.md` |
 | C2 | `docs/architecture/c2-containers.md` | `references/c2-container.md` |
 | C3 | `docs/architecture/c3-<container>.md` | `references/c3-component.md` |
+| Build plan | `docs/architecture/c4-build-plan.md` | `references/c4-code.md` |
 
 The loop is the same at every level:
 
@@ -217,9 +225,12 @@ The loop is the same at every level:
         | C1 | `egm-zoom-out` → `zoom-out-standard`; `egm-comprehension` → no standard; `egm-design`, `egm-structural`, `egm-style` → `c4-model-standard` |
         | C2 | as C1 without `egm-comprehension` |
         | C3 | as C2, plus `egm-implementation-readiness` → `c4-model-standard` |
+        | Build plan | `egm-implementation-readiness` → `implementation-readiness-standard`; `egm-style` → `c4-model-standard` |
 
         `c4-model-standard` is
         `resources/document_standards/c4-model-standard.md`;
+        `implementation-readiness-standard` is
+        `resources/document_standards/implementation-readiness-standard.md`;
     *   `GoldfishContext`: the scope's decision files, the approved upper
         documents, `GLOSSARY.md`, and the note "greenfield project: no
         existing code to leverage";
@@ -245,10 +256,38 @@ The loop is the same at every level:
 
 **Level order.** C2 is dispatched after C1 is `Approved`. After C2 is
 `Approved`, add C3 tasks for each container the C2 table marks `C3: required`
-(containers marked `C3: skip (<reason>)` get none). C3 for a container runs
-only when C1 and C2 are `Approved`. Reconcile the C3 tasks each time C2 is
-approved again, as described in `references/ledger.md`. The C4 step is
-available after a later update.
+(containers marked `C3: skip (<reason>)` get none), then the `C4` grill, draft,
+readiness, review and approve tasks for the build plan. C3 for a container
+runs only when C1 and C2 are `Approved`. The `C4` grill depends on every C3 `approve` task (on C2's when no container needs
+C3). Reconcile the C3 tasks each time C2 is approved again, as described in
+`references/ledger.md`, and keep the `C4` grill's dependencies in step.
+
+## C4 code step
+
+Load `references/c4-code.md` yourself: it defines the slice tasks, batches,
+path checks, batch gates and the finish.
+
+1.  **Build plan.** Scope `C4` runs the Grilling loop and Level loop with the
+    Build plan rows above. Its draft writes documents only:
+    `docs/architecture/c4-build-plan.md` and tickets in
+    `docs/architecture/slices/`.
+2.  **Slices.** No implement, fix or merge round runs before build-plan
+    approval. On approval, add the slice and `drift` tasks. Slice 01, the
+    walking skeleton, runs alone; later ready slices run in batches. Each
+    slice is implemented, path-checked, merged, verified and code-reviewed by
+    fresh subagents.
+3.  **Path checks.** After each implement, fix and merge round, compare the
+    changed paths with the ticket's Allowed Paths (the batch's for a merge).
+    Show a violation and add a `fix` chain that reverts it.
+4.  **Results.** A `FAIL` verify or `BLOCKING` code review proposes a `fix`;
+    add the `fix` chain after the user confirms.
+5.  **Batch gate.** After each batch, show its results and ask whether to
+    start the next batch.
+6.  **Finish.** When every slice is done, dispatch the `drift` round (it reads
+    `egm-drift-report`'s SKILL.md). After the user settles each finding, set
+    each fully implemented document to `Implemented`.
+
+A contradiction while building stops slice work; see `references/c4-code.md`.
 
 ## Reopening
 

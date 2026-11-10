@@ -157,10 +157,12 @@ contradiction.
 ## `fix` round
 
 **Inputs:** the slice ticket, the blocking code-review findings, the failed
-verification summary, or the path-check violation, plus the files they name.
+verification summary, the path-check violation, or the batch-gate change
+recorded in `c4-plan.answers.md`, plus the files they name.
 
-**Instructions:** Fix only the listed findings, or revert the out-of-bounds
-changes. Stay inside the ticket's allowed paths.
+**Instructions:** Work on the slice branch in a new worktree. Fix only the
+listed findings, or revert the out-of-bounds changes. Stay inside the ticket's
+allowed paths.
 
 **Output files:** files inside the ticket's allowed paths.
 
@@ -169,11 +171,12 @@ paths or reveals a contradiction with a C3 interface.
 
 ## `merge` round
 
-**Inputs:** the batch's slice branches or worktrees, the integration branch, the
-tickets' allowed paths.
+**Inputs:** the slice branch, the integration branch, the allowed paths of
+every ticket in the batch.
 
-**Instructions:** Merge each slice into the integration branch. Resolve
-conflicts only within the batch's allowed paths.
+**Instructions:** Merge the slice branch into the integration branch. Resolve
+conflicts only within the batch's allowed paths. Remove the slice worktree and
+keep the branch.
 
 **Output files:** files inside the batch's allowed paths.
 
@@ -214,9 +217,11 @@ wrong (report it as a contradiction).
 
 ## `drift` round
 
-**Inputs:** `egm-drift-report`, `docs/architecture/`, the implemented code.
+**Inputs:** `egm-drift-report`'s SKILL.md, `docs/architecture/`, the
+implemented code.
 
-**Instructions:** Run `egm-drift-report` on `docs/architecture/`. Report where
+**Instructions:** Read `egm-drift-report`'s SKILL.md and follow it (not through
+a Skill tool) on `docs/architecture/`. Report where
 documents and code disagree.
 
 **Output files:** the drift report in the location `egm-drift-report` names.

@@ -147,3 +147,27 @@ scenarios:
           - type: "required_pattern"
             pattern: "(revise|grill|readiness|superseded|new .approve.)"
             message: "A rejected approval must add a revise (or grill if a new decision is needed) chain with fresh readiness, review and approve tasks, superseding the pending ones."
+
+  - scenario_id: "generate_project_after_plan"
+    description: "CUJ 5: with C1, C2 and every required C3 document Approved, grills the build plan, drafts c4-build-plan.md and slice tickets, reviews them, and after approval runs slice 01 (the walking skeleton) alone, then ready slices in batches, each implemented, merged, verified and code-reviewed by fresh subagents, ending with egm-drift-report."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "/egm-c4 (C1, C2, c3-web.md and c3-api.md are Approved; no build plan exists yet)"
+        assertions:
+          - type: "required_pattern"
+            pattern: "(build plan|c4-build-plan\\.md|c4-plan|grill|toolchain|walking skeleton)"
+            message: "With every design level approved, the C4 step must start by grilling the build plan, not by writing code."
+
+  - scenario_id: "path_violation_adds_fix"
+    description: "An implement round for slice 03 changed a file outside the ticket's Allowed Paths; the orchestrator shows the path, adds a fix chain that reverts it, and does not merge the slice until a path check passes."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "The implement round for slice 03 also edited services/web/src/app.ts, which is not in the ticket's Allowed Paths."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(Allowed Paths|fix|revert|path check|out-of-bounds|violation)"
+            message: "A path-check violation must be shown and add a fix task that reverts the out-of-bounds change before the slice merges."

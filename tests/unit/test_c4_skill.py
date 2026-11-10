@@ -10,7 +10,8 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 SKILL = ROOT / "skills/egm-c4"
 REFS = SKILL / "references"
-ADAPTED = ("grilling.md", "domain-language.md", "c3-component.md")
+ADAPTED = ("grilling.md", "domain-language.md", "c3-component.md",
+           "c4-code.md")
 
 
 def read(path: Path) -> str:
@@ -214,4 +215,20 @@ def test_orchestrator_routes_all_design_levels() -> None:
   for phrase in ("`references/c2-container.md`", "`references/c3-component.md`",
                  "/egm-c4 c3 <container>", "upper levels are not Approved",
                  "Reconcile", "`stale`"):
+    assert phrase in text, phrase
+
+
+def test_c4_code_playbook() -> None:
+  text = flat(REFS / "c4-code.md")
+  for phrase in ("Target Scope & File Boundary", "walking skeleton",
+                 "docs/architecture/slices/NN-<slice>.md", "Allowed Paths",
+                 "Waits On", "Test Seams", "red-green", "git diff --name-only",
+                 "Build and Test Commands", "rework against revised C3"):
+    assert phrase in text, phrase
+
+
+def test_orchestrator_gates_code_on_build_plan() -> None:
+  text = flat(SKILL / "SKILL.md")
+  for phrase in ("`references/c4-code.md`", "build-plan approval",
+                 "egm-drift-report", "`Implemented`"):
     assert phrase in text, phrase

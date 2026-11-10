@@ -80,19 +80,23 @@ The orchestrator adds tasks only by these rules:
 *   C1 approved → C2 grill, draft, readiness, review, approve.
 *   C2 approved → the same five tasks per container marked `C3: required`, then
     the C4 grill, draft, readiness, review and approve tasks for the build plan.
-*   Build plan approved → per slice: implement, merge, verify, code-review.
+*   Build plan approved → per slice: implement, merge, verify, code-review;
+    then one `C4` `drift` task that waits on every slice (see `c4-code.md`).
 *   Section changes or review findings that need more than an approved
     replacement → `revise`, then a new `readiness`, `review` and `approve`. A
     change that needs a new decision → `grill` first.
-*   Blocking code-review findings or failed verification → `fix`, then `merge`,
-    `verify` and `code-review` again.
+*   Blocking code-review findings, failed verification, a path-check
+    violation, or a change the user requests at a batch gate → `fix`, then
+    `merge`, `verify` and `code-review` again.
 *   User rejects at `approve` → `revise` (or `grill` if a new decision is
     needed), then `readiness`, `review` and a new `approve`.
 
 **Superseding.** When a `revise` (or `grill`) chain is added for a scope, set
 that scope's pending `readiness`, `review` and `approve` tasks (`todo`,
 `stale`, or the `approve` the user just rejected) to `done` with Notes
-`superseded by Txx`, naming the new task of the same type. Point any task that
+`superseded by Txx`, naming the new task of the same type. When a `fix`
+chain is added for a slice, supersede that slice's pending `merge`, `verify`
+and `code-review` tasks the same way. Point any task that
 depended on a superseded task at its replacement. Because the Status mapping
 reads the highest-ID `approve` task, a superseded `approve` never sets a
 document to `Approved`.
@@ -108,7 +112,9 @@ When the user accepts a contradiction or forces an `Approved` level:
     existing tree and answers, plus the contradiction.
 2.  Mark every task that transitively depends on the old `approve` task
     `stale`, and point its dependency at the new `approve` task. Stale tasks
-    therefore cannot run before the upper level is approved again.
+    therefore cannot run before the upper level is approved again. Done
+    `C4:slice-NN` tasks follow the narrower rule in `c4-code.md`
+    ("Contradictions while building").
 3.  A stale `grill` reruns from its existing log and the upper level's changes;
     a stale `draft` becomes a `revise` of the existing document.
 
