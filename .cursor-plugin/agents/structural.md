@@ -1,5 +1,5 @@
 ---
-name: egm-structural
+name: c4-structural
 description: Document structure reviewer.
 model: inherit
 readonly: true

@@ -1,5 +1,5 @@
 ---
-name: egm-design
+name: c4-design
 description: Design critique reviewer.
 model: inherit
 readonly: true

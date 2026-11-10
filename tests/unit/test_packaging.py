@@ -64,8 +64,8 @@ def test_runtime_bundle_is_complete_and_reproducible(
         data = bundle.read((prefix / icon).as_posix())
         assert data == (skill.parent / icon).read_bytes()
         assert ElementTree.fromstring(data).tag == "{http://www.w3.org/2000/svg}svg"
-    assert "skills/egm-bootstrap/references/worker-return.schema.json" in names
-    assert "skills/egm-bootstrap/references/templates.md" in names
+    assert "skills/c4-bootstrap/references/worker-return.schema.json" in names
+    assert "skills/c4-bootstrap/references/templates.md" in names
     assert "resources/document_standards/feature-spec-standard.md" in names
     assert "agents/design_critic.md" in names
     assert "docs/codex.md" in names
@@ -109,7 +109,7 @@ def test_runtime_bundle_is_complete_and_reproducible(
     ("review_loop", "#e86e00", "#ff8d41"),
 ])
 def test_skill_icon_and_host_palette_match(skill: str, base: str, facet: str) -> None:
-  root = ROOT / "skills" / f"egm-{skill.replace('_', '-')}"
+  root = ROOT / "skills" / ("c4" if skill == "c4" else f"c4-{skill.replace('_', '-')}")
   metadata = yaml.safe_load((root / "agents/openai.yaml").read_text())["interface"]
   assert metadata["brand_color"].lower() == base
   for field in ("icon_small", "icon_large"):
@@ -344,17 +344,17 @@ def test_refuses_unbundled_services(source: Path, tmp_path: Path, field: str) ->
 @pytest.mark.parametrize("target", ["claude", "openai"])
 @pytest.mark.parametrize("missing", [
     "skills",
-    "skills/egm-bootstrap/SKILL.md",
-    "skills/egm-c4/SKILL.md",
-    "skills/egm-drift-report/SKILL.md",
-    "skills/egm-resolve/SKILL.md",
-    "skills/egm-review/SKILL.md",
-    "skills/egm-review-loop/SKILL.md",
-    "skills/egm-review/agents/openai.yaml",
-    "skills/egm-review/assets/icon.svg",
-    "skills/egm-bootstrap/references/worker-return.schema.json",
-    "skills/egm-bootstrap/references/templates.md",
-    "skills/egm-c4/references/round-result.schema.json",
+    "skills/c4-bootstrap/SKILL.md",
+    "skills/c4/SKILL.md",
+    "skills/c4-drift-report/SKILL.md",
+    "skills/c4-resolve/SKILL.md",
+    "skills/c4-review/SKILL.md",
+    "skills/c4-review-loop/SKILL.md",
+    "skills/c4-review/agents/openai.yaml",
+    "skills/c4-review/assets/icon.svg",
+    "skills/c4-bootstrap/references/worker-return.schema.json",
+    "skills/c4-bootstrap/references/templates.md",
+    "skills/c4/references/round-result.schema.json",
     "agents/design_critic.md",
     "resources/execution_instructions.md",
     "resources/document_standards/zoom-out-standard.md",

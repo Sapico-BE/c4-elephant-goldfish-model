@@ -1,5 +1,5 @@
 ---
-name: egm-inventive-catalyst
+name: c4-inventive-catalyst
 description: Inventive problem-solving Goldfish persona applying TRIZ principles to identify and eliminate system-level contradictions without compromise.
 license: Apache-2.0
 ---

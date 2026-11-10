@@ -49,8 +49,8 @@ This integration delivers:
 2.  Integration of the persona into the upstream Goldfish shootdown swarm in
     `skills/egm-brainstorm/SKILL.md`.
 3.  Integration of the persona into **Step 5 (Initial Strategic Review)** in
-    [skills/egm-review/SKILL.md](../../skills/egm-review/SKILL.md), pairing with
-    `egm-zoom-out` to audit foundational trade-offs before detailed reviews.
+    [skills/c4-review/SKILL.md](../../skills/c4-review/SKILL.md), pairing with
+    `c4-zoom-out` to audit foundational trade-offs before detailed reviews.
 
 --------------------------------------------------------------------------------
 
@@ -88,16 +88,16 @@ Control) spanning both single-process tools and distributed systems.
 ### Goals
 
 *   **Dedicated Inventive Persona**: Define `agents/inventive_catalyst.md`
-    (`egm-inventive-catalyst`) to identify technical contradictions and propose
+    (`c4-inventive-catalyst`) to identify technical contradictions and propose
     pattern-based resolutions without diluting the responsibility of existing
     evaluative personas.
 *   **Dual-Phase Integration**:
-    *   **Brainstorming**: Add `egm-inventive-catalyst` to the parallel
-        shootdown swarm coordinated by `egm-synthesizer` in `/egm-brainstorm`
+    *   **Brainstorming**: Add `c4-inventive-catalyst` to the parallel
+        shootdown swarm coordinated by `c4-synthesizer` in `/egm-brainstorm`
         (the 7-lens swarm) to expand conceptual possibilities.
-    *   **Review Pipeline**: Add `egm-inventive-catalyst` to **Step 5 (Initial
-        Strategic Review)** in `/egm-review` to audit high-altitude foundational
-        compromises alongside `egm-zoom-out` before line-by-line review.
+    *   **Review Pipeline**: Add `c4-inventive-catalyst` to **Step 5 (Initial
+        Strategic Review)** in `/c4-review` to audit high-altitude foundational
+        compromises alongside `c4-zoom-out` before line-by-line review.
 *   **Self-Contained Inlined Pattern Knowledge**: Inline 10 curated software
     architecture patterns directly into the persona prompt, eliminating external
     file I/O and cross-harness path resolution failures.
@@ -119,7 +119,7 @@ Control) spanning both single-process tools and distributed systems.
     dual-maintenance debt and runtime drift, the pattern catalog lives strictly
     inside the persona definition.
 *   **Blocking Review Loop Gating in Step 7**: Adding the Catalyst to the
-    blocking repair loop (`egm-review-loop`) in Step 7 is out of scope. It runs
+    blocking repair loop (`c4-review-loop`) in Step 7 is out of scope. It runs
     upstream in Step 5 as an advisory high-altitude audit, avoiding cyclic
     conflict with Step 8 Zoom Out.
 
@@ -134,7 +134,7 @@ standalone Markdown file conforming to the standard Goldfish harness contract:
 
 ```markdown
 ---
-name: egm-inventive-catalyst
+name: c4-inventive-catalyst
 description: Inventive problem-solving Goldfish persona applying TRIZ principles to identify and eliminate system-level contradictions without compromise.
 license: Apache-2.0
 ---
@@ -253,26 +253,26 @@ Otherwise, for each finding, include:
     `skills/egm-brainstorm/SKILL.md`, update the subagent dispatch list for
     `Mode: BRAINSTORM`:
 
-    *   Update `Reviewers` to include `egm-inventive-catalyst`.
+    *   Update `Reviewers` to include `c4-inventive-catalyst`.
 
-3.  **Generic Multi-Lens Synthesis**: `egm-synthesizer` aggregates findings
+3.  **Generic Multi-Lens Synthesis**: `c4-synthesizer` aggregates findings
     across all lenses symmetrically into the `## Analysis` section of
     `concepts_brief.md`. Extend the failed-reviewer rule in
     `agents/synthesizer.md` from `Mode: REVIEW` to `Mode: BRAINSTORM`: a lens
     that times out or returns nothing is retried once, then reported as
     `not run` in `concepts_brief.md`, never as a lens with no findings.
 
-#### B. Review Loop Integration (`/egm-review`)
+#### B. Review Loop Integration (`/c4-review`)
 
 1.  **Step 5 (Initial Strategic Review) Pairing**: In
-    `skills/egm-review/SKILL.md`, update `Subflow: Zoom Out Review` (Step 5) to
+    `skills/c4-review/SKILL.md`, update `Subflow: Zoom Out Review` (Step 5) to
     spawn **two parallel high-altitude auditors**:
-    *   `egm-zoom-out`: Audits for YAGNI, over-engineering, and root-problem
+    *   `c4-zoom-out`: Audits for YAGNI, over-engineering, and root-problem
         alignment against `zoom-out-standard.md`.
-    *   `egm-inventive-catalyst`: Audits for foundational false compromises and
+    *   `c4-inventive-catalyst`: Audits for foundational false compromises and
         inventive opportunities across `full file` without a document standard
         (relying on its self-contained inlined catalog, analogous to
-        `egm-comprehension`).
+        `c4-comprehension`).
 2.  **Advisory Checkpoint Gate**: Step 5 is an interactive manual checkpoint
     gate. Findings from the Catalyst are reported in `zoom_out_report.md` under
     an **Inventive Opportunities** section. The author can choose to pivot
@@ -281,10 +281,10 @@ Otherwise, for each finding, include:
     from the mandatory defect repair traceability matrix.
 3.  **Unidirectional Review Pipeline**: Because foundational compromises are
     evaluated in Step 5:
-    *   Step 6 (`egm-comprehension`) audits the doc for clarity.
-    *   Step 7 (`egm-design`, `egm-structural`, `egm-style`) audits
+    *   Step 6 (`c4-comprehension`) audits the doc for clarity.
+    *   Step 7 (`c4-design`, `c4-structural`, `c4-style`) audits
         implementation mechanics without cyclic whiplash.
-    *   Step 8 (`egm-zoom-out`) acts as the final pruning shears before Step 9
+    *   Step 8 (`c4-zoom-out`) acts as the final pruning shears before Step 9
         readiness testing, evaluating adopted inventive resolutions in the
         context of resolved trade-offs so legitimate conflict resolutions are
         not treated as premature complexity.
@@ -310,7 +310,7 @@ Otherwise, for each finding, include:
 *   **Mitigation**:
     1.  The Catalyst must explicitly output `Secondary Liabilities` for every
         pattern.
-    2.  In `/egm-review`, Step 5 findings are strictly advisory, and Step 8
+    2.  In `/c4-review`, Step 5 findings are strictly advisory, and Step 8
         (Intermediate Zoom Out) prunes any speculative complexity before
         implementation planning.
 
@@ -355,7 +355,7 @@ Otherwise, for each finding, include:
 
 ### Alternative C: Synthesizer-Embedded Prompting (Zero-Spawn Alternative)
 
-*   **Description**: Instruct `egm-synthesizer` to perform TRIZ analysis
+*   **Description**: Instruct `c4-synthesizer` to perform TRIZ analysis
     directly during synthesis rather than launching a 7th subagent.
 *   **Pros**: Saves token expenditure and eliminates cold-start latency for one
     subagent.
@@ -380,10 +380,10 @@ Otherwise, for each finding, include:
 
 ### Alternative E: Step 5 Strategic Audit vs. Step 7 Blocking Review Loop
 
-*   **Description**: Add `egm-inventive-catalyst` to the Step 7
-    (`egm-review-loop`) blocking repair loop.
+*   **Description**: Add `c4-inventive-catalyst` to the Step 7
+    (`c4-review-loop`) blocking repair loop.
 *   **Pros**: Runs alongside design critics on `FeatureRange`.
-*   **Cons**: Causes severe cyclic whiplash with Step 8 (`egm-zoom-out`), which
+*   **Cons**: Causes severe cyclic whiplash with Step 8 (`c4-zoom-out`), which
     immediately prunes complexity added in Step 7. Furthermore, mapping to
     `feature-spec-standard.md` creates a phantom contract.
 *   **Reason for Rejection**: Placing the Catalyst in Step 5 provides the
@@ -404,7 +404,7 @@ checkpoints at each stage.
 
 *   **Type / Scope**: Agent Persona Specification
 *   **Rationale**: Define the system prompt, mandates, role, inlined pattern
-    catalog, and output format for `egm-inventive-catalyst`.
+    catalog, and output format for `c4-inventive-catalyst`.
 *   **Proposed Changes**: Author the file following the exact schema specified
     in Section 1 of the Proposed Architecture.
 
@@ -415,7 +415,7 @@ checkpoints at each stage.
 *   **Proposed Changes**: Add `"./.claude-plugin/agents/inventive_catalyst.md"`
     to the `agents` array in `.claude-plugin/plugin.json`. Add the persona to
     `.claude-plugin/agents/`, `.cursor-plugin/agents/`,
-    `com.github.copilot/agents/egm-inventive-catalyst.agent.md`, the reviewer
+    `com.github.copilot/agents/c4-inventive-catalyst.agent.md`, the reviewer
     list in `adapters/opencode/install.py`, and the persona list in
     `scripts/pack_plugin.py`. Update reviewer and adapter counts in
     `docs/harnesses.md` from nine to ten. Regenerate `distributions/claude/`.
@@ -430,7 +430,7 @@ checkpoints at each stage.
 #### 3. `agents/synthesizer.md` (Modify)
 
 *   **Type / Scope**: Intermediate Orchestrator & Aggregator
-*   **Rationale**: Instruct `egm-synthesizer` to launch and aggregate findings
+*   **Rationale**: Instruct `c4-synthesizer` to launch and aggregate findings
     from `inventive_catalyst` during brainstorming.
 *   **Proposed Changes**:
     *   In `IF Mode: BRAINSTORM` Step 1: Update the subagent dispatch list to
@@ -443,15 +443,15 @@ checkpoints at each stage.
         *"Collect findings from all 7 Goldfish, deduplicate overlapping points,
         synthesize inventive contradictions and pattern resolutions alongside
         risk dimensions, and compile them into `concepts_brief.md`."*
-    *   In Step 5 of `egm-review`: `egm-inventive-catalyst` is dispatched
-        alongside `egm-zoom-out`; findings under `## Inventive Opportunities`
+    *   In Step 5 of `c4-review`: `c4-inventive-catalyst` is dispatched
+        alongside `c4-zoom-out`; findings under `## Inventive Opportunities`
         are recorded directly into `zoom_out_report.md` without altering
         `goldfish_review_report.md`'s strict Blocker/Major/Nit defect schema.
 
 #### 4. `skills/egm-brainstorm/SKILL.md` (Modify)
 
 *   **Type / Scope**: Core Skill Workflow
-*   **Rationale**: Register `egm-inventive-catalyst` in the brainstorming
+*   **Rationale**: Register `c4-inventive-catalyst` in the brainstorming
     shootdown swarm.
 *   **Proposed Changes**:
     *   Add the 7th lens to the table: `| **7. Inventive Catalyst** |
@@ -459,24 +459,24 @@ checkpoints at each stage.
         trade-off is this design accepting as inevitable? How can we resolve
         this conflict using proven software transforms to achieve the Ideal
         Final Result without compromise?* |`
-    *   Update Step 2.1 lead-in to include `egm-inventive-catalyst` in the
+    *   Update Step 2.1 lead-in to include `c4-inventive-catalyst` in the
         `Reviewers` array parameter:
-        `Reviewers: [egm-design, egm-codebase-details, egm-zoom-out,
-        egm-comprehension, egm-implementation-readiness, egm-structural,
-        egm-inventive-catalyst]`.
+        `Reviewers: [c4-design, c4-codebase-details, c4-zoom-out,
+        c4-comprehension, c4-implementation-readiness, c4-structural,
+        c4-inventive-catalyst]`.
     *   In the embedded `concepts_brief.md` template, extend the `## Analysis`
         placeholder to cover inventive contradictions, the catalog pattern
         suggested for each, its secondary trade-offs, and the Ideal Final
         Result.
 
-#### 5. `skills/egm-review/SKILL.md` (Modify)
+#### 5. `skills/c4-review/SKILL.md` (Modify)
 
 *   **Type / Scope**: Review Orchestrator
-*   **Rationale**: Integrate `egm-inventive-catalyst` into Step 5 (Initial
+*   **Rationale**: Integrate `c4-inventive-catalyst` into Step 5 (Initial
     Strategic Review) without colliding with Step 8 post-critic pruning, while
     staying strictly under the 24,000-byte skill load limit enforced by
     `tests/unit/test_skill_load_limits.py`.
-*   **Skill Size Budget**: The `egm-review` body is 23,743 bytes at `main`,
+*   **Skill Size Budget**: The `c4-review` body is 23,743 bytes at `main`,
     leaving 257 bytes of headroom. To accommodate Step 5 without exceeding the
     limit:
     1.  The detailed report schema for Inventive Opportunities is defined
@@ -484,16 +484,16 @@ checkpoints at each stage.
         avoiding a duplicate multiline schema block in `SKILL.md`.
     2.  `Subflow: Zoom Out Review` stays shared. Its Step 5 case and the Step 5
         bullet in `Subflow: Uninterrupted Full Flow` add
-        `egm-inventive-catalyst`. This brings the body to about 23,885 bytes,
+        `c4-inventive-catalyst`. This brings the body to about 23,885 bytes,
         so nothing else needs cutting.
 *   **Proposed Changes**:
     *   In `Subflow: Zoom Out Review` step 1, after the Step 8 clause, add:
-        "When running as Step 5, also spawn `egm-inventive-catalyst` in
+        "When running as Step 5, also spawn `c4-inventive-catalyst` in
         parallel and write both into `zoom_out_report.md`." Step 8 still runs
-        only `egm-zoom-out`.
+        only `c4-zoom-out`.
     *   In the Step 5 bullet of `Subflow: Uninterrupted Full Flow`, which the
-        `Consolidated report` preset runs, change `Reviewers: [egm-zoom-out]`
-        to `Reviewers: [egm-zoom-out, egm-inventive-catalyst]`.
+        `Consolidated report` preset runs, change `Reviewers: [c4-zoom-out]`
+        to `Reviewers: [c4-zoom-out, c4-inventive-catalyst]`.
 
 *Phase 2 Checkpoint*: Validate skill frontmatter and subflow parsing via `pytest
 tests/unit/test_frontmatter.py`.
@@ -532,7 +532,7 @@ tests/unit/test_frontmatter.py`.
     *   `docs/designs/README.md`: Update the existing entry for
         `triz_integration.md` to remove reference to rejected "dynamic reviewer
         selection" and reflect integration into `/egm-brainstorm` and Step 5 of
-        `/egm-review`.
+        `/c4-review`.
 
 #### 8. User-Facing Documentation (Modify)
 
@@ -558,14 +558,14 @@ using `pytest tests/unit/test_link_integrity.py`.
 *   **Proposed Changes**:
     *   `skills/egm-brainstorm/TEST.md`: Update test expectations and lens
         enumeration to include Inventive Catalyst (7 lenses).
-    *   `skills/egm-review/TEST.md`: Update Step 5 test expectation to verify
+    *   `skills/c4-review/TEST.md`: Update Step 5 test expectation to verify
         Initial Strategic Review with parallel Zoom Out and Catalyst execution.
     *   `skills/egm-brainstorm/test_scenarios.yaml`: Add behavioral test
         scenarios asserting that the `## Analysis` section names an inventive
         contradiction, the catalog pattern suggested for it, and its secondary
         trade-offs, plus a scenario validating the "No false compromise
         detected" early-exit guardrail when the input is already optimal.
-    *   `skills/egm-review/test_scenarios.yaml`: Add scenarios validating
+    *   `skills/c4-review/test_scenarios.yaml`: Add scenarios validating
         detection of false architectural compromises in Step 5 and the early-exit
         guardrail.
     *   `tests/unit/test_frontmatter.py`: Add validation asserting frontmatter

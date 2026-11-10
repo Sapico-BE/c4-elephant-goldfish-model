@@ -1,5 +1,5 @@
 ---
-name: egm-inventive-catalyst
+name: c4-inventive-catalyst
 description: Contradiction elimination and inventive transforms reviewer.
 model: inherit
 readonly: true

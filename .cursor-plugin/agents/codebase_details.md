@@ -1,5 +1,5 @@
 ---
-name: egm-codebase-details
+name: c4-codebase-details
 description: Codebase details reviewer.
 model: inherit
 readonly: true

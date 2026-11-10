@@ -15,8 +15,8 @@ iteratively section-by-section, gathering feedback at each stage before saving t
 disk.
 
 Crucially, it establishes **semantic boundaries** within the document to enable
-downstream multi-agent reviews (`/egm-review`) and automated drift auditing
-(`/egm-drift-report`).
+downstream multi-agent reviews (`/c4-review`) and automated drift auditing
+(`/c4-drift-report`).
 
 ## The Problem
 
@@ -61,7 +61,7 @@ sequenceDiagram
     participant Summary as Artifact: concepts_brief.md / notes
     participant DraftArtifact as Artifact: design_draft.md
     participant Workspace as Workspace File: docs/designs/<FEATURE>.md
-    participant Review as egm-review Skill
+    participant Review as c4-review Skill
 
     Note over Human,Draft: Step 1: Predecessor Context Ingestion
     Human->>Draft: /egm-draft
@@ -82,8 +82,8 @@ sequenceDiagram
     Draft->>Human: Report contradictions & architectural additions
     Draft->>DraftArtifact: Append Watermark Footer
     Draft->>Workspace: Write docs/designs/<FEATURE>.md
-    Draft->>Human: Provide link to spec & recommend /egm-review
-    Human->>Review: /egm-review docs/designs/<FEATURE>.md
+    Draft->>Human: Provide link to spec & recommend /c4-review
+    Human->>Review: /c4-review docs/designs/<FEATURE>.md
 ```
 
 --------------------------------------------------------------------------------
@@ -125,7 +125,7 @@ Drafts the execution section:
 
 *   Reconciles the draft against the predecessor context and asks the user to
     decide each contradiction. It does not self-grade against the Zoom Out
-    standard; `/egm-review` Stage 5 does that from a fresh context.
+    standard; `/c4-review` Stage 5 does that from a fresh context.
 *   Appends a standardized provenance watermark footer (*`*Drafted with EGM*`*)
     separated by a horizontal rule delimiter (`--------------------------------------------------------------------------------`)
     after trailing open questions.
@@ -134,7 +134,7 @@ Drafts the execution section:
     uses `docs/designs/README.md`; contributors update it as required by
     [CONTRIBUTING.md](../../CONTRIBUTING.md).
 *   Formats markdown using standard markdown formatters.
-*   Outputs a clickable link and instructs the user to run `/egm-review`.
+*   Outputs a clickable link and instructs the user to run `/c4-review`.
 
 --------------------------------------------------------------------------------
 
@@ -145,12 +145,12 @@ Goldfish review engine to parse the document into two semantic zones:
 
 1.  **Feature Range (`FeatureRange`)**: Lines 1 through the header boundary.
     Contains the high-level problem statement, goals, architecture, and
-    alternatives. Audited by the **Design Critic** (`egm-design`) and
-    **Comprehension Reviewer** (`egm-comprehension`).
+    alternatives. Audited by the **Design Critic** (`c4-design`) and
+    **Comprehension Reviewer** (`c4-comprehension`).
 2.  **Detailed Range (`DetailedRange`)**: From `## Detailed Implementation Plan`
     to EOF. Contains file targets, schemas, and test plans. Audited by the
-    **Implementation Readiness Reviewer** (`egm-implementation-readiness`) and
-    **Codebase Details Auditor** (`egm-codebase-details`).
+    **Implementation Readiness Reviewer** (`c4-implementation-readiness`) and
+    **Codebase Details Auditor** (`c4-codebase-details`).
 
 Standardizing on the `## Detailed Implementation Plan` header allows automated
 boundary discovery without requiring manual line range configuration. Terminal

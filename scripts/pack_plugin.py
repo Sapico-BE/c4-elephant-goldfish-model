@@ -25,22 +25,22 @@ HOST = {
     "openai": (".codex-plugin/plugin.json",),
 }
 SKILLS = (
-    "egm-bootstrap", "egm-c4",
-    "egm-drift-report", "egm-resolve", "egm-review", "egm-review-loop",
+    "c4-bootstrap", "c4",
+    "c4-drift-report", "c4-resolve", "c4-review", "c4-review-loop",
 )
 REQUIRED_SHARED = (
     "plugin.json", "LICENSE", "README.md", "THIRD_PARTY_NOTICES.md",
     "assets/icon.svg",
     "docs/index.md", "docs/getting_started.md", "docs/harnesses.md",
     "docs/claude.md", "docs/codex.md", "docs/faq.md", "docs/privacy.md",
-    "docs/explainers/egm-c4.html",
+    "docs/explainers/c4.html",
     "resources/README.md", "resources/execution_instructions.md",
-    "skills/egm-bootstrap/references/worker-return.schema.json",
-    "skills/egm-bootstrap/references/templates.md",
-    "skills/egm-c4/references/round-result.schema.json",
-    "skills/egm-c4/references/grilling.md",
-    "skills/egm-c4/references/ledger.md",
-    "skills/egm-c4/references/rounds.md",
+    "skills/c4-bootstrap/references/worker-return.schema.json",
+    "skills/c4-bootstrap/references/templates.md",
+    "skills/c4/references/round-result.schema.json",
+    "skills/c4/references/grilling.md",
+    "skills/c4/references/ledger.md",
+    "skills/c4/references/rounds.md",
 ) + tuple(
     f"skills/{skill}/{name}"
     for skill in SKILLS

@@ -5,13 +5,13 @@ const steps = [
   {
     name: 'C4',
     icon: 'c4',
-    command: '/egm-c4',
+    command: '/c4',
     body: 'Grill the idea, then design C1 context, C2 containers, and C3 components with Goldfish review at each level, and build in test-first slices.',
   },
   {
     name: 'Review',
     icon: 'review',
-    command: '/egm-review',
+    command: '/c4-review',
     body: 'Fresh zero-context Goldfish subagents check a standalone document for completeness, clarity, self-containment, and implementation readiness.',
   },
 ] as const;
@@ -41,7 +41,7 @@ const steps = [
       <span class="marker"><SkillIcon skill="drift_report" /></span>
       <div class="drift-head">
         <h3 class="title">Check for drift</h3>
-        <span class="cmd">/egm-drift-report</span>
+        <span class="cmd">/c4-drift-report</span>
       </div>
       <p class="muted">
         After implementation, compare the code with the design and report where they diverge.

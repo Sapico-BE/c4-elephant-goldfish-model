@@ -19,8 +19,8 @@ review, understand, and explain every submitted change.
      (`.github/ISSUE_TEMPLATE/feature_proposal.md`) to receive
      `design-ready`.
    * **b)** Submit and merge a full EGM design document PR
-     (`docs/designs/<name>.md` authored via `/egm-c4` or
-     `/egm-review`, referencing the issue with `Refs #<issue>`) so
+     (`docs/designs/<name>.md` authored via `/c4` or
+     `/c4-review`, referencing the issue with `Refs #<issue>`) so
      maintainers can apply `pr-ready` to the Feature Inquiry Issue.
    * **c)** Submit and merge an implementation PR of the approved design into
      the codebase (`Closes #<issue>`).

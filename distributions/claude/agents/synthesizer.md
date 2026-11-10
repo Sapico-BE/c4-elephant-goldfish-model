@@ -1,5 +1,5 @@
 ---
-name: egm-synthesizer
+name: c4-synthesizer
 description: Intermediate Swarm Compiler and Aggregator coordinating parallel Goldfish reviewers, deduplicating findings, and compiling deliverable reports.
 license: Apache-2.0
 ---

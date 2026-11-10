@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-"""Contracts for the egm-c4 orchestrator skill and its references."""
+"""Contracts for the c4 orchestrator skill and its references."""
 
 import json
 from pathlib import Path
@@ -8,7 +8,7 @@ import re
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-SKILL = ROOT / "skills/egm-c4"
+SKILL = ROOT / "skills/c4"
 REFS = SKILL / "references"
 ADAPTED = ("grilling.md", "domain-language.md", "c3-component.md",
            "c4-code.md")
@@ -43,7 +43,7 @@ def test_adapted_reference_credits_mit_source(name: str) -> None:
   assert "Adapted from mattpocock/skills" in text
   assert "MIT License" in text
   notices = flat(ROOT / "THIRD_PARTY_NOTICES.md")
-  assert f"skills/egm-c4/references/{name}" in notices
+  assert f"skills/c4/references/{name}" in notices
 
 
 def test_third_party_notice_carries_mit_text() -> None:
@@ -175,7 +175,7 @@ def test_orchestrator_review_focus() -> None:
 
 def test_execution_rules_scope_egm_c4_exceptions() -> None:
   text = flat(ROOT / "resources/execution_instructions.md")
-  for phrase in ("egm-c4", "Code writing", "Round writes",
+  for phrase in ("c4", "Code writing", "Round writes",
                  "Contradictions in rounds", "Interview rounds",
                  "Orchestrator writes"):
     assert phrase in text, phrase
@@ -183,7 +183,7 @@ def test_execution_rules_scope_egm_c4_exceptions() -> None:
 
 
 def test_review_loop_delegated_resolution() -> None:
-  text = flat(ROOT / "skills/egm-review-loop/SKILL.md")
+  text = flat(ROOT / "skills/c4-review-loop/SKILL.md")
   for phrase in ("ResolveMode", "`inline`", "`delegated`",
                  "Execute the resolution workflow in the primary Elephant context",
                  "StopBeforeGate: true", "ReportDir"):
@@ -191,7 +191,7 @@ def test_review_loop_delegated_resolution() -> None:
 
 
 def test_resolve_can_stop_before_gate() -> None:
-  text = flat(ROOT / "skills/egm-resolve/SKILL.md")
+  text = flat(ROOT / "skills/c4-resolve/SKILL.md")
   assert "StopBeforeGate" in text
   assert "without editing `TargetFile`" in text
 
@@ -201,17 +201,17 @@ def test_c4_passes_report_dir() -> None:
 
 
 def test_delegated_round_reports_and_report_dir() -> None:
-  loop = flat(ROOT / "skills/egm-review-loop/SKILL.md")
+  loop = flat(ROOT / "skills/c4-review-loop/SKILL.md")
   assert "Status: resolved" in loop
-  for path in ("skills/egm-review-loop/SKILL.md", "docs/designs/review.md",
-               "docs/designs/c4.md", "skills/egm-c4/references/rounds.md"):
+  for path in ("skills/c4-review-loop/SKILL.md", "docs/designs/review.md",
+               "docs/designs/c4.md", "skills/c4/references/rounds.md"):
     text = flat(ROOT / path)
     assert "goldfish_review_report.<RunId>.round-<n>.md" in text, path
     assert "goldfish_review_report.round-" not in text, path
-  for path in ("skills/egm-review-loop/SKILL.md", "docs/designs/review.md"):
+  for path in ("skills/c4-review-loop/SKILL.md", "docs/designs/review.md"):
     assert "findings.<RunId>.round-<n>.<reviewer>.md" in flat(ROOT / path)
   assert "RunId" in flat(SKILL / "SKILL.md")
-  assert "ReportDir" in flat(ROOT / "skills/egm-resolve/SKILL.md")
+  assert "ReportDir" in flat(ROOT / "skills/c4-resolve/SKILL.md")
   assert "ReportDir" in flat(ROOT / "docs/designs/review.md")
 
 
@@ -262,7 +262,7 @@ def test_slice_mechanics_and_ledger_rules() -> None:
 def test_orchestrator_routes_all_design_levels() -> None:
   text = flat(SKILL / "SKILL.md")
   for phrase in ("`references/c2-container.md`", "`references/c3-component.md`",
-                 "/egm-c4 c3 <container>", "upper levels are not Approved",
+                 "/c4 c3 <container>", "upper levels are not Approved",
                  "Reconcile", "`stale`"):
     assert phrase in text, phrase
 
@@ -279,7 +279,7 @@ def test_c4_code_playbook() -> None:
 def test_orchestrator_gates_code_on_build_plan() -> None:
   text = flat(SKILL / "SKILL.md")
   for phrase in ("`references/c4-code.md`", "build-plan approval",
-                 "egm-drift-report", "`Implemented`"):
+                 "c4-drift-report", "`Implemented`"):
     assert phrase in text, phrase
 
 

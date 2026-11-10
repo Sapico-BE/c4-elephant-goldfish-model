@@ -1,5 +1,5 @@
 ---
-name: egm-implementation-readiness
+name: c4-implementation-readiness
 description: Implementation readiness reviewer.
 model: inherit
 readonly: true

@@ -135,7 +135,7 @@ Attach the following evidence for each host:
   project context were excluded. Use a parent-only canary probe.
 * Effective child permissions and a negative probe showing mutation attempts
   are blocked. A prompt asking for read-only behavior is insufficient.
-* End-to-end `/egm-brainstorm`, `/egm-draft`, and `/egm-review` outputs.
+* End-to-end `/egm-brainstorm`, `/egm-draft`, and `/c4-review` outputs.
   Verify reviewer completion, required reads, and stage order from traces.
 * Limits, failures, and measured usage. Redact credentials before publication.
 

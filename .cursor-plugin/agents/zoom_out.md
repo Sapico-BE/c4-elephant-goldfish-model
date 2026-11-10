@@ -1,5 +1,5 @@
 ---
-name: egm-zoom-out
+name: c4-zoom-out
 description: Simplicity and scope reviewer.
 model: inherit
 readonly: true

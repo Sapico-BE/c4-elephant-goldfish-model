@@ -30,25 +30,25 @@ npm install --prefix /absolute/opencode-v1 opencode-ai@1.18.29
 
 Inspect the generated `opencode.json` and `installation.json` before use.
 The latter records package identity and SHA-256 hashes of all bundled files.
-The native configuration contains seven commands, eight reviewers, and the `egm` primary agent.
+The native configuration contains seven commands, eight reviewers, and the `c4` primary agent.
 Native skill aliases use the canonical frontmatter names and link to the unchanged skill directories.
 
 Start OpenCode from the project directory with the candidate configuration:
 
 ```sh
-OPENCODE_CONFIG=/absolute/egm-opencode-candidate/opencode.json opencode --agent egm
+OPENCODE_CONFIG=/absolute/egm-opencode-candidate/opencode.json opencode --agent c4
 ```
 
 Model calls require separate user authorization. Installation and version checks do not require model calls.
-Select `egm` before native skill use. Other primary agents do not receive this adapter's dispatch instructions.
+Select `c4` before native skill use. Other primary agents do not receive this adapter's dispatch instructions.
 For review text, use an ordinary message rather than a slash command. For example:
 
 ```text
-Use the egm-review skill to review /absolute/path/design.md.
+Use the c4-review skill to review /absolute/path/design.md.
 ```
 
 Paste material into that ordinary message, or save it in a file for the agent to read.
-The generated `/egm-c4` and `/egm-review` commands retain
+The generated `/c4` and `/c4-review` commands retain
 OpenCode's native command syntax. Their arguments are not literal text: OpenCode
 evaluates shell markers (an exclamation mark followed by a command in backticks)
 before agent tool permissions apply. Do not paste untrusted review material into
@@ -63,7 +63,7 @@ Resolve `agents/`, `resources/`, and `docs/` against that root.
 Resolve `references/` against the canonical skill directory, after resolving its alias.
 Resolve user files against the project directory. Never substitute project files for bundled personas.
 
-Dispatch reviewers directly from `egm` with the V1 `task` tool.
+Dispatch reviewers directly from `c4` with the V1 `task` tool.
 Set `subagent_type` to the persona's canonical frontmatter name.
 Supply `description` and `prompt`. Omit `task_id` to create a fresh session.
 Use foreground tasks. Do not enable background dispatch or reuse a reviewer session.
@@ -140,7 +140,7 @@ python tests/integration/opencode_native_probe.py \
 Choose an output path that does not exist. A passing probe does not establish
 live model behavior, full workflows, or general reviewer isolation.
 
-On 2026-10-24, OpenCode `1.18.29` accepted the generated configuration through `debug config` and `debug agent egm-style`.
+On 2026-10-24, OpenCode `1.18.29` accepted the generated configuration through `debug config` and `debug agent c4-style`.
 The historical reviewer toolset enabled `read`, `glob`, and `grep`. The current
 candidate denies `grep` to preserve the `.env` read restriction.
 The `debug skill` command discovered all seven skills from the installed candidate paths.

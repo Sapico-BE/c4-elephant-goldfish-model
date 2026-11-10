@@ -28,7 +28,7 @@ The EGM skills and personas are packaged as a plugin for **Antigravity**, **Clau
 
 1.  **Skills**: The skills in `skills/` can be installed via the plugin/extension
     manifest. This guide shows their commands without a prefix (e.g.
-    `/egm-c4`, `/egm-review`); see
+    `/c4`, `/c4-review`); see
     [Try your first design](../README.md#try-your-first-design) for how to
     invoke them in Antigravity (agy CLI), Claude Code, and Codex, such as the
     `/c4:` prefix.
@@ -56,14 +56,14 @@ Use whichever skill serves your immediate bottleneck.
 
 The "core" workflow looks like:
 
-1.  **`/egm-c4`**: Takes a greenfield project through the C4 model. The agent
+1.  **`/c4`**: Takes a greenfield project through the C4 model. The agent
     grills the developer to clarify the problem, then drafts C1 (system
     context), C2 (containers), and C3 (components) documents under
     `docs/architecture/`. A multi-lens Goldfish swarm reviews each level in
     fresh subagents, and the developer approves each level before the next.
     After approval, the agent builds the project in test-first slices.
 
-2.  **`/egm-review`**: Reviews a standalone document with **Goldfish**, such as a
+2.  **`/c4-review`**: Reviews a standalone document with **Goldfish**, such as a
     design doc you wrote outside the C4 flow. Performs a multi-stage review in a
     fresh, zero-context session to validate its completeness, clarity,
     self-containment, and readiness.
@@ -85,7 +85,7 @@ The "core" workflow looks like:
     > testing strategies, etc. EGM is not opinionated here. Add your skills to
     > your implementation plan!
 
-5.  **`/egm-drift-report`**: Once code exists, compare the checked-in documents
+5.  **`/c4-drift-report`**: Once code exists, compare the checked-in documents
     with the current source and reconcile any drift.
 
 ## Drift Detection
@@ -93,7 +93,7 @@ The "core" workflow looks like:
 To ensure that your design specifications and active codebase remain
 synchronized over time, EGM provides a drift detection skill:
 
-*   **`/egm-drift-report`**: Scan your design directory and referenced code for
+*   **`/c4-drift-report`**: Scan your design directory and referenced code for
     drift. Any detected divergence should be reconciled. Either update the doc,
     or the code. Human picks which.
 
@@ -120,7 +120,7 @@ path/to/project
 
 ### Bootstrapping
 
-`/egm-bootstrap <path/to/project>` automatically generates, formats, and
+`/c4-bootstrap <path/to/project>` automatically generates, formats, and
 performs a first-pass verification of READMEs across a directory tree to
 establish codebase context. Humans should still review this output. It does this
 using a bottom-up, recursive summarization process:
