@@ -200,8 +200,10 @@ done, show each slice's verify and code-review summaries and ask whether to
 start the next batch. On approval, record `Bn approved` as the ledger's batch
 rule says. Otherwise append the requested change to
 `docs/architecture/decisions/c4-plan.answers.md`, then add a `fix` chain for
-the slice that names the entry, or a build-plan `revise` when a ticket itself
-must change; the batch stays open and the gate is asked again.
+the slice that names the entry, or reopen the build plan by the ledger's
+reopening rule when a ticket itself must change. The batch stays open and the
+gate is asked again, after the reopen chain where there is one (see the batch
+rule in `ledger.md`).
 
 ## Path checks
 
@@ -225,7 +227,7 @@ violation is:
 *   **On the slice branch or in the slice worktree:** add a `fix` chain whose
     round reverts the out-of-bounds changes. The slice does not merge until a
     path check passes. To keep such a change instead, the ticket's Allowed
-    Paths must first change through a build-plan `revise`.
+    Paths must first change by reopening the build plan.
 *   **Elsewhere** (changes left in the project checkout outside the slice
     branch, or commits an `implement` or `fix` round made on the integration
     branch): a `fix` round cannot reach them. Ask the SKILL.md keep-or-revert question and mark the task `blocked`

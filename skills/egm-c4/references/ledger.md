@@ -52,15 +52,24 @@ Decision files are `docs/architecture/decisions/<stem>.tree.md` and
 The first `todo` or `stale` task, in ID order, whose dependencies are all
 `done`. An `in-progress` task left by an interrupted session is resumed first.
 
-**Slice batches.** `C4:slice-NN` tasks and the `C4` `drift` task also follow
-batches (`c4-code.md`). When a batch starts, the orchestrator adds `batch Bn`
-to the Notes of each member slice's `implement` task (`B1` is slice 01 alone).
-When the user approves the batch gate, it adds `Bn approved` to the same
-Notes. A batch is open from its start until it is approved, and at most one is
-open. While a batch is open, only tasks of its member slices are ready,
-including their `fix` chains. An `implement` with no batch label is ready only
-when no batch is open; the next batch then takes every such ready `implement`.
-`drift` is ready only when no batch is open.
+**Slice batches.** Batches (`c4-code.md`) restrict only `C4:slice-NN` tasks
+and the `C4` `drift` task. Tasks of every other scope, including a reopened
+build plan's `C4` chain and C1 to C3 reopen tasks, are ready by the rule above
+whether or not a batch is open. When a batch starts, the orchestrator adds
+`batch Bn` to the Notes of each member slice's `implement` task (`B1` is slice
+01 alone). When the user approves the batch gate, it adds `Bn approved` to the
+same Notes. A batch is open from its start until it is approved, and at most
+one is open. While a batch is open, the only ready `C4:slice-NN` tasks are
+those of its member slices, including their `fix` chains. An `implement` with
+no batch label is ready only when no batch is open; the next batch then takes
+every such ready `implement`. `drift` is ready only when no batch is open.
+
+If the build plan or an upper level is reopened while a batch is open,
+in-progress slice rounds stop as "Contradictions while building" in
+`c4-code.md` says, and the member slices' remaining tasks wait on the new
+`approve` by the reopening rule. The batch stays open; its gate is asked once
+the reopen chain's `approve` is `done` and every member slice's last
+`code-review` is `done`.
 
 ## Status mapping
 
