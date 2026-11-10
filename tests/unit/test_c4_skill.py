@@ -174,3 +174,21 @@ def test_execution_rules_scope_egm_c4_exceptions() -> None:
                  "Orchestrator writes"):
     assert phrase in text, phrase
   assert "keep the code in a markdown draft block" in text
+
+
+def test_review_loop_delegated_resolution() -> None:
+  text = flat(ROOT / "skills/egm-review-loop/SKILL.md")
+  for phrase in ("ResolveMode", "`inline`", "`delegated`",
+                 "Execute the resolution workflow in the primary Elephant context",
+                 "StopBeforeGate: true", "ReportDir"):
+    assert phrase in text, phrase
+
+
+def test_resolve_can_stop_before_gate() -> None:
+  text = flat(ROOT / "skills/egm-resolve/SKILL.md")
+  assert "StopBeforeGate" in text
+  assert "without editing `TargetFile`" in text
+
+
+def test_c4_passes_report_dir() -> None:
+  assert "ReportDir" in flat(SKILL / "SKILL.md")

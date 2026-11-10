@@ -205,7 +205,7 @@ For C1 (`docs/architecture/c1-context.md`, playbook
     *   `GoldfishContext`: the scope's decision files, the approved upper
         documents, `GLOSSARY.md`, and the note "greenfield project: no
         existing code to leverage";
-    *   reports in the scope's review folder (C1:
+    *   `ReportDir`: the scope's review folder (C1:
         `docs/architecture/reviews/c1/`), which keeps the loop's settled
         findings across runs. Name it as the report location to the loop, the
         synthesizer and every resolve round.

@@ -61,6 +61,12 @@ The caller or user provides exactly these parameters:
     directory) and pass its absolute path instead. If a page cannot be saved,
     ask the user for a local copy and end your turn; if no one can answer,
     as in a headless run, leave it out, tell the user, and keep going.
+*   **`ResolveMode`**: Optional; default `inline`. `inline` is the resolution
+    workflow in 2.3 as written. `delegated` is for an orchestrating caller that
+    runs the decision gate itself (see 2.3).
+*   **`ReportDir`**: Optional. Folder for all reports of this loop run
+    (synthesizer reports, saved reviewer findings, `goldfish_review_report.md`).
+    Default: the existing artifact-directory resolution.
 
 ## Path & Standard Resolution Logic
 
@@ -153,6 +159,17 @@ file` mode is specified, confirm full-file line bounds).
     *   Present the interactive decision gate (Auto accept, Continue, Interactive
         breakdown).
     *   Apply approved text repairs to `TargetFile` using your file-editing tool.
+3.  **Delegated mode** (`ResolveMode: delegated` only; with `inline` or no
+    `ResolveMode`, steps 1 and 2 apply and this step does not). Do not run step
+    2 yourself. Dispatch a fresh subagent that follows `egm-resolve` with
+    `StopBeforeGate: true`, passing it `TargetFile`, the active line range, the
+    `FindingsList` and `ReportDir` (under direct dispatch, the reviewer findings
+    the caller saved verbatim in `ReportDir`). It writes
+    `goldfish_review_report.md` there and returns without editing `TargetFile`.
+    Return the report path to the caller, who runs the decision gate and
+    applies approved replacement text. Settled findings, clean rounds and
+    convergence (2.4) work as usual, using the reports in `ReportDir` across
+    rounds.
 
 #### 2.4 Iteration Check & Turn Boundary
 

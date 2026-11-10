@@ -152,6 +152,14 @@ For each finding, the Elephant determines:
 A contest must cite evidence the reviewer could read. Comprehension gaps cannot
 be contested, and severities cannot be changed without a contest.
 
+`egm-review-loop` takes two optional inputs for orchestrating callers.
+`ResolveMode` (`inline` by default, or `delegated`) lets the caller run the
+decision gate: in `delegated` mode each round's resolution is a fresh subagent
+following `egm-resolve` with `StopBeforeGate: true`, which writes
+`goldfish_review_report.md` and returns without editing the target. `ReportDir`
+names the folder for all reports of the run. Defaults leave the behavior above
+unchanged.
+
 ### 2. User Triage Modes
 
 The engineer reviews `goldfish_review_report.md` via four interaction modes:
