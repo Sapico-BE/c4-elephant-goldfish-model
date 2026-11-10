@@ -25,8 +25,8 @@ HOST = {
     "openai": (".codex-plugin/plugin.json",),
 }
 SKILLS = (
-    "egm-bootstrap", "egm-brainstorm", "egm-draft", "egm-drift-report",
-    "egm-resolve", "egm-review", "egm-review-loop",
+    "egm-bootstrap", "egm-brainstorm", "egm-c4", "egm-draft",
+    "egm-drift-report", "egm-resolve", "egm-review", "egm-review-loop",
 )
 REQUIRED_SHARED = (
     "plugin.json", "LICENSE", "README.md", "assets/icon.svg",
@@ -36,6 +36,10 @@ REQUIRED_SHARED = (
     "skills/egm-bootstrap/references/worker-return.schema.json",
     "skills/egm-bootstrap/references/templates.md",
     "skills/egm-draft/references/design_doc.md",
+    "skills/egm-c4/references/round-result.schema.json",
+    "skills/egm-c4/references/grilling.md",
+    "skills/egm-c4/references/ledger.md",
+    "skills/egm-c4/references/rounds.md",
 ) + tuple(
     f"skills/{skill}/{name}"
     for skill in SKILLS

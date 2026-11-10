@@ -24,8 +24,8 @@ MARKETPLACES = (
     ".claude-plugin/marketplace.json",
 )
 EXPECTED_SKILLS = {
-    "egm-bootstrap", "egm-brainstorm", "egm-draft", "egm-drift-report",
-    "egm-resolve", "egm-review", "egm-review-loop",
+    "egm-bootstrap", "egm-brainstorm", "egm-c4", "egm-draft",
+    "egm-drift-report", "egm-resolve", "egm-review", "egm-review-loop",
 }
 REVIEWERS = (
     "codebase_details", "comprehension", "design_critic",

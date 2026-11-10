@@ -144,3 +144,33 @@ def test_c4_model_standard() -> None:
                  "decision files", "level", "Ready for review"):
     assert phrase in text, phrase
   assert "c4-model-standard.md" in read(ROOT / "resources/README.md")
+
+
+def test_orchestrator_contract() -> None:
+  text = flat(SKILL / "SKILL.md")
+  for phrase in ("docs/architecture/c4-tasks.md", "fresh subagent",
+                 "`references/ledger.md`", "`references/rounds.md`",
+                 "`references/grilling.md`", "round-result.schema.json",
+                 "`resources/document_standards/c4-model-standard.md`",
+                 "ResolveMode: delegated", "never runs builds or tests"):
+    assert phrase in text, phrase
+
+
+def test_orchestrator_review_focus() -> None:
+  text = flat(SKILL / "SKILL.md")
+  for phrase in (
+      "maps each part of a free-form reply to a question number",
+      "greenfield",
+      "after every round",
+      "no subagent tool",
+  ):
+    assert phrase in text, phrase
+
+
+def test_execution_rules_scope_egm_c4_exceptions() -> None:
+  text = flat(ROOT / "resources/execution_instructions.md")
+  for phrase in ("egm-c4", "Code writing", "Round writes",
+                 "Contradictions in rounds", "Interview rounds",
+                 "Orchestrator writes"):
+    assert phrase in text, phrase
+  assert "keep the code in a markdown draft block" in text

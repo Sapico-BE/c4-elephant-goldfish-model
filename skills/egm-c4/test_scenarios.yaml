@@ -1,0 +1,101 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+skill: "egm-c4"
+description: "Behavioral evaluation scenario suite for egm-c4 skill."
+
+scenarios:
+  - scenario_id: "start_greenfield_c1"
+    description: "CUJ 1: in a repository with no docs/architecture/, creates the ledger with C1 tasks, records the idea, and dispatches a fresh grill subagent."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "/egm-c4 I want to build a library lending app for a small town library."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(c4-tasks\\.md|ledger|grill|c1\\.answers\\.md|subagent)"
+            message: "Starting a greenfield project must create the ledger, record the idea, and start C1 grilling in a fresh subagent."
+
+  - scenario_id: "refuse_early_code"
+    description: "CUJ 6: with C2 in Draft, declines to generate code and asks whether to continue the current task."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "C2 is still in Draft. Just generate the API code now."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(only in the C4 step|build plan|build-plan approval|not yet|decline|continue the current task)"
+            message: "Code requests before build-plan approval must be declined with the reason and an offer to continue the current task."
+
+  - scenario_id: "skipped_question_deferred"
+    description: "A skipped grilling question is recorded as skipped so the next round marks it deferred and the draft lists it under Open Questions."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "Answers for round 2: Q1 yes, Q2 use Entra ID, skip Q3."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(skipped|deferred|Open Questions)"
+            message: "A skipped question must be recorded and deferred, not dropped or answered on the user's behalf."
+
+  - scenario_id: "invalid_round_result_retried"
+    description: "A round returns JSON that does not match round-result.schema.json; the orchestrator retries once with a fresh subagent, then marks the task blocked."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "The grill subagent for T01 returned plain prose instead of the round result JSON."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(retry|fresh subagent|blocked|schema|invalid)"
+            message: "An invalid round result must be retried once in a fresh subagent and then mark the task blocked."
+
+  - scenario_id: "free_form_round_answer"
+    description: "The user answers a grilling round in free form; the orchestrator maps each part to a question number and asks only about the unmapped part."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "Sounds fine overall, use Postgres for the catalogue, and we also need SMS reminders."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(Q\\d|question \\d|which question|new topic|map)"
+            message: "A free-form reply must be mapped to question numbers, with one question only about the parts that do not map."
+
+  - scenario_id: "existing_code_warns"
+    description: "With no docs/architecture/ but existing source files, says the flow is for greenfield work and asks before creating the ledger."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "/egm-c4 (this repository already has src/ with a working Flask app and no docs/architecture/)"
+        assertions:
+          - type: "required_pattern"
+            pattern: "(greenfield|existing code|egm-bootstrap|egm-drift-report)"
+            message: "Existing source without a ledger must trigger the greenfield warning and a question before the ledger is created."
+
+  - scenario_id: "no_subagent_tool_stops"
+    description: "In a harness without a subagent tool, stops and explains that rounds need fresh subagents."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "/egm-c4 (this harness has no subagent tool)"
+        assertions:
+          - type: "required_pattern"
+            pattern: "(subagent|fresh context|cannot run|stop)"
+            message: "Without a subagent tool the orchestrator must stop instead of running rounds in its own context."
