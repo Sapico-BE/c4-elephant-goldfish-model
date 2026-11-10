@@ -21,8 +21,9 @@ Skills retain `disable-model-invocation: true`: their absence from automatic
 skill discovery is expected. The `Skill` tool refuses these skills, so to run
 another EGM skill (for example `egm-review-loop` or `egm-resolve` during review
 Stages 7 and 9), read its `SKILL.md` and follow it in the same thread. Do not
-use the `Skill` tool for EGM skills. Keep drafting and orchestration in the
-main context.
+use the `Skill` tool for EGM skills. For `egm-review`, keep drafting and
+orchestration in the main context. `egm-c4` drafts in round subagents while
+the main session orchestrates.
 Claude Code has no artifact comments. To request revisions, give the notes in
 chat at the section-approval gates, or edit the level documents under
 `docs/architecture/` directly; the next revise round reads them again.

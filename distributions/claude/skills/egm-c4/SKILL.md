@@ -35,9 +35,12 @@ do not follow them yourself, except the answers-file format in
 
 ## Inputs
 
-`/egm-c4 [c1|c2|c3 <container>|c4]`
+`/egm-c4 [c1|c2|c3 <container>|c4|<idea text>]`
 
 *   **No argument:** resume from the ledger and run the next ready task.
+*   **Any other text:** the idea. With no ledger, Start-up step 3 records it
+    instead of asking for it. With a ledger, ask whether to append it as a
+    note to the next ready task's scope.
 *   **`c1`:** run C1. If C1 is `Approved`, confirm first that
     `docs/architecture/c1-context.md` returns to Draft and every task that
     depends on it becomes `stale`, then reopen it (see Reopening). The grill
@@ -64,6 +67,8 @@ You write only:
 *   `docs/architecture/decisions/*.answers.md`, append-only;
 *   the `**Status:**` line of a level document;
 *   replacement text the user approved at a resolve gate, applied verbatim;
+*   the user's gate decisions recorded verbatim in the round report, marked
+    `Status: resolved`;
 *   under direct dispatch, each reviewer's returned findings, saved verbatim to
     the scope's review folder (`docs/architecture/reviews/<stem>/`).
 
@@ -103,10 +108,10 @@ directory does not move them.
     has source files, say that this flow is for greenfield work (existing code
     is covered by `egm-bootstrap` and `egm-drift-report`) and ask whether to
     continue before creating the ledger. Path checks need git: if the project
-    is not a git repository, ask the user to initialize one. Then ask the user
-    to describe the idea, create the ledger with the C1 `grill`, `draft`,
-    `readiness`, `review` and `approve` tasks, and record the description
-    verbatim as the first entry (round 0) of
+    is not a git repository, ask the user to initialize one. Then take the
+    idea from the input or ask the user to describe it, create the ledger with
+    the C1 `grill`, `draft`, `readiness`, `review` and `approve` tasks, and
+    record the idea verbatim as the first note entry (round 0, `R0-N1`) of
     `docs/architecture/decisions/c1.answers.md`.
 
 ## Next task
@@ -186,7 +191,7 @@ One `grill` task spans every round for its scope; count rounds in `Notes`.
 5.  Dispatch the next round to a new fresh subagent.
 6.  When a round returns `complete` with `frontier_empty: true`, ask the user
     to confirm the shared understanding. Topics the user adds are appended as
-    answers and another round runs. On confirmation, mark the `grill` task
+    note entries and another round runs. On confirmation, mark the `grill` task
     `done`.
 
 ## Level loop
@@ -207,16 +212,21 @@ The loop is the same at every level:
 2.  **Draft.** Dispatch a `draft` round. It writes the document only from the
     decision files and approved upper documents, with `**Status:** Draft`, and
     updates `GLOSSARY.md` and `docs/adr/`.
-3.  **Section approval.** Show the draft one section at a time. Append each
-    requested change to the answers file, then add tasks by the ledger's
-    adding and superseding rules (`references/ledger.md`).
+3.  **Section approval.** Show the draft one section at a time (for the
+    build plan, its sections and then each ticket). Append each requested
+    change to the answers file as a note entry, then add tasks by the
+    ledger's adding and superseding rules (`references/ledger.md`).
 4.  **Readiness.** Dispatch a `readiness` round. Gaps add tasks by the
     ledger's adding and superseding rules (`references/ledger.md`).
 5.  **Goldfish review.** Read `egm-review-loop` (`../egm-review-loop/SKILL.md`
     from this skill's folder) and follow it in this thread, not through a
     Skill tool, with:
-    *   `TargetFile`: the level document; `SemanticTarget`: `full file`;
-    *   `ResolveMode: delegated`;
+    *   `TargetFile`: the level document; `SemanticTarget`: `full file`. For
+        the build plan, `SemanticTarget` is `full file, plus every slice
+        ticket listed in GoldfishContext`: reviewers review the tickets too,
+        and approved replacement text may apply to a ticket;
+    *   `ResolveMode: delegated`; `RunId`: the ledger `review` task ID (for
+        example `T04`);
     *   reviewers and standards by level. Do not use `egm-codebase-details`:
         no code exists yet.
 
@@ -232,23 +242,28 @@ The loop is the same at every level:
         `implementation-readiness-standard` is
         `resources/document_standards/implementation-readiness-standard.md`;
     *   `GoldfishContext`: the scope's decision files, the approved upper
-        documents, `GLOSSARY.md`, and the note "greenfield project: no
-        existing code to leverage";
+        documents, `GLOSSARY.md`, the note "greenfield project: no existing
+        code to leverage", and for the build plan every ticket in
+        `docs/architecture/slices/`;
     *   `ReportDir`: the scope's review folder (for example
         `docs/architecture/reviews/c1/`), which keeps the loop's settled
         findings across runs. Name it as the report location to the loop, the
         synthesizer and every resolve round.
 
-    Under direct dispatch (no synthesizer, as in Claude Cowork), save each
-    reviewer's returned findings verbatim as a file in the review folder; the
+    Report names carry the run and round, so runs never overwrite each other:
+    round reports are `goldfish_review_report.<RunId>.round-<n>.md`. Under
+    direct dispatch (no synthesizer, as in Claude Cowork), save each
+    reviewer's returned findings verbatim as
+    `findings.<RunId>.round-<n>.<reviewer>.md` in the review folder; the
     resolve round reads them there. In delegated mode each loop round's
     resolution is a `resolve` round in a fresh subagent that follows
     `egm-resolve` through its report and stops before the gate. You show the
     gate, apply replacement text the user approves verbatim, record the
     user's decision for each finding verbatim in the round report, and mark it
-    `Status: resolved` before the next round. Findings that
-    need more add tasks by the ledger's adding and superseding rules
-    (`references/ledger.md`). The `review` task is `done` when the loop ends.
+    `Status: resolved` before the next round. Convergence counts only this
+    run's reports; the settled list reads every run's reports in the folder.
+    Findings that need more add tasks by the ledger's adding and superseding
+    rules (`references/ledger.md`). The `review` task is `done` when the loop ends.
 6.  **Approve.** Ask for explicit approval. On approval, set
     `**Status:** Approved`, mark `approve` `done`, and add the next tasks by the
     ledger's adding rules. On rejection, add tasks by the ledger's adding and
@@ -271,8 +286,13 @@ path checks, batch gates and the finish.
     Build plan rows above. Its draft writes documents only:
     `docs/architecture/c4-build-plan.md` and tickets in
     `docs/architecture/slices/`. At its `approve` gate, name the plan's
-    worktree root, which lies outside the project; approval confirms that
-    slice rounds write there.
+    integration branch and worktree root. Approval of a root outside the
+    project confirms that slice rounds write there; with `none`, slices run
+    one at a time on slice branches in the project checkout. Before asking,
+    check that the integration branch has a commit
+    (`git rev-parse --verify <integration-branch>`); if not, ask the user to
+    commit `docs/architecture/`, `GLOSSARY.md` and `docs/adr/` first. You never
+    commit.
 2.  **Slices.** No implement, fix or merge round runs before build-plan
     approval. On approval, add the slice and `drift` tasks. Slice 01, the
     walking skeleton, runs alone; later ready slices run in batches. Each
@@ -288,8 +308,9 @@ path checks, batch gates and the finish.
     start the next batch. Record batch membership and approval in the ledger
     by its batch rule (`references/ledger.md`), which next-ready follows.
 6.  **Finish.** When every slice is done, dispatch the `drift` round (it reads
-    `egm-drift-report`'s SKILL.md). After the user settles each finding, set
-    each fully implemented document to `Implemented`.
+    `egm-drift-report`'s SKILL.md). After the user settles each finding and
+    the `drift` task is `done`, set each fully implemented document to
+    `Implemented`.
 
 A contradiction while building stops slice work; see `references/c4-code.md`.
 
@@ -298,6 +319,7 @@ A contradiction while building stops slice work; see `references/c4-code.md`.
 When the user accepts a contradiction or forces an `Approved` level, confirm
 what returns to Draft and which tasks become `stale`. For a contradiction,
 append it (document, statement, evidence) to the reopened scope's answers
-file. Then apply the reopening and Reconcile rules in `references/ledger.md`;
-the new grill round starts from the existing tree and answers plus the
-contradiction.
+file as a note entry. Then apply the reopening and Reconcile rules in
+`references/ledger.md`; the new grill round starts from the existing tree and
+answers plus the contradiction. When an `approve` task becomes `stale`, set
+that document's `**Status:**` line to `Draft`.

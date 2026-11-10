@@ -67,6 +67,13 @@ The caller or user provides exactly these parameters:
 *   **`ReportDir`**: Optional. Folder for all reports of this loop run
     (synthesizer reports, saved reviewer findings, `goldfish_review_report.md`).
     Default: the existing artifact-directory resolution.
+*   **`RunId`**: Optional; the caller must give it with
+    `ResolveMode: delegated`. A short ID for this loop run (`egm-c4` passes its
+    ledger `review` task ID, such as `T04`) that keeps report names from
+    colliding across runs that share a `ReportDir`.
+
+`ResolveMode`, `ReportDir` and `RunId` are never prompted for; when they are
+omitted, the loop behaves exactly as it did without them.
 
 ## Path & Standard Resolution Logic
 
@@ -105,6 +112,8 @@ Evaluate the provided inputs (`TargetFile`, `SemanticTarget`, `Reviewers`,
         and `codebase_details`.
 4.  **Confirm Configuration**: Display the consolidated plan (Target, Reviewers,
     and mapped Standards) and ask the user to confirm before proceeding.
+    A caller that sets `ResolveMode: delegated` (an orchestrating caller such
+    as `egm-c4`) has already configured the run: skip steps 3 and 4.
 
 ### Step 2: The Sharpening Loop (Iterative Cycle)
 
@@ -140,7 +149,10 @@ file` mode is specified, confirm full-file line bounds).
     *   **`ReportDir`** (when given): pass it to the synthesizer as the
         artifact directory for its reports. Under direct dispatch, save each
         reviewer's findings verbatim as a file there. Without `ReportDir`, use
-        the artifact-directory resolution as before.
+        the artifact-directory resolution as before. With `RunId`, name the
+        files per run, round and reviewer: the synthesizer report
+        `synthesis.<RunId>.round-<n>.md` and, under direct dispatch, each
+        reviewer's findings `findings.<RunId>.round-<n>.<reviewer>.md`.
     *   Each reviewer produces findings with severity (🔴 Blocker, 🟡 Major, 🟢
         Nit), line numbers, discrepancy descriptions, and rationales.
 2.  **Consolidate Findings**: Collect all findings across reviewers into a single
@@ -169,8 +181,8 @@ file` mode is specified, confirm full-file line bounds).
     `StopBeforeGate: true`, passing it `TargetFile`, the active line range, the
     `FindingsList` and `ReportDir` (under direct dispatch, the reviewer findings
     saved verbatim in `ReportDir`), and name the report
-    `goldfish_review_report.round-<n>.md` in `ReportDir` (`n` is the loop
-    round). The subagent writes it and returns without editing `TargetFile`.
+    `goldfish_review_report.<RunId>.round-<n>.md` in `ReportDir` (`n` is the
+    loop round). The subagent writes it and returns without editing `TargetFile`.
     Return the report path to the caller, who runs the decision gate, applies
     approved replacement text, records the user's decision for each finding
     verbatim in that round's report, and marks it `Status: resolved` before the
@@ -199,9 +211,11 @@ is rare even when the document improves. Use these rules instead:
     that fix would resolve it.
 
 In delegated mode, take the settled, fixed and clean-round inputs from the
-per-round reports (`goldfish_review_report.round-<n>.md`) in `ReportDir`: the
-proposed dispositions and the user's recorded gate decisions. The caller's gate
-is the turn-taking checkpoint.
+per-round reports (`goldfish_review_report.<RunId>.round-<n>.md`) in
+`ReportDir`: the proposed dispositions and the user's recorded gate decisions.
+Decide clean rounds and convergence only from this run's reports (this
+`RunId`); build the settled list from the reports of every run in
+`ReportDir`. The caller's gate is the turn-taking checkpoint.
 
 On converged, go to Step 3. On cap or churn, write a short list of the open
 findings by severity, then ask the user one question: accept and proceed,
@@ -218,8 +232,10 @@ another round of review.
 Upon completion (converged, cap or churn accepted by the user, or manual
 halt):
 
-*   **Programmatic Callers**: If running as a subflow of `egm-review`, exit
-    cleanly to hand execution back to the parent workflow.
+*   **Programmatic Callers**: If running as a subflow of an orchestrating
+    caller (`egm-review`, or a caller that set `ResolveMode: delegated`, such
+    as `egm-c4`), exit cleanly to hand execution back to the parent workflow;
+    do not ask the manual-invocation question below.
 *   **Manual Invocations**: Output a summary of completion in chat: *"The review
     loop has completed after [N] rounds ([converged | accepted at cap | halted]).
 Open findings are in the report. Would you like to proceed to

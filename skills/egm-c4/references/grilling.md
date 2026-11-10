@@ -37,10 +37,23 @@ recommendation, and the user's verbatim answer:
 **Answer:** Use Entra ID, but guests must not get access.
 ```
 
+Everything the orchestrator records that is not an answer to a question is a
+**note entry**: the idea (round 0), a topic the user adds at the
+shared-understanding check, a section change requested at section approval, a
+change requested at a batch gate, or a contradiction the user accepted. `<N>`
+is the last grill round of the scope (0 before the first round) and `<M>`
+numbers the notes after it. Cite a note as `R<N>-N<M>`, for example `R3-N1`:
+
+```md
+## Round <N>, note <M>
+**Kind:** idea | added topic | section change | batch-gate change | contradiction
+**Text:** <the user's verbatim words; for a contradiction: document, statement, evidence>
+```
+
 `<scope>.tree.md` is the decision tree. Only grill rounds rewrite it, and you
 rewrite it whole every round after rebuilding it from the answers file. Each
-node is `open`, `decided` (citing an answer entry such as `R2-Q3`), or
-`deferred`:
+node is `open`, `decided` (citing an answer entry such as `R2-Q3` or a note
+such as `R0-N1`), or `deferred`:
 
 ```md
 - [decided] Identity provider: Entra ID (R2-Q3)
@@ -52,8 +65,9 @@ Rules:
 
 - A question the user skipped becomes `deferred`. It leaves the frontier. The
   draft lists it under Open Questions unless the user brings it back.
-- A `decided` node must cite an answer entry. Never mark a node `decided` from
-  your own inference or from a recommendation the user did not accept.
+- A `decided` node must cite an answer or note entry. Never mark a node
+  `decided` from your own inference or from a recommendation the user did not
+  accept.
 - Add child nodes when an answer opens new decisions. Seed the tree from the
   playbook's seed questions on the first round.
 - Do not edit the answers file, the level document, or `GLOSSARY.md`.

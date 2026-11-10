@@ -202,12 +202,61 @@ def test_c4_passes_report_dir() -> None:
 
 def test_delegated_round_reports_and_report_dir() -> None:
   loop = flat(ROOT / "skills/egm-review-loop/SKILL.md")
-  assert "goldfish_review_report.round-" in loop
   assert "Status: resolved" in loop
-  assert "goldfish_review_report.round-" in flat(
-      SKILL / "references/rounds.md")
+  for path in ("skills/egm-review-loop/SKILL.md", "docs/designs/review.md",
+               "docs/designs/c4.md", "skills/egm-c4/references/rounds.md"):
+    text = flat(ROOT / path)
+    assert "goldfish_review_report.<RunId>.round-<n>.md" in text, path
+    assert "goldfish_review_report.round-" not in text, path
+  for path in ("skills/egm-review-loop/SKILL.md", "docs/designs/review.md"):
+    assert "findings.<RunId>.round-<n>.<reviewer>.md" in flat(ROOT / path)
+  assert "RunId" in flat(SKILL / "SKILL.md")
   assert "ReportDir" in flat(ROOT / "skills/egm-resolve/SKILL.md")
   assert "ReportDir" in flat(ROOT / "docs/designs/review.md")
+
+
+ORCHESTRATOR_WRITES = (
+    "`docs/architecture/c4-tasks.md`",
+    "append-only",
+    "`**Status:**` line",
+    "replacement text the user approved at a resolve gate, applied verbatim",
+    "the user's gate decisions recorded verbatim in the round report, marked "
+    "`Status: resolved`",
+    "each reviewer's returned findings, saved verbatim to the scope's review "
+    "folder",
+)
+
+
+def test_orchestrator_write_lists_match() -> None:
+  skill = flat(SKILL / "SKILL.md")
+  skill_list = skill.split("You write only:", 1)[1].split(
+      "Every other file is written", 1)[0]
+  rules = flat(ROOT / "resources/execution_instructions.md")
+  rules_item = rules.split("**Orchestrator writes**", 1)[1]
+  spec_row = next(line for line in read(ROOT / "docs/designs/c4.md").splitlines()
+                  if line.startswith("| Orchestrator |"))
+  assert skill_list.count("* ") == len(ORCHESTRATOR_WRITES)
+  for phrase in ORCHESTRATOR_WRITES:
+    for name, text in (("SKILL.md", skill_list), ("execution_instructions.md",
+                                                  rules_item),
+                       ("c4.md Roles row", spec_row)):
+      assert phrase in text, f"{name}: {phrase}"
+
+
+def test_slice_mechanics_and_ledger_rules() -> None:
+  rounds = flat(REFS / "rounds.md")
+  code = flat(REFS / "c4-code.md")
+  ledger = flat(REFS / "ledger.md")
+  for text in (rounds, code):
+    assert "git merge --no-ff --no-commit" in text
+    assert "<merge>^1" in text
+  assert "superseded by" in ledger.split("## Reopening", 1)[1]
+  assert "`docs/architecture/slices/`" in ledger.split("## Scope mapping", 1)[1]
+  for text in (ledger, flat(SKILL / "SKILL.md")):
+    assert "**Status:**` line to `Draft`" in text
+  assert "the `drift` task is `done`" in ledger
+  assert "## Round <N>, note <M>" in flat(REFS / "grilling.md")
+  assert "R<N>-N<M>" in flat(REFS / "grilling.md")
 
 
 def test_orchestrator_routes_all_design_levels() -> None:

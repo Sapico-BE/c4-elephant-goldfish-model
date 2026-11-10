@@ -95,22 +95,25 @@ decision files, or a choice the brief cannot settle blocks the draft.
 
 ## `revise` round
 
-**Inputs:** the level document, the scope's decision files including the answers
+**Inputs:** the level document (for the build plan, with its tickets in
+`docs/architecture/slices/`), the scope's decision files including the answers
 that request the change, approved upper-level documents, the level playbook,
 `GLOSSARY.md`, and any readiness gaps or review findings to address.
 
 **Instructions:** Change only what the new answers or listed gaps require. Keep
 `**Status:** Draft`. Keep the document traceable to the decision files.
 
-**Output files:** the level document, and `GLOSSARY.md` or `docs/adr/` when the
-change touches them.
+**Output files:** the level document (for the build plan, also its tickets in
+`docs/architecture/slices/`), and `GLOSSARY.md` or `docs/adr/` when the change
+touches them.
 
 **When to return `needs_user`:** When the change needs a new decision (propose a
 `grill` task in `new_tasks`), or contradicts an upper-level document.
 
 ## `readiness` round
 
-**Inputs:** the level document, the level playbook's ready-for-review criteria,
+**Inputs:** the level document (for the build plan, with every ticket in
+`docs/architecture/slices/`), the level playbook's ready-for-review criteria,
 approved upper-level documents.
 
 **Instructions:** Check each criterion and return the gaps. Write nothing.
@@ -126,13 +129,15 @@ upper-level contradiction; otherwise return `complete`.
 `docs/architecture/reviews/<scope>/` and its per-round reports (under
 direct dispatch, the reviewer findings the orchestrator saved verbatim in that
 folder), the
-target document.
+target document (for the build plan, with its tickets in
+`docs/architecture/slices/`).
 
 **Instructions:** Follow `egm-resolve` through its report and stop before the
 gate. Record dispositions and proposed replacement text. Do not edit the target.
 
-**Output files:** `docs/architecture/reviews/<scope>/goldfish_review_report.round-<n>.md`
-(`n` is the loop round; the orchestrator names the file).
+**Output files:** `docs/architecture/reviews/<scope>/goldfish_review_report.<RunId>.round-<n>.md`
+(`RunId` is the ledger `review` task ID and `n` the loop round; the
+orchestrator names the file).
 
 **When to return `needs_user`:** When a finding needs a user choice before a
 disposition can be written. The orchestrator runs the gate and applies approved
@@ -147,7 +152,10 @@ the C3 documents the ticket touches, the code standards the build plan names.
 **Instructions:** Work red-green at the ticket's test seams on branch
 `c4/NN-<slice>`, in a worktree under the build plan's worktree root, or in the
 project checkout when the root is `none` (then return the checkout to the
-integration branch before you finish). Commit your work on that branch. Write
+integration branch before you finish). Create the branch from the integration
+branch only if it does not exist; reuse an existing slice worktree, or add one
+for the existing branch (`git worktree add <path> c4/NN-<slice>`, without
+`-b`). Commit your work on that branch. Write
 only inside the ticket's allowed paths. Slice 01 is the walking
 skeleton and may write the scaffolding its ticket lists.
 
@@ -178,7 +186,8 @@ paths or reveals a contradiction with a C3 interface.
 every ticket in the batch.
 
 **Instructions:** Merge the slice branch into the integration branch with
-`--no-commit`. Resolve conflicts only within the batch's allowed paths. Check
+`git merge --no-ff --no-commit`, so every merge stages its paths and ends in a
+merge commit. Resolve conflicts only within the batch's allowed paths. Check
 the staged paths against those allowed paths; commit only if all are inside,
 otherwise abort the merge and return `needs_user`. Remove the slice worktree
 and keep the branch.
@@ -206,8 +215,9 @@ cannot run in this environment; use `blocked` if nothing can run.
 
 ## `code-review` round
 
-**Inputs:** the slice diff, the slice ticket, the C3 interfaces it touches, the
-code standards the build plan names.
+**Inputs:** the slice diff (`git diff <merge>^1 <merge>`, where `<merge>` is the
+merge commit of this chain's `merge` task, named in the brief), the slice
+ticket, the C3 interfaces it touches, the code standards the build plan names.
 
 **Instructions:** Read-only. Check the diff against the code standards, the C3
 interfaces and the ticket. Return `outcome: complete` with a `summary` that

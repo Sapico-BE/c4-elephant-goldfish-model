@@ -158,11 +158,23 @@ depending on the one before. Each `implement` depends on the build plan's
 one `C4` `drift` task that depends on every slice's last `code-review`.
 
 **Worktree root.** A worktree root outside the project needs the user's
-consent: at the build plan's `approve` gate, name the worktree root and say
-that slice rounds will write there; approval confirms it. No worktree exists before that approval. With worktree root
+consent: at the build plan's `approve` gate, name the integration branch and
+the worktree root and say that slice rounds will write there; approval
+confirms it. No worktree exists before that approval. With worktree root
 `none`, or if the user declines worktrees, each round works on its slice branch
 in the project checkout and returns the checkout to the integration branch
 before it finishes; slices then run strictly one after another.
+
+**Integration branch.** Slice branches and worktrees start from the
+integration branch, so it needs a commit. Before the `approve` gate, the
+orchestrator checks `git rev-parse --verify <integration-branch>`; if it
+fails (a fresh `git init`), it asks the user to commit `docs/architecture/`,
+`GLOSSARY.md` and `docs/adr/` first. The orchestrator never commits.
+
+**Existing branches.** An implement or fix round reuses what exists: the slice
+worktree if it is still there, otherwise a new worktree for the existing
+branch `c4/NN-<slice>` (`git worktree add <path> c4/NN-<slice>`, without
+`-b`). It creates the branch only when it does not exist.
 
 **Batches.** Slice 01 runs alone as batch `B1`. Each later batch is every
 slice whose `implement` is ready, and in no batch, when the batch starts. The
@@ -173,20 +185,25 @@ time. Each slice goes through:
 
 1.  **Implement.** A fresh implementer subagent works red-green at the
     ticket's Test Seams on branch `c4/NN-<slice>`, created from the integration
-    branch, in a worktree under the worktree root (or in the project checkout
+    branch unless it exists (see Existing branches), in a worktree under the worktree root (or in the project checkout
     when it is `none`). It commits its work on that branch.
 2.  **Path check.** The implement round's declared outputs are the ticket's
     Allowed Paths (see Path checks).
 3.  **Merge.** A fresh merge subagent merges the slice branch into the
-    integration branch with `--no-commit`, checks the staged paths against the
+    integration branch with `git merge --no-ff --no-commit` (a fast-forward
+    would stage nothing to check), checks the staged paths against the
     batch's Allowed Paths, and commits only when every path is inside them
     (otherwise it aborts the merge and returns `needs_user`). It resolves
     conflicts only within those paths and removes the slice worktree; the
-    branch stays.
+    branch stays. After the round, the orchestrator records the merge commit
+    (`git rev-parse <integration-branch>`) in the `merge` task's Notes.
 4.  **Verify.** A fresh verify subagent runs the plan's Build and Test Commands
     on the integration branch and returns `PASS` or `FAIL: <summary>`.
 5.  **Code review.** A fresh read-only subagent reviews the slice diff and
-    returns `APPROVED` or `BLOCKING: <findings>`.
+    returns `APPROVED` or `BLOCKING: <findings>`. The slice diff is
+    `git diff <merge>^1 <merge>`, where `<merge>` is the merge commit recorded
+    for the same chain's `merge` task; a fix chain's code review therefore
+    sees the fix merge.
 
 A `FAIL`, a `BLOCKING` result or a path-check violation on the slice branch
 adds a `fix` chain by the ledger's adding and superseding rules; tasks that
@@ -199,7 +216,8 @@ and `code-review` then run again.
 done, show each slice's verify and code-review summaries and ask whether to
 start the next batch. On approval, record `Bn approved` as the ledger's batch
 rule says. Otherwise append the requested change to
-`docs/architecture/decisions/c4-plan.answers.md`, then add a `fix` chain for
+`docs/architecture/decisions/c4-plan.answers.md` as a note entry
+(`grilling.md`), then add a `fix` chain for
 the slice that names the entry, or reopen the build plan by the ledger's
 reopening rule when a ticket itself must change. The batch stays open and the
 gate is asked again, after the reopen chain where there is one (see the batch
@@ -275,8 +293,8 @@ that shows the C3 interface itself is wrong is a contradiction.
 When every slice is done, the `drift` round reads `egm-drift-report`'s
 SKILL.md (not through a Skill tool), follows it on `docs/architecture/`
 against the built code, and writes its report. After the user settles each finding (update the document through a
-reopen, or the code through a `fix` chain), the orchestrator sets each fully
-implemented document to `Implemented`: C1, C2 and the build plan when every
+reopen, or the code through a `fix` chain) and the `drift` task is `done`,
+the orchestrator sets each fully implemented document to `Implemented`: C1, C2 and the build plan when every
 slice is done, and a C3 document when every slice touching its container is
 done.
 

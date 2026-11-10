@@ -50,11 +50,10 @@ override the rules above where they conflict.
 *   **Interview rounds**: A grilling round may present several numbered
     questions with recommended answers. Every other gate still asks one
     question.
-*   **Orchestrator writes**: The main session writes only the files in the
-    orchestrator row of the Roles table: the ledger
-    `docs/architecture/c4-tasks.md`, the append-only answers files in
-    `docs/architecture/decisions/`, `**Status:**` lines, replacement text the
-    user approved at a resolve gate, applied verbatim, the user's gate decisions
-    recorded verbatim in the round report (marked `Status: resolved`), and
-    reviewer findings saved verbatim to the scope's review folder under direct
-    dispatch.
+*   **Orchestrator writes**: The main session writes only the files listed
+    in the `egm-c4` SKILL.md: the ledger `docs/architecture/c4-tasks.md`; the
+    append-only answers files in `docs/architecture/decisions/`;
+    `**Status:**` lines; replacement text the user approved at a resolve
+    gate, applied verbatim; the user's gate decisions recorded verbatim in the
+    round report, marked `Status: resolved`; and, under direct dispatch, each
+    reviewer's returned findings, saved verbatim to the scope's review folder.

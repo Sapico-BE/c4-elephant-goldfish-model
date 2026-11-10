@@ -26,7 +26,7 @@ writes the concrete paths into each brief.
 | `C1` | `c1` | `docs/architecture/reviews/c1/` | `docs/architecture/c1-context.md` |
 | `C2` | `c2` | `docs/architecture/reviews/c2/` | `docs/architecture/c2-containers.md` |
 | `C3:<container>` | `c3-<container>` | `docs/architecture/reviews/c3-<container>/` | `docs/architecture/c3-<container>.md` |
-| `C4` | `c4-plan` | `docs/architecture/reviews/c4-plan/` | `docs/architecture/c4-build-plan.md` |
+| `C4` | `c4-plan` | `docs/architecture/reviews/c4-plan/` | `docs/architecture/c4-build-plan.md` and its tickets in `docs/architecture/slices/` |
 | `C4:slice-NN` | none | none | `docs/architecture/slices/NN-<slice>.md` |
 
 Decision files are `docs/architecture/decisions/<stem>.tree.md` and
@@ -79,11 +79,13 @@ the table means that task:
 | Document `**Status:**` | Ledger state |
 | :--------------------- | :----------- |
 | `Draft` (or file missing) | `approve` task is not `done` |
-| `Approved` | `approve` task is `done`; C4 slices for the scope are not all `done` |
-| `Implemented` | `approve` is `done` and every slice touching the scope is `done` |
+| `Approved` | `approve` task is `done`; the `Implemented` conditions do not all hold |
+| `Implemented` | `approve` is `done`, every slice touching the scope is `done`, and the `drift` task is `done` |
 
 On start, the orchestrator checks this mapping for each document and asks the
-user to resolve any mismatch.
+user to resolve any mismatch. When an `approve` task becomes `stale`, the
+orchestrator sets that document's `**Status:**` line to `Draft`, so the
+mapping holds without a prompt.
 
 ## Malformed ledger
 
@@ -133,9 +135,11 @@ When the user accepts a contradiction or forces an `Approved` level:
     existing tree and answers, plus the contradiction.
 2.  Mark every task that transitively depends on the old `approve` task
     `stale`, and point its dependency at the new `approve` task. Stale tasks
-    therefore cannot run before the upper level is approved again. Done
-    `C4:slice-NN` tasks follow the narrower rule in `c4-code.md`
-    ("Contradictions while building").
+    therefore cannot run before the upper level is approved again. Skip tasks
+    whose Notes say `superseded by`: they stay `done`. For each `approve`
+    task that becomes `stale`, set that document's `**Status:**` line to
+    `Draft`. Done `C4:slice-NN` tasks follow the narrower rule in
+    `c4-code.md` ("Contradictions while building").
 3.  A stale `grill` reruns from its existing log and the upper level's changes;
     a stale `draft` becomes a `revise` of the existing document.
 
