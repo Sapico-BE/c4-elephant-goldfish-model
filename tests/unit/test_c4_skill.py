@@ -111,3 +111,36 @@ def test_rounds_cover_every_round_type() -> None:
   text = read(REFS / "rounds.md")
   for kind in ROUND_TYPES:
     assert re.search(rf"^## `{kind}` round", text, re.M), kind
+
+
+PLAYBOOKS = {
+    "c1-context.md": ("People", "External Systems", "Critical User Journeys",
+                      "Quality Attributes and Constraints", "C4Context"),
+}
+
+
+def test_mermaid_reference_has_one_example_per_diagram() -> None:
+  text = read(REFS / "mermaid-c4.md")
+  for kind in ("C4Context", "C4Container", "C4Component", "C4Deployment"):
+    assert re.search(rf"```mermaid\s*\n\s*{kind}\b", text), kind
+  flat_text = " ".join(text.split())
+  for phrase in ("title", "Legend", "technology", "deep module", "test seam"):
+    assert phrase in flat_text, phrase
+
+
+@pytest.mark.parametrize("name", sorted(PLAYBOOKS))
+def test_level_playbook_structure(name: str) -> None:
+  text = read(REFS / name)
+  for heading in ("## Seed questions", "## Document template", "## Diagram",
+                  "## Ready for review"):
+    assert heading in text, heading
+  for term in PLAYBOOKS[name]:
+    assert term in text, term
+
+
+def test_c4_model_standard() -> None:
+  text = flat(ROOT / "resources/document_standards/c4-model-standard.md")
+  for phrase in ("title", "legend", "technology", '"Uses"', "GLOSSARY.md",
+                 "decision files", "level", "Ready for review"):
+    assert phrase in text, phrase
+  assert "c4-model-standard.md" in read(ROOT / "resources/README.md")
