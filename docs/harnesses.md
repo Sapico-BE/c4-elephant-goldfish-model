@@ -29,7 +29,7 @@ break EGM, because the skills read `agents/` and
 
 - **Antigravity App**: Run `/plugin`, ask the agent `Install https://github.com/google/elephant-goldfish-model`, or manually install into `~/.gemini/config/plugins/egm/` using the commands below.
 - **Antigravity for IDEs (Extension for Visual Studio Code)**: Run `/plugin`, ask the agent `Install https://github.com/google/elephant-goldfish-model`, or manually install into `~/.gemini/config/plugins/egm/` using the commands below.
-- **Antigravity IDE (Standalone)**: Not supported at this time. Although the plugin and skills load from `~/.gemini/config/plugins/egm/`, standalone Antigravity IDE (tested on macOS and Linux) does not expose the fresh-context subagent tool (`invoke_subagent`) required for Goldfish reviews (`/egm-brainstorm` and `/egm-review`).
+- **Antigravity IDE (Standalone)**: Not supported at this time. Although the plugin and skills load from `~/.gemini/config/plugins/egm/`, standalone Antigravity IDE (tested on macOS and Linux) does not expose the fresh-context subagent tool (`invoke_subagent`) required for Goldfish reviews (`/egm-c4` and `/egm-review`).
 
 The Antigravity App and Antigravity for IDEs share the global plugin directory
 `~/.gemini/config/plugins/<name>/`. For a fresh manual installation without the
@@ -45,8 +45,8 @@ cp -R plugin.json README.md LICENSE skills agents resources docs assets ~/.gemin
 ```
 
 Reload the window (or restart the Antigravity App), then confirm that `egm`
-appears in the plugin list and that its skills (`egm-brainstorm`, `egm-draft`,
-`egm-review`) are available. The command form for these skills in the
+appears in the plugin list and that its skills (`egm-c4`, `egm-review`,
+`egm-drift-report`) are available. The command form for these skills in the
 Antigravity App and Antigravity for IDEs has not been verified.
 
 ## Manifests
@@ -166,7 +166,7 @@ We welcome contributors who want to help verify and expand harness support.
 
 ### Contributing Support for New Harnesses
 
-A harness counts as supported after `/egm-brainstorm`, `/egm-draft`, and
+A harness counts as supported after `/egm-c4` and
 `/egm-review` run end to end through its plugin install. When contributing
 support for another harness:
 
@@ -174,6 +174,6 @@ support for another harness:
    (e.g., matching the harness's plugin/extension standard).
 2. Document install steps, manifest mapping, and delegation mechanics in this guide
    (`docs/harnesses.md`).
-3. Verify that `/egm-brainstorm`, `/egm-draft`, and `/egm-review` run end to end,
+3. Verify that `/egm-c4` and `/egm-review` run end to end,
    and attach verification notes or execution transcripts in your Pull Request description
    (as outlined in the [Pull Request Template](https://github.com/google/elephant-goldfish-model/blob/main/.github/PULL_REQUEST_TEMPLATE.md)).

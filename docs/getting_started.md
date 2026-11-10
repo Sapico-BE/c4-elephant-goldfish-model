@@ -28,7 +28,7 @@ The EGM skills and personas are packaged as a plugin for **Antigravity**, **Clau
 
 1.  **Skills**: The skills in `skills/` can be installed via the plugin/extension
     manifest. This guide shows their commands without a prefix (e.g.
-    `/egm-brainstorm`, `/egm-draft`, `/egm-review`); see
+    `/egm-c4`, `/egm-review`); see
     [Try your first design](../README.md#try-your-first-design) for how to
     invoke them in Antigravity (agy CLI), Claude Code, and Codex, such as the
     `/egm:` prefix.
@@ -56,27 +56,26 @@ Use whichever skill serves your immediate bottleneck.
 
 The "core" workflow looks like:
 
-1.  **`/egm-brainstorm`**: Start an upstream ideation session. This command
-    prompts the developer to clarify the concept, then spawns a multi-lens Goldfish
-    swarm to stress-test the concept and generate a structured `concepts_brief.md`
-    artifact.
+1.  **`/egm-c4`**: Takes a greenfield project through the C4 model. The agent
+    grills the developer to clarify the problem, then drafts C1 (system
+    context), C2 (containers), and C3 (components) documents under
+    `docs/architecture/`. A multi-lens Goldfish swarm reviews each level in
+    fresh subagents, and the developer approves each level before the next.
+    After approval, the agent builds the project in test-first slices.
 
-2.  **`/egm-draft`**: Drafts a design doc. This command turns a concept brief or
-    initial idea into a formal markdown design doc under `docs/designs/`, section
-    by section.
-
-3.  **`/egm-review`**: Reviews a design with **Goldfish**. Performs a
-    multi-stage review of a design doc in a fresh, zero-context session to
-    validate its completeness, clarity, self-containment, and readiness.
+2.  **`/egm-review`**: Reviews a standalone document with **Goldfish**, such as a
+    design doc you wrote outside the C4 flow. Performs a multi-stage review in a
+    fresh, zero-context session to validate its completeness, clarity,
+    self-containment, and readiness.
 
     This will provide *a lot* of feedback by design. Take what you think is
     relevant. Ignore the rest.
 
-4.  **Human Review**: Send a Pull Request with your design to another human. EGM
+3.  **Human Review**: Send a Pull Request with your design to another human. EGM
     does not replace human oversight, but encourages it. Human reviews are
     essential for ensuring long-term product consistency and prioritization.
 
-5.  **Implement**: Tell AI to build to the plan. The instructions on how to
+4.  **Implement**: For a standalone design doc, tell AI to build to the plan. The instructions on how to
     implement it should be in your design doc. If the LLM makes a minor mistake,
     feel free to fix it yourself, or ask the LLM to make point fixes. If it is
     wildly off, update the design doc and try again.
@@ -85,6 +84,9 @@ The "core" workflow looks like:
     > their implementation phase. Readability and style guides, profiling tools,
     > testing strategies, etc. EGM is not opinionated here. Add your skills to
     > your implementation plan!
+
+5.  **`/egm-drift-report`**: Once code exists, compare the checked-in documents
+    with the current source and reconcile any drift.
 
 ## Drift Detection
 

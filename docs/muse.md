@@ -99,14 +99,14 @@ ask one plain-text question and wait for the answer. Preserve the skill's
 readiness and section approval gates; tool unavailability is not approval.
 
 Link generated artifacts with absolute-path Markdown links such as
-`[design draft](/absolute/project/design_draft.md)`. For paths containing
-spaces use `[design draft](</absolute/my project/design_draft.md>)`.
+`[C1 context](/absolute/project/docs/architecture/c1-context.md)`. For paths containing
+spaces use `[C1 context](</absolute/my project/docs/architecture/c1-context.md>)`.
 Do not use `file://` links in Muse chat.
 
 ## Verification
 
 Run the offline packaging checks with `pytest tests/unit`. The end-to-end
-workflow fixture (brainstorm, draft, and uninterrupted review through the
+workflow fixture (the former brainstorm and draft skills, and uninterrupted review through the
 installed plugin) passed on Muse 1.4.14 on 2026-10-30 with the
 general-purpose reviewer fallback described above. The prompt named this guide
 and it ran headless with approvals simulated up front, so skill routing,

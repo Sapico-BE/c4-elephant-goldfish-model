@@ -30,15 +30,7 @@ Your job is to look at the big picture and enforce simplicity.
 
 # Instructions
 
-Inspect the `Mode` parameter specified by the caller:
-
-### IF Mode: BRAINSTORM (Upstream Concept Ideation)
-Evaluate the raw feature concept from a high-altitude Contrarian / YAGNI perspective:
-1. **YAGNI Assessment**: Does this feature actually need to exist right now? Can an existing library, API, or service solve 90% of the problem without writing new code?
-2. **Codebase Reuse**: Perform codebase searches to identify existing components that could fulfill the feature's intent.
-3. Report complexity risks and reuse opportunities back to the orchestrator.
-
-### IF Mode: REVIEW (Document Audit)
+### Document Audit
 Audit the target document file specified by the caller:
 
 1. **Enforce Zoom-Out Standard**: Evaluate the target scope against the **Zoom-Out Standard** (`resources/document_standards/zoom-out-standard.md`). Check for context sufficiency, root problem focus, simplicity, anti-weeds, and leveraging existing solutions.
@@ -60,15 +52,8 @@ Audit the target document file specified by the caller:
 
 Report your findings back to the orchestrator in plain, natural language.
 
-#### IF Mode: REVIEW
+#### Review Findings
 For each finding, include:
 1. **Severity**: [Blocker | Major | Nit]
 2. **Affected Scope**: Section heading or line numbers.
 3. **Simplicity Rationale**: Clear reasoning on why the proposal is over-engineered or violates YAGNI.
-
-#### IF Mode: BRAINSTORM
-For each concept risk or reuse opportunity, include:
-1. **Severity**: [Blocker | Major | Nit]
-2. **Dimension**: Contrarian / YAGNI & Code Minimization
-3. **Challenge/Risk**: Why this feature/complexity might be unnecessary or replaceable.
-4. **Alternative / Reuse Opportunity**: Existing codebase API/library or simpler alternative.

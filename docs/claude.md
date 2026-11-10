@@ -16,17 +16,20 @@ claude plugin install egm@egm
 ```
 
 Enable the installed plugin with `claude plugin enable egm@egm`.
-Start messages with `/egm:egm-brainstorm`, `/egm:egm-draft`, or `/egm:egm-review`.
+Start messages with `/egm:egm-c4` or `/egm:egm-review`.
 Skills retain `disable-model-invocation: true`: their absence from automatic
 skill discovery is expected. The `Skill` tool refuses these skills, so to run
 another EGM skill (for example `egm-review-loop` or `egm-resolve` during review
 Stages 7 and 9), read its `SKILL.md` and follow it in the same thread. Do not
-use the `Skill` tool for EGM skills. Keep drafting and orchestration in the
-main context.
-Claude Code has no artifact comments. To request draft revisions, edit
-`design_draft.md` directly or add `<!-- -->` comments in it, or give the notes
-in chat; the model reads the draft again before each revision.
-Write briefs, drafts, and reports to the user's working directory. The
+use the `Skill` tool for EGM skills. For `egm-review`, keep drafting and
+orchestration in the main context. `egm-c4` drafts in round subagents while
+the main session orchestrates.
+Claude Code has no artifact comments. To request revisions, give the notes in
+chat at the section-approval gates, or edit the level documents under
+`docs/architecture/` directly; the next revise round reads them again.
+`egm-c4` writes its documents under the target project's `docs/architecture/`.
+Write review reports to the artifact directory (for `egm-c4`,
+`docs/architecture/reviews/<stem>/`) in the user's working directory. The
 per-session scratchpad is not the artifact directory: it belongs to one
 session, and the deliverables must outlive it.
 If the user's prompt or agent instructions file (`CLAUDE.md` or `AGENTS.md`)

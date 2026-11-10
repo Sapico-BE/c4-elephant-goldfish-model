@@ -35,3 +35,25 @@
     to the user in plain text, point out the contradiction, and ask for
     resolution. You are strictly forbidden from planning or executing any
     file-writing/editing tool in the same turn as you discover a contradiction.
+
+**egm-c4 exceptions**: These apply only while the `egm-c4` skill runs and
+override the rules above where they conflict.
+
+*   **Code writing**: Allowed only for implement, fix and merge rounds in the C4
+    step, after build-plan approval, inside the ticket's allowed paths.
+*   **Round writes**: A round subagent may write its declared output files
+    without a per-file go-ahead. Drafts keep `**Status:** Draft` until the user
+    approves.
+*   **Contradictions in rounds**: A round that finds a contradiction finishes
+    its declared outputs and reports it. The orchestrator then makes no further
+    changes until the user resolves it.
+*   **Interview rounds**: A grilling round may present several numbered
+    questions with recommended answers. Every other gate still asks one
+    question.
+*   **Orchestrator writes**: The main session writes only the files listed
+    in the `egm-c4` SKILL.md: the ledger `docs/architecture/c4-tasks.md`; the
+    append-only answers files in `docs/architecture/decisions/`;
+    `**Status:**` lines; replacement text the user approved at a resolve
+    gate, applied verbatim; the user's gate decisions recorded verbatim in the
+    round report, marked `Status: resolved`; and, under direct dispatch, each
+    reviewer's returned findings, saved verbatim to the scope's review folder.

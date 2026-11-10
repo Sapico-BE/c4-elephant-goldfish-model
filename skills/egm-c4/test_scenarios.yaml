@@ -1,0 +1,173 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+skill: "egm-c4"
+description: "Behavioral evaluation scenario suite for egm-c4 skill."
+
+scenarios:
+  - scenario_id: "start_greenfield_c1"
+    description: "CUJ 1: in a repository with no docs/architecture/, creates the ledger with C1 tasks, records the idea, and dispatches a fresh grill subagent."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "/egm-c4 I want to build a library lending app for a small town library."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(c4-tasks\\.md|ledger|grill|c1\\.answers\\.md|subagent)"
+            message: "Starting a greenfield project must create the ledger, record the idea, and start C1 grilling in a fresh subagent."
+
+  - scenario_id: "refuse_early_code"
+    description: "CUJ 6: with C2 in Draft, declines to generate code and asks whether to continue the current task."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "C2 is still in Draft. Just generate the API code now."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(only in the C4 step|build plan|build-plan approval|not yet|decline|continue the current task)"
+            message: "Code requests before build-plan approval must be declined with the reason and an offer to continue the current task."
+
+  - scenario_id: "skipped_question_deferred"
+    description: "A skipped grilling question is recorded as skipped so the next round marks it deferred and the draft lists it under Open Questions."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "Answers for round 2: Q1 yes, Q2 use Entra ID, skip Q3."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(skipped|deferred|Open Questions)"
+            message: "A skipped question must be recorded and deferred, not dropped or answered on the user's behalf."
+
+  - scenario_id: "invalid_round_result_retried"
+    description: "A round returns JSON that does not match round-result.schema.json; the orchestrator retries once with a fresh subagent, then marks the task blocked."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "The grill subagent for T01 returned plain prose instead of the round result JSON."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(retry|fresh subagent|blocked|schema|invalid)"
+            message: "An invalid round result must be retried once in a fresh subagent and then mark the task blocked."
+
+  - scenario_id: "free_form_round_answer"
+    description: "The user answers a grilling round in free form; the orchestrator maps each part to a question number and asks only about the unmapped part."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "Sounds fine overall, use Postgres for the catalogue, and we also need SMS reminders."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(Q\\d|question \\d|which question|new topic|map)"
+            message: "A free-form reply must be mapped to question numbers, with one question only about the parts that do not map."
+
+  - scenario_id: "existing_code_warns"
+    description: "With no docs/architecture/ but existing source files, says the flow is for greenfield work and asks before creating the ledger."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "/egm-c4 (this repository already has src/ with a working Flask app and no docs/architecture/)"
+        assertions:
+          - type: "required_pattern"
+            pattern: "(greenfield|existing code|egm-bootstrap|egm-drift-report)"
+            message: "Existing source without a ledger must trigger the greenfield warning and a question before the ledger is created."
+
+  - scenario_id: "no_subagent_tool_stops"
+    description: "In a harness without a subagent tool, stops and explains that rounds need fresh subagents."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "/egm-c4 (this harness has no subagent tool)"
+        assertions:
+          - type: "required_pattern"
+            pattern: "(subagent|fresh context|cannot run|stop)"
+            message: "Without a subagent tool the orchestrator must stop instead of running rounds in its own context."
+
+  - scenario_id: "resume_next_c3"
+    description: "CUJ 2: in a new session with C1 and C2 approved and C3 tasks for web and api (db is C3: skip), shows done and open tasks and starts the grill for the first ready C3 task."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "/egm-c4 (new session; the ledger shows C1 and C2 approved, C3 grill tasks for web and api, and db marked C3: skip)"
+        assertions:
+          - type: "required_pattern"
+            pattern: "(ledger|C3:web|web|grill|done and open)"
+            message: "The orchestrator must read the ledger, show done and open tasks, and start the first ready C3 task (grilling web), not db."
+
+  - scenario_id: "force_level_reopen"
+    description: "CUJ 3: forcing an Approved C3 level confirms the document returns to Draft and dependents become stale, then grills with the existing log; forcing a level whose upper levels are not Approved is refused."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "/egm-c4 c3 api (C1, C2 and c3-api.md are Approved)"
+        assertions:
+          - type: "required_pattern"
+            pattern: "(Draft|stale|decision log|confirm|reopen)"
+            message: "Forcing an Approved level must confirm the return to Draft and the stale tasks first, then keep the existing decision log."
+
+  - scenario_id: "contradiction_reopens_c2"
+    description: "CUJ 4: a C3 grill round reports that the system needs a message queue container C2 lacks; the orchestrator stops C3 work, names the contradiction, offers to reopen C2, and reconciles C3 tasks after C2 is approved again."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "The C3 grill subagent for api returned a contradiction: the system needs a message queue container that C2 lacks."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(contradiction|reopen C2|c2.answers|stale|Reconcile)"
+            message: "A contradiction must stop C3 work, be named, and offer to reopen C2, with dependents stale and C3 tasks reconciled after C2 is approved again."
+
+  - scenario_id: "rejected_approval_revises"
+    description: "When the user rejects approval of a level, the orchestrator adds a revise (or grill) task and a new readiness, review and approve, superseding the pending ones."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "I do not approve the C2 document; the container table is missing the queue."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(revise|grill|readiness|superseded|new .approve.)"
+            message: "A rejected approval must add a revise (or grill if a new decision is needed) chain with fresh readiness, review and approve tasks, superseding the pending ones."
+
+  - scenario_id: "generate_project_after_plan"
+    description: "CUJ 5: with C1, C2 and every required C3 document Approved, grills the build plan, drafts c4-build-plan.md and slice tickets, reviews them, and after approval runs slice 01 (the walking skeleton) alone, then ready slices in batches, each implemented, merged, verified and code-reviewed by fresh subagents, ending with egm-drift-report."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "/egm-c4 (C1, C2, c3-web.md and c3-api.md are Approved; no build plan exists yet)"
+        assertions:
+          - type: "required_pattern"
+            pattern: "(build plan|c4-build-plan\\.md|c4-plan|grill|toolchain|walking skeleton)"
+            message: "With every design level approved, the C4 step must start by grilling the build plan, not by writing code."
+
+  - scenario_id: "path_violation_adds_fix"
+    description: "An implement round for slice 03 changed a file outside the ticket's Allowed Paths; the orchestrator shows the path, adds a fix chain that reverts it, and does not merge the slice until a path check passes."
+    eval_type: "deterministic"
+    system_prompt:
+      skill_file: "skills/egm-c4/SKILL.md"
+    turns:
+      - user_input: "The implement round for slice 03 also edited services/web/src/app.ts, which is not in the ticket's Allowed Paths."
+        assertions:
+          - type: "required_pattern"
+            pattern: "(Allowed Paths|fix|revert|path check|out-of-bounds|violation)"
+            message: "A path-check violation must be shown and add a fix task that reverts the out-of-bounds change before the slice merges."

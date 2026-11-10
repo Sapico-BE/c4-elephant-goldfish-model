@@ -35,6 +35,10 @@ The caller or orchestration driver provides exactly these parameters:
 *   **`LineRange`**: Exact line numbers (or `full file`).
 *   **`FindingsList`**: Aggregated flat list of findings from Goldfish
     reviewers.
+*   **`ReportDir`**: Optional. Folder for the report. Default: the working
+    directory or your harness's artifact directory, as in Step 3.
+*   **`StopBeforeGate`**: Optional; default `false`. When `true`, stop after
+    Step 3 (see the end of Step 3). When omitted or `false`, run every step.
 
 ## Execution Workflow
 
@@ -42,12 +46,15 @@ The caller or orchestration driver provides exactly these parameters:
 
 1.  **Hybrid Execution UX**: Detect if execution arguments are present:
 
-    *   *Automated Mode*: If all parameters are provided, execute silently as a
+    *   *Automated Mode*: If all required parameters (`TargetFile`,
+        `LineRange`, `FindingsList`) are provided, execute silently as a
         subprocess.
-    *   *Standalone Human Mode*: If parameters are omitted, trigger a friendly
-        onboarding flow. Prompt for one piece of input at a time, waiting for
-        the user's response after each turn. Once all inputs are specified,
-        display the final setup and verify the user is ready to continue.
+    *   *Standalone Human Mode*: If required parameters are omitted, trigger a
+        friendly onboarding flow. Optional inputs (`ReportDir`,
+        `StopBeforeGate`) never trigger it. Prompt for one piece of input at
+        a time, waiting for the user's response after each turn. Once all
+        inputs are specified, display the final setup and verify the user is
+        ready to continue.
 
 2.  Read `TargetFile` at `LineRange` by reading it and parse the `FindingsList`.
 
@@ -84,7 +91,8 @@ Apply these rules:
 ### Step 3: Report Fixes
 
 Construct the final report and save it named
-`goldfish_review_report.md` in the working directory (or your harness's artifact directory, if it has one)
+`goldfish_review_report.md` in `ReportDir` if the caller gave one, otherwise in
+the working directory (or your harness's artifact directory, if it has one),
 using your file-writing tool. Use this layout:
 
 ```markdown
@@ -106,6 +114,13 @@ using your file-writing tool. Use this layout:
     *   Change: [Precise replacement string or deletion note]
 {{end}}
 ```
+
+**`StopBeforeGate: true` only.** Make each `PROPOSE FIX` Change the exact
+replacement text, so the caller can apply it verbatim. Use the report file name the
+caller gives (for example `goldfish_review_report.T04.round-2.md`) instead of
+`goldfish_review_report.md`. Then return the report path without editing
+`TargetFile`. Do not run Step 4 or Step 5: the caller runs the gate and marks
+the report resolved. Without `StopBeforeGate: true`, continue to Step 4.
 
 ### Step 4: Interactive Resolution Gate
 

@@ -61,8 +61,8 @@ The open-source EGM framework is organized into four decoupled subsystems:
 
 ### 1. Skills Layer (`skills/`)
 Modular agent capabilities executable via slash commands or direct invocation:
-*   `egm-brainstorm`: 7-lens shootdown swarm for early concept exploration.
-*   `egm-draft`: Section-by-section specification compiler.
+*   `egm-c4`: Greenfield orchestrator that takes a project through C1, C2 and C3
+    design documents with Goldfish review, then builds it in test-first slices.
 *   `egm-review`: Orchestrator for the multi-stage review pipeline.
 *   `egm-review-loop`: Concurrent subagent review dispatcher.
 *   `egm-resolve`: Interactive resolution and patch application.
@@ -85,24 +85,23 @@ User guides (`getting_started.md`, `faq.md`) and technical design specifications
 
 ## End-to-End Lifecycle & Dataflow
 
-The EGM development pipeline transitions artifacts through five disciplined
+The EGM development pipeline transitions artifacts through four disciplined
 phases:
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor Human as Software Engineer
-    participant Elephant as Elephant (Brainstorm & Draft)
+    participant Elephant as Elephant (C4 Design & Build)
     participant Artifact as Side-Panel Artifact / File
     participant Reviewer as Goldfish Reviewers (Synthesizer)
     participant VCS as Version Control (PR)
     participant Coder as Implementation Agent
 
-    Human->>Elephant: /egm-brainstorm (Multi-Lens Ideation & Shootdown)
-    Elephant->>Artifact: Write concepts_brief.md
-    Human->>Elephant: /egm-draft
-    Elephant->>Artifact: Write docs/designs/FEATURE.md
-    Human->>Reviewer: /egm-review docs/designs/FEATURE.md
+    Human->>Elephant: /egm-c4 (C1 -> C2 -> C3, then build)
+    Elephant->>Artifact: Write docs/architecture/ documents
+    Reviewer-->>Elephant: Goldfish review of each level
+    Human->>Reviewer: /egm-review docs/designs/FEATURE.md (standalone document)
     Note over Reviewer: Zoom Out -> Comprehension -> Critic -> Zoom Out -> Readiness
     Reviewer->>Artifact: Write review reports & findings
     Human->>Reviewer: Triage & resolve findings (/egm-resolve)
@@ -111,25 +110,20 @@ sequenceDiagram
     Human->>Coder: Implement against FEATURE.md
 ```
 
-### Phase 1: Upstream Ideation & Multi-Lens Shootdown (The Elephant)
+### Phase 1: C4 Design and Build (The Elephant)
 
-*   **Command**: `/egm-brainstorm`
-*   **Mechanics**: The Elephant interviews the engineer to anchor a core hypothesis,
-    then spawns a 7-lens Goldfish swarm to shoot down flawed assumptions.
-*   **Output**: A structured brief written to `concepts_brief.md`.
+*   **Command**: `/egm-c4`
+*   **Mechanics**: The Elephant grills the engineer, then drafts C1 System
+    Context, C2 Container and C3 Component documents under
+    `docs/architecture/`. Each level is reviewed by Goldfish reviewers in fresh
+    subagents and approved by the human before the next level starts. After
+    approval, the Elephant builds the project in test-first slices.
+*   **Output**: The C1, C2 and C3 documents, the build plan, and the slice files.
+    See [c4.md](c4.md) for the full design.
 
-### Phase 2: Spec Authoring & Semantic Boundaries
+### Phase 2: Isolated Verification (The Goldfish)
 
-*   **Command**: `/egm-draft`
-*   **Mechanics**: Converts the concepts brief (or discussion notes) into an EGM-compliant
-    technical design document written to `docs/designs/<feature>.md`.
-*   **Semantic Boundary Discovery**: Establishes a clear boundary between the
-    high-level architecture (`FeatureRange`) and the detailed implementation
-    plan (`DetailedRange`), enabling targeted subagent reviews.
-
-### Phase 3: Isolated Verification (The Goldfish)
-
-*   **Command**: `/egm-review`
+*   **Command**: `/egm-review` (for standalone documents outside the C4 flow)
 *   **Execution**: Executes a five-stage evaluation pipeline:
     1.  **Step 5: Zoom Out Review**: Evaluates simplicity, YAGNI, and codebase
         reuse against `zoom-out-standard.md`.
@@ -146,24 +140,23 @@ sequenceDiagram
     reviewers in parallel, aggregates raw findings, deduplicates overlaps, and
     writes consolidated markdown reports.
 
-### Phase 4: Human Review & Submission
+### Phase 3: Human Review & Submission
 
 *   The human engineer resolves or rejects Goldfish findings using
     `/egm-resolve`, updates the design doc, and submits the
     specification via Pull Request for human peer review.
 
-### Phase 5: Implementation & Drift Monitoring
+### Phase 4: Implementation & Drift Monitoring
 
 *   **Execution**: Coding agents implement code strictly adhering to the
     approved design document. (No Skill.md is required here because the design 
     document is complete and detailed.)
-*   **Phase Write Boundaries**: Phases 1-4 (`/egm-brainstorm`, `/egm-draft`,
-    `/egm-review`, and `/egm-resolve`) should write only specification and
-    review artifacts: `concepts_brief.md`, `design_draft.md`, the review
-    reports, the design doc, and `SITEMAP.md` if it exists. They should not
+*   **Phase Write Boundaries**: Phases 2-3 (`/egm-review` and
+    `/egm-resolve`) should write only specification and review artifacts: the
+    review reports, the design doc, and `SITEMAP.md` if it exists. They should not
     change production source code or dependencies. This is a convention, and
     nothing enforces it. Once Step 9 (Implementation Readiness Test) passes,
-    the plan's `Target Scope & File Boundary` list is the set of files Phase 5
+    the plan's `Target Scope & File Boundary` list is the set of files Phase 4
     implementation may write.
 *   **Maintenance**: `/egm-drift-report` is run periodically (e.g. weekly) to
     detect divergence between codebase implementations and checked-in design docs.

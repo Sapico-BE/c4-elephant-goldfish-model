@@ -4,6 +4,7 @@ These files are the authoritative instructions and rubrics loaded by EGM
 skills and reviewers. Update the rules here; link to them from human guides
 instead of maintaining separate summaries of their requirements.
 
+- [C4 model standard](document_standards/c4-model-standard.md)
 - [Execution instructions](execution_instructions.md)
 - [Feature specification standard](document_standards/feature-spec-standard.md)
 - [Heilmeier standard](document_standards/heilmeier-standard.md)

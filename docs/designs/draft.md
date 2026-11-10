@@ -1,7 +1,7 @@
 # EGM Design Drafting: Specification Authoring & Semantic Boundaries
 
 *   **Authors:** Jim Quinn ([@quinnjim](https://github.com/quinnjim)), Elise Ewing ([@eewing314](https://github.com/eewing314))
-*   **Status:** Current
+*   **Status:** Superseded by [c4.md](c4.md)
 *   **Date:** 2026-06-06
 
 --------------------------------------------------------------------------------

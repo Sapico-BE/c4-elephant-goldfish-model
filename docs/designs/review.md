@@ -152,6 +152,25 @@ For each finding, the Elephant determines:
 A contest must cite evidence the reviewer could read. Comprehension gaps cannot
 be contested, and severities cannot be changed without a contest.
 
+`egm-review-loop` takes three optional inputs for orchestrating callers.
+`ResolveMode` (`inline` by default, or `delegated`) lets the caller run the
+decision gate: in `delegated` mode each round's resolution is a fresh subagent
+following `egm-resolve` with `StopBeforeGate: true`, which writes the round's
+report under the name the loop gives it and returns without editing the
+target. `ReportDir` names the folder for all reports of the run (`egm-resolve`
+also accepts it). `RunId`, which a `delegated` caller must give, names the run
+(`egm-c4` passes its ledger `review` task ID). Each round's report is
+`goldfish_review_report.<RunId>.round-<n>.md`, and under direct dispatch each
+reviewer's saved findings are `findings.<RunId>.round-<n>.<reviewer>.md`, so
+runs that share a `ReportDir` never overwrite each other. The caller records
+the user's gate decisions in the round report and marks it resolved. Clean
+rounds and convergence count only the current run's reports; the settled list
+reads every run's reports in `ReportDir`. A `delegated` caller has configured
+the run, so the loop does not re-ask the reviewer configuration and exits to
+the caller without the manual-invocation question. `egm-resolve` prompts
+only for missing required inputs. Defaults leave the behavior above
+unchanged.
+
 ### 2. User Triage Modes
 
 The engineer reviews `goldfish_review_report.md` via four interaction modes:

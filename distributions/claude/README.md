@@ -17,7 +17,7 @@ Develop ideas with context and review documents with fresh eyes. EGM is an open-
 
 **Elephant** holds your project context and drafts the specification. **Goldfish** reviewers examine the draft and referenced source material without the earlier conversation, helping expose unstated assumptions and blind spots. **You** make the architectural trade-offs and approve the specification before implementing.
 
-The built-in draft and design-review workflow targets software specifications. For other documents, choose reviewers and standards with `/egm-review-loop`. Bootstrap and drift reporting apply to software codebases.
+The built-in C4 design and review workflow targets software specifications. For other documents, choose reviewers and standards with `/egm-review-loop`. Bootstrap and drift reporting apply to software codebases.
 
 https://github.com/user-attachments/assets/93c799a2-10a3-4266-af02-eb79dd33a9a2
 
@@ -57,42 +57,34 @@ Start a new session after installation. For **Claude Cowork** and **ChatGPT Work
 
 Open your project in your coding agent and choose a feature that needs design decisions. This example adds webhook delivery: what should happen when a delivery fails, or the same event arrives twice?
 
-The commands below are shown without a prefix. In Antigravity (agy CLI) and Claude Code, add the `/egm:` prefix, for example `/egm:egm-brainstorm`. On agy CLI 1.4.10 an unprefixed name is completed to the prefixed command ([#220](https://github.com/google/elephant-goldfish-model/issues/220)), but 1.4.8 does not ([#196](https://github.com/google/elephant-goldfish-model/issues/196)), so keep the prefix. In Codex, select the corresponding EGM skill from the skill picker. Brainstorming and review require a session that can create fresh subagents.
+The commands below are shown without a prefix. In Antigravity (agy CLI) and Claude Code, add the `/egm:` prefix, for example `/egm:egm-c4`. On agy CLI 1.4.10 an unprefixed name is completed to the prefixed command ([#220](https://github.com/google/elephant-goldfish-model/issues/220)), but 1.4.8 does not ([#196](https://github.com/google/elephant-goldfish-model/issues/196)), so keep the prefix. In Codex, select the corresponding EGM skill from the skill picker. The C4 workflow and review require a session that can create fresh subagents.
 
-<img src="skills/egm-brainstorm/assets/icon.svg" width="20" height="20" align="top" alt=""> **Explore the idea**
-
-```text
-/egm-brainstorm Add webhook delivery to this project.
-```
-
-Discuss requirements and trade-offs with the agent. Fresh reviewers challenge the proposal, and the agent saves the agreed direction in `concepts_brief.md`.
-
-<img src="skills/egm-draft/assets/icon.svg" width="20" height="20" align="top" alt=""> **Draft the specification**
+<img src="skills/egm-c4/assets/icon.svg" width="20" height="20" align="top" alt=""> **Design it with C4**
 
 ```text
-/egm-draft
+/egm-c4 Add webhook delivery to this project.
 ```
 
-The agent turns the brief into `design_draft.md`, pausing after each section for your feedback in chat.
+The agent grills you on the problem, then drafts C1 (system context), C2 (containers), and C3 (components) documents under `docs/architecture/`. Fresh reviewers challenge each level, and you approve it before the next. Once the design is approved, the agent builds the project in test-first slices.
 
-<img src="skills/egm-review/assets/icon.svg" width="20" height="20" align="top" alt=""> **Review the draft**
+<img src="skills/egm-review/assets/icon.svg" width="20" height="20" align="top" alt=""> **Review a standalone document**
 
 ```text
-/egm-review design_draft.md
+/egm-review docs/designs/my-feature.md
 ```
 
-Use the draft path returned by the agent.
+Use `egm-review` for a design document you wrote yourself, outside the C4 flow. Fresh reviewers check the design, its clarity, its fit with the code, and its implementation plan. Choose which findings to address.
 
-Fresh reviewers check the design, its clarity, its fit with the code, and its implementation plan. Choose which findings to address. When you approve the design, ask your coding agent to implement it.
+When the code exists, run `egm-drift-report` to compare the checked-in documents with the current source.
 
-See the [workflow guide](docs/getting_started.md) for the full process, including saving approved specifications under `docs/designs/`.
+See the [workflow guide](docs/getting_started.md) for the full process.
 
 ## How it works
 
 <table>
   <thead><tr><th align="left">Role</th><th align="left">Context</th><th align="left">Responsibility</th></tr></thead>
   <tbody>
-    <tr valign="top"><td><strong>Elephant</strong></td><td>Your project, requirements, and earlier decisions</td><td>Explore the problem and draft the specification.</td></tr>
+    <tr valign="top"><td><strong>Elephant</strong></td><td>Your project, requirements, and earlier decisions</td><td>Explore the problem, draft the specification, and build it.</td></tr>
     <tr valign="top"><td><strong>Goldfish</strong></td><td>The document and its referenced source material, without the earlier conversation</td><td>Find missing assumptions, unclear requirements, and implementation risks.</td></tr>
     <tr valign="top"><td><strong>You</strong></td><td>The goals and constraints that matter</td><td>Resolve trade-offs, approve the design, and decide what to build.</td></tr>
   </tbody>
@@ -107,8 +99,7 @@ You can use each skill when you need it. You do not have to follow the full sequ
 <table>
   <thead><tr><th align="left">Skill</th><th align="left">Use it to…</th></tr></thead>
   <tbody>
-    <tr valign="top"><td width="160" valign="top"><img src="skills/egm-brainstorm/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/egm-brainstorm/SKILL.md">Brainstorm</a></td><td>Test an idea and write a concept brief.</td></tr>
-    <tr valign="top"><td width="160" valign="top"><img src="skills/egm-draft/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/egm-draft/SKILL.md">Draft</a></td><td>Turn a brief or existing notes into a design document.</td></tr>
+    <tr valign="top"><td width="160" valign="top"><img src="skills/egm-c4/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/egm-c4/SKILL.md">C4</a></td><td>Take a greenfield project through C1, C2, and C3 designs, then build it in test-first slices.</td></tr>
     <tr valign="top"><td width="160" valign="top"><img src="skills/egm-resolve/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/egm-resolve/SKILL.md">Resolve</a></td><td>Work through review findings and agree on changes.</td></tr>
     <tr valign="top"><td width="160" valign="top"><img src="skills/egm-bootstrap/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/egm-bootstrap/SKILL.md">Bootstrap</a></td><td>Create or update documentation for an existing codebase.</td></tr>
     <tr valign="top"><td width="160" valign="top"><img src="skills/egm-review/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/egm-review/SKILL.md">Review</a></td><td>Review a design with fresh agents across five stages.</td></tr>

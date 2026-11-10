@@ -10,7 +10,7 @@ import tempfile
 import zipfile
 
 SHARED = (
-    "plugin.json", "LICENSE", "README.md",
+    "plugin.json", "LICENSE", "README.md", "THIRD_PARTY_NOTICES.md",
     "skills/*/SKILL.md", "skills/*/agents/openai.yaml",
     "skills/*/assets/*.svg", "skills/*/assets/*.png", "skills/*/references/*.md",
     "skills/*/references/*.json", "agents/*.md", "resources/*.md",
@@ -25,17 +25,21 @@ HOST = {
     "openai": (".codex-plugin/plugin.json",),
 }
 SKILLS = (
-    "egm-bootstrap", "egm-brainstorm", "egm-draft", "egm-drift-report",
-    "egm-resolve", "egm-review", "egm-review-loop",
+    "egm-bootstrap", "egm-c4",
+    "egm-drift-report", "egm-resolve", "egm-review", "egm-review-loop",
 )
 REQUIRED_SHARED = (
-    "plugin.json", "LICENSE", "README.md", "assets/icon.svg",
+    "plugin.json", "LICENSE", "README.md", "THIRD_PARTY_NOTICES.md",
+    "assets/icon.svg",
     "docs/index.md", "docs/getting_started.md", "docs/harnesses.md",
     "docs/claude.md", "docs/codex.md", "docs/faq.md", "docs/privacy.md",
     "resources/README.md", "resources/execution_instructions.md",
     "skills/egm-bootstrap/references/worker-return.schema.json",
     "skills/egm-bootstrap/references/templates.md",
-    "skills/egm-draft/references/design_doc.md",
+    "skills/egm-c4/references/round-result.schema.json",
+    "skills/egm-c4/references/grilling.md",
+    "skills/egm-c4/references/ledger.md",
+    "skills/egm-c4/references/rounds.md",
 ) + tuple(
     f"skills/{skill}/{name}"
     for skill in SKILLS

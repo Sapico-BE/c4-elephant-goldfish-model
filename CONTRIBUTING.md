@@ -72,12 +72,12 @@ follows the EGM Spec-Driven Development process:
     [Feature / Architectural Inquiry Issue](https://github.com/google/elephant-goldfish-model/issues/new?template=feature_proposal.md)
     (`.github/ISSUE_TEMPLATE/feature_proposal.md`) outlining the problem
     statement and proposed `Goals` vs. `Non-Goals`. We recommend using
-    `/egm-brainstorm` to complete this section. Maintainers will review and apply
+    `/egm-c4` to complete this section. Maintainers will review and apply
     `design-ready` once aligned on direction.
 
 2.  **Draft & Review Design Specification**:
     Draft a technical design specification under `docs/designs/<name>.md`. We
-    recommend using `/egm-draft`, and registering it in [`docs/designs/README.md`](docs/designs/README.md).
+    recommend authoring it with `/egm-c4`, and registering it in [`docs/designs/README.md`](docs/designs/README.md).
     We also recommend running `/egm-review docs/designs/<name>.md` to stress-test
     the proposal.
 

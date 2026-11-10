@@ -101,8 +101,6 @@ def install(destination: Path) -> Path:
         "Wait for foreground completion. Pass only the task, absolute resource paths, "
         "target, standards, and selected reading list, not conversation history. "
         "Stop if delegation or a required completion is missing. "
-        "When running brainstorm before draft, complete all seven brainstorm "
-        "reviewers and synthesize their findings into concepts_brief.md before drafting. "
         "In review, write each completed stage report before starting the next stage. "
         "Before Step 8, verify zoom_out_report.md exists in the artifact directory "
         "and pass its absolute path to the reviewer; stop if it is missing. "

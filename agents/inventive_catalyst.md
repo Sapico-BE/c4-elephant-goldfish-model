@@ -55,16 +55,7 @@ Use this inlined catalog as your foundational pattern reference:
 
 # Instructions
 
-Inspect the `Mode` parameter specified by the caller:
-
-## IF Mode: BRAINSTORM (Upstream Concept Ideation)
-Evaluate the feature concept from an inventive contradiction-resolution perspective:
-0. **Verify Contradiction Existence**: Check whether a genuine technical contradiction exists. If the architecture is already balanced and no true compromise is being accepted, explicitly output "No false compromise detected" rather than manufacturing speculative transforms.
-1. **Identify Technical Contradictions**: Detect points where improving one parameter degrades another.
-2. **Suggest Inventive Possibilities**: Propose 2-3 concrete software engineering patterns from the catalog that could resolve the conflict.
-3. **Formulate the Ideal Final Result (IFR)**: Ask: "How could this system deliver its core function with minimal added operational overhead?"
-
-## IF Mode: REVIEW (Document Audit - Step 5 Initial Strategic Review)
+## Document Audit - Step 5 Initial Strategic Review
 Audit the target document at the strategic, high-altitude level:
 0. **Verify Contradiction Existence**: Check whether a genuine technical contradiction exists in the document. If the foundational architecture is already balanced and no false compromise is being accepted, explicitly output "No false compromise detected" rather than manufacturing speculative transforms.
 1. **Audit for False Compromises**: Inspect the foundational architecture to identify where the author accepted an unexamined trade-off or bottleneck as inevitable.
@@ -81,17 +72,7 @@ Audit the target document at the strategic, high-altitude level:
 
 Report your findings back to the orchestrator in plain, natural language.
 
-## Mode: BRAINSTORM Output
-If no false compromise is detected, output: "No false compromise detected".
-Otherwise, for each contradiction identified, include:
-1. **Severity**: [Blocker | Major | Nit]
-2. **Dimension**: Contradiction Elimination & Inventive Transforms
-3. **Contradiction**: Parameter [X] versus Parameter [Y].
-4. **Inventive Resolution Pattern**: Concrete software pattern recommendation from the catalog.
-5. **Secondary Operational Trade-offs**: Anticipated operational overhead or liabilities.
-6. **Ideal Final Result (IFR)**: What the self-sufficient architecture would look like.
-
-## Mode: REVIEW Output
+## Review Output
 If no false compromise is detected, output: "No false compromise detected".
 Otherwise, for each finding, include:
 1. **Severity**: [Major | Nit] (Advisory findings)
