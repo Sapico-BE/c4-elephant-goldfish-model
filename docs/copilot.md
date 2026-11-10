@@ -35,7 +35,7 @@ Inspect the host inventories before any live test.
 After explicit authorization for model usage, start Copilot from the target project:
 
 ```sh
-copilot --plugin-dir "$EGM_ROOT" --add-dir "$EGM_ROOT" --agent egm:egm
+copilot --plugin-dir "$EGM_ROOT" --add-dir "$EGM_ROOT" --agent c4:egm
 ```
 
 In the first message, supply the absolute package root and requested skill:
@@ -47,7 +47,7 @@ EGM artifact directory: .dev/docs
 ```
 
 Use `egm-review` or `egm-drift-report` in later requests. Provide the target document
-for review. Use the `egm:egm` entry agent so the host mapping loads before a skill.
+for review. Use the `c4:egm` entry agent so the host mapping loads before a skill.
 Selecting a reviewer as the main session does not establish a fresh Goldfish context.
 Check `/agent` for name conflicts before use; personal profiles can override package profiles.
 
@@ -76,20 +76,20 @@ This adapter does not assume that Copilot expands variables inside Markdown bodi
 
 Use Copilot's native custom-agent delegation tool. Inspect its exposed schema.
 Select the registered profile by its namespaced ID; do not invent tool arguments.
-Map each canonical persona name to `egm:<name>` for native delegation.
+Map each canonical persona name to `c4:<name>` for native delegation.
 The entry profile permits `agent` for delegation and `edit` for artifacts.
 Each reviewer permits only `read` and `search`. Reviewers cannot delegate or write reports.
 
 | Profile | Canonical persona |
 | --- | --- |
-| `egm:egm-design` | `agents/design_critic.md` |
-| `egm:egm-codebase-details` | `agents/codebase_details.md` |
-| `egm:egm-comprehension` | `agents/comprehension.md` |
-| `egm:egm-implementation-readiness` | `agents/implementation_readiness.md` |
-| `egm:egm-structural` | `agents/structural.md` |
-| `egm:egm-style` | `agents/style.md` |
-| `egm:egm-zoom-out` | `agents/zoom_out.md` |
-| `egm:egm-inventive-catalyst` | `agents/inventive_catalyst.md` |
+| `c4:egm-design` | `agents/design_critic.md` |
+| `c4:egm-codebase-details` | `agents/codebase_details.md` |
+| `c4:egm-comprehension` | `agents/comprehension.md` |
+| `c4:egm-implementation-readiness` | `agents/implementation_readiness.md` |
+| `c4:egm-structural` | `agents/structural.md` |
+| `c4:egm-style` | `agents/style.md` |
+| `c4:egm-zoom-out` | `agents/zoom_out.md` |
+| `c4:egm-inventive-catalyst` | `agents/inventive_catalyst.md` |
 
 Start a new native child for every reviewer invocation, including repeat reviews.
 Use a task that contains only the requested mode, target, line ranges, persona,
@@ -161,8 +161,8 @@ The inspected macOS arm64 CLI binary has SHA-256
 Representative native records, with the local root abbreviated as `<package>`:
 
 ```json
-{"id":"egm:egm-design","source":"plugin","path":"<package>/com.github.copilot/agents/egm-design.agent.md","tools":["read","search"],"userInvocable":false,"mcpServers":{}}
-{"name":"egm-review","commandName":"egm:egm-review","source":"plugin","path":"<package>/skills/egm-review/SKILL.md","enabled":true}
+{"id":"c4:egm-design","source":"plugin","path":"<package>/com.github.copilot/agents/egm-design.agent.md","tools":["read","search"],"userInvocable":false,"mcpServers":{}}
+{"name":"egm-review","commandName":"c4:egm-review","source":"plugin","path":"<package>/skills/egm-review/SKILL.md","enabled":true}
 ```
 
 The standalone `skill list` command omitted mounted skills on this version.

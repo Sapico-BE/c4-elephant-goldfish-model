@@ -1,11 +1,11 @@
 {
-  "name": "egm",
+  "name": "c4",
   "interface": {
     "displayName": "Elephant-Goldfish Model"
   },
   "plugins": [
     {
-      "name": "egm",
+      "name": "c4",
       "source": "./",
       "policy": {
         "installation": "AVAILABLE",

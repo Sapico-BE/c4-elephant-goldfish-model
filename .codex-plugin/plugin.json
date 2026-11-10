@@ -1,12 +1,12 @@
 {
-  "name": "egm",
+  "name": "c4",
   "version": "0.1.1",
   "description": "Develop ideas with context and review documents with fresh eyes.",
   "author": {
     "name": "Google"
   },
   "homepage": "https://egm.dev",
-  "repository": "https://github.com/google/elephant-goldfish-model",
+  "repository": "https://github.com/Sapico-BE/c4-elephant-goldfish-model",
   "license": "Apache-2.0",
   "skills": "./skills/",
   "requires_local_executor": true,

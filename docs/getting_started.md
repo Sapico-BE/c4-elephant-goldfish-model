@@ -31,7 +31,7 @@ The EGM skills and personas are packaged as a plugin for **Antigravity**, **Clau
     `/egm-c4`, `/egm-review`); see
     [Try your first design](../README.md#try-your-first-design) for how to
     invoke them in Antigravity (agy CLI), Claude Code, and Codex, such as the
-    `/egm:` prefix.
+    `/c4:` prefix.
 2.  **Personas**: The prompts in `agents/` define isolated system instructions
     for subagents.
 

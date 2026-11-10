@@ -181,7 +181,7 @@ def test_copilot_native_offline_discovery(
                 params = {"sessionId": session["sessionId"]}
                 agents = rpc("session.agent.list", params)["agents"]
                 profiles = copilot_package / "com.github.copilot/agents"
-                expected = {f"egm:{frontmatter(p)['name']}": p
+                expected = {f"c4:{frontmatter(p)['name']}": p
                             for p in profiles.glob("*.agent.md")}
                 loaded = {a["id"]: a for a in agents if a["source"] == "plugin"}
                 assert set(loaded) == set(expected)
@@ -196,7 +196,7 @@ def test_copilot_native_offline_discovery(
                 skills = rpc("session.skills.list", params)["skills"]
                 loaded_skills = {s["commandName"]: s for s in skills
                                  if s["source"] == "plugin"}
-                expected_skills = {f"egm:{frontmatter(p)['name']}": p
+                expected_skills = {f"c4:{frontmatter(p)['name']}": p
                                    for p in (copilot_package / "skills").glob("*/SKILL.md")}
                 assert set(loaded_skills) == set(expected_skills)
                 for name, path in expected_skills.items():
