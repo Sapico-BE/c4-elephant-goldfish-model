@@ -1,7 +1,7 @@
 {
   "name": "c4",
   "interface": {
-    "displayName": "Elephant-Goldfish Model"
+    "displayName": "c4 Elephant-Goldfish Model"
   },
   "plugins": [
     {

@@ -4,7 +4,7 @@ Review pull requests only for high-severity correctness, packaging, security, or
 
 ## 1. Repository Invariants
 
-* **Skill Frontmatter and Directory Naming**: Every `skills/<dir>/SKILL.md` file must include YAML frontmatter with `name` equal to the directory name (`egm-*`) and a non-empty `description`. Every `agents/<name>.md` file must include `name` and `description` frontmatter.
+* **Skill Frontmatter and Directory Naming**: Every `skills/<dir>/SKILL.md` file must include YAML frontmatter with `name` equal to the directory name (`c4` or `c4-*`) and a non-empty `description`. Every `agents/<name>.md` file must include `name` and `description` frontmatter.
 * **Runtime Bundle Parity**: Changes to `skills/`, `agents/`, `resources/`, `docs/`, `assets/`, `README.md`, `LICENSE`, `plugin.json`, or `.claude-plugin/` must preserve `python3 scripts/pack_plugin.py --target claude --output distributions/claude` parity with `distributions/claude/`.
 * **GitHub Flavored Markdown Tables**: Never use multiline `:` continuation rows in Markdown tables. Every table row must stay on one line so GitHub renders it properly.
 * **Relative Link Integrity**: All relative Markdown links and intra-document `#heading` anchors must resolve on disk.

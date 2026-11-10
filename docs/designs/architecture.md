@@ -61,13 +61,13 @@ The open-source EGM framework is organized into four decoupled subsystems:
 
 ### 1. Skills Layer (`skills/`)
 Modular agent capabilities executable via slash commands or direct invocation:
-*   `egm-c4`: Greenfield orchestrator that takes a project through C1, C2 and C3
+*   `c4`: Greenfield orchestrator that takes a project through C1, C2 and C3
     design documents with Goldfish review, then builds it in test-first slices.
-*   `egm-review`: Orchestrator for the multi-stage review pipeline.
-*   `egm-review-loop`: Concurrent subagent review dispatcher.
-*   `egm-resolve`: Interactive resolution and patch application.
-*   `egm-drift-report`: Agent workflow comparing specs and READMEs to code via host search and file-reading tools.
-*   `egm-bootstrap`: Recursive bottom-up codebase documentation generator.
+*   `c4-review`: Orchestrator for the multi-stage review pipeline.
+*   `c4-review-loop`: Concurrent subagent review dispatcher.
+*   `c4-resolve`: Interactive resolution and patch application.
+*   `c4-drift-report`: Agent workflow comparing specs and READMEs to code via host search and file-reading tools.
+*   `c4-bootstrap`: Recursive bottom-up codebase documentation generator.
 
 ### 2. Personas Layer (`agents/`)
 Stateless system prompt instructions for isolated Goldfish reviewer subagents
@@ -98,13 +98,13 @@ sequenceDiagram
     participant VCS as Version Control (PR)
     participant Coder as Implementation Agent
 
-    Human->>Elephant: /egm-c4 (C1 -> C2 -> C3, then build)
+    Human->>Elephant: /c4 (C1 -> C2 -> C3, then build)
     Elephant->>Artifact: Write docs/architecture/ documents
     Reviewer-->>Elephant: Goldfish review of each level
-    Human->>Reviewer: /egm-review docs/designs/FEATURE.md (standalone document)
+    Human->>Reviewer: /c4-review docs/designs/FEATURE.md (standalone document)
     Note over Reviewer: Zoom Out -> Comprehension -> Critic -> Zoom Out -> Readiness
     Reviewer->>Artifact: Write review reports & findings
-    Human->>Reviewer: Triage & resolve findings (/egm-resolve)
+    Human->>Reviewer: Triage & resolve findings (/c4-resolve)
     Human->>VCS: Open Pull Request with FEATURE.md
     VCS-->>Human: Spec Approved & Merged
     Human->>Coder: Implement against FEATURE.md
@@ -112,7 +112,7 @@ sequenceDiagram
 
 ### Phase 1: C4 Design and Build (The Elephant)
 
-*   **Command**: `/egm-c4`
+*   **Command**: `/c4`
 *   **Mechanics**: The Elephant grills the engineer, then drafts C1 System
     Context, C2 Container and C3 Component documents under
     `docs/architecture/`. Each level is reviewed by Goldfish reviewers in fresh
@@ -123,7 +123,7 @@ sequenceDiagram
 
 ### Phase 2: Isolated Verification (The Goldfish)
 
-*   **Command**: `/egm-review` (for standalone documents outside the C4 flow)
+*   **Command**: `/c4-review` (for standalone documents outside the C4 flow)
 *   **Execution**: Executes a five-stage evaluation pipeline:
     1.  **Step 5: Zoom Out Review**: Evaluates simplicity, YAGNI, and codebase
         reuse against `zoom-out-standard.md`.
@@ -143,7 +143,7 @@ sequenceDiagram
 ### Phase 3: Human Review & Submission
 
 *   The human engineer resolves or rejects Goldfish findings using
-    `/egm-resolve`, updates the design doc, and submits the
+    `/c4-resolve`, updates the design doc, and submits the
     specification via Pull Request for human peer review.
 
 ### Phase 4: Implementation & Drift Monitoring
@@ -151,14 +151,14 @@ sequenceDiagram
 *   **Execution**: Coding agents implement code strictly adhering to the
     approved design document. (No Skill.md is required here because the design 
     document is complete and detailed.)
-*   **Phase Write Boundaries**: Phases 2-3 (`/egm-review` and
-    `/egm-resolve`) should write only specification and review artifacts: the
+*   **Phase Write Boundaries**: Phases 2-3 (`/c4-review` and
+    `/c4-resolve`) should write only specification and review artifacts: the
     review reports, the design doc, and `SITEMAP.md` if it exists. They should not
     change production source code or dependencies. This is a convention, and
     nothing enforces it. Once Step 9 (Implementation Readiness Test) passes,
     the plan's `Target Scope & File Boundary` list is the set of files Phase 4
     implementation may write.
-*   **Maintenance**: `/egm-drift-report` is run periodically (e.g. weekly) to
+*   **Maintenance**: `/c4-drift-report` is run periodically (e.g. weekly) to
     detect divergence between codebase implementations and checked-in design docs.
 
 ## Artifact-First UX Protocol

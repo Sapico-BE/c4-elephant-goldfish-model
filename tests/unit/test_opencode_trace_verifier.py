@@ -47,7 +47,7 @@ def evidence() -> tuple[list[dict], dict]:
                     '<task id="child" state="completed">\n<task_result>\n'
                     'Completed\n</task_result>\n</task>'
                 ),
-                'input': {'subagent_type': 'egm-zoom-out'},
+                'input': {'subagent_type': 'c4-zoom-out'},
                 'time': {'start': 100, 'end': 130},
                 'metadata': {'sessionId': 'child', 'parentSessionId': 'parent'},
             },
@@ -56,7 +56,7 @@ def evidence() -> tuple[list[dict], dict]:
     child = {
         'info': {
             'id': 'child', 'parentID': 'parent', 'version': '1.18.29',
-            'agent': 'egm-zoom-out',
+            'agent': 'c4-zoom-out',
         },
         'messages': [
             {'info': {'id': 'user-1', 'sessionID': 'child', 'role': 'user'}, 'parts': []},
@@ -153,7 +153,7 @@ def test_rejects_unreliable_or_conflicting_evidence(
     elif change == 'relative_path':
         part['state']['input']['filePath'] = 'agents/zoom_out.md'
     elif change == 'wrong_agent':
-        child['info']['agent'] = 'egm-comprehension'
+        child['info']['agent'] = 'c4-comprehension'
     elif change == 'read_outside_task':
         part['state']['time']['start'] = 99
     elif change == 'missing_read_time':

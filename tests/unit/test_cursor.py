@@ -101,7 +101,7 @@ def test_relocated_package_keeps_all_canonical_resources(installed: Path) -> Non
 
 
 def test_host_rule_and_guide_keep_failure_and_artifact_contracts() -> None:
-    rule = ROOT / ".cursor-plugin/rules/egm.mdc"
+    rule = ROOT / ".cursor-plugin/rules/c4.mdc"
     assert frontmatter(rule)["alwaysApply"] is True
     text = " ".join(rule.read_text(encoding="utf-8").split())
     for contract in (

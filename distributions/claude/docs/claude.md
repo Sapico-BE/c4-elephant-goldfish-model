@@ -16,19 +16,19 @@ claude plugin install c4@c4
 ```
 
 Enable the installed plugin with `claude plugin enable c4@c4`.
-Start messages with `/c4:egm-c4` or `/c4:egm-review`.
+Start messages with `/c4:c4` or `/c4:c4-review`.
 Skills retain `disable-model-invocation: true`: their absence from automatic
 skill discovery is expected. The `Skill` tool refuses these skills, so to run
-another EGM skill (for example `egm-review-loop` or `egm-resolve` during review
+another EGM skill (for example `c4-review-loop` or `c4-resolve` during review
 Stages 7 and 9), read its `SKILL.md` and follow it in the same thread. Do not
-use the `Skill` tool for EGM skills. For `egm-review`, keep drafting and
-orchestration in the main context. `egm-c4` drafts in round subagents while
+use the `Skill` tool for EGM skills. For `c4-review`, keep drafting and
+orchestration in the main context. `c4` drafts in round subagents while
 the main session orchestrates.
 Claude Code has no artifact comments. To request revisions, give the notes in
 chat at the section-approval gates, or edit the level documents under
 `docs/architecture/` directly; the next revise round reads them again.
-`egm-c4` writes its documents under the target project's `docs/architecture/`.
-Write review reports to the artifact directory (for `egm-c4`,
+`c4` writes its documents under the target project's `docs/architecture/`.
+Write review reports to the artifact directory (for `c4`,
 `docs/architecture/reviews/<stem>/`) in the user's working directory. The
 per-session scratchpad is not the artifact directory: it belongs to one
 session, and the deliverables must outlive it.
@@ -39,7 +39,7 @@ instructions file resolves outside the working directory, after following
 symbolic links, ask the user to confirm it before creating the folder or
 writing there. If they decline or no one can confirm, use the working directory
 and say why. Create the folder if it does not exist.
-In Claude Code, `c4:egm-synthesizer` may spawn reviewers (nesting is allowed
+In Claude Code, `c4:c4-synthesizer` may spawn reviewers (nesting is allowed
 up to 3 levels by default), or the main context may dispatch reviewers directly.
 In Claude Cowork, subagents cannot spawn further subagents, so dispatch
 reviewers directly from the main context instead of launching a synthesizer
@@ -132,7 +132,7 @@ names. Keep the explicit adapter list rather than removing it to silence this no
 ## Reviewer isolation
 
 Spawn a new native Agent of the plugin's registered reviewer type for each
-independent review, for example `c4:egm-zoom-out`. Do not fork the conversation
+independent review, for example `c4:c4-zoom-out`. Do not fork the conversation
 or resume a previous reviewer. Provide only the task, target, persona/standard
 paths, and explicitly supplied Goldfish context; do not copy parent deliberation.
 
@@ -148,7 +148,7 @@ A plugin subagent's `tools` field cannot restrict Write to specific paths, and
 Claude Code ignores `hooks` and `permissionMode` in plugin subagents. The
 adapter's rule to write only the requested report or brief is therefore an
 instruction, not a host-enforced limit. Writes still follow the session's
-permission rules. When you spawn `c4:egm-synthesizer`, name the artifact
+permission rules. When you spawn `c4:c4-synthesizer`, name the artifact
 directory you are using in its task. Otherwise it never sees a line from the
 user's prompt, and it drops a folder outside the working directory that only
 agent instructions name. It has no shell, so it checks that path as written and

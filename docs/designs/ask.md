@@ -25,14 +25,14 @@ so the command follows the `egm-` prefix that every other EGM skill uses.
 ## The Problem
 
 1.  **Blank Canvas**: New users have seen a demo of `/egm-brainstorm` or
-    `/egm-review` but do not know what to type to start, which skill fits their
+    `/c4-review` but do not know what to type to start, which skill fits their
     task, or what input a skill expects.
 
 2.  **Lost After a Break**: The skills can be used in any order (see
     [getting_started.md](../getting_started.md)). Within one session, each
     skill already names the next step when it finishes: egm-brainstorm's
-    handoff offers `/egm-draft`, egm-draft recommends `egm-review`, and
-    egm-review's stage gates name the next stage. That handoff is gone in a new
+    handoff offers `/egm-draft`, egm-draft recommends `c4-review`, and
+    c4-review's stage gates name the next stage. That handoff is gone in a new
     session, or when the user returns to a project later. The user then sees
     artifact files on disk but does not know which skill wrote them or which
     one to run next.
@@ -145,12 +145,12 @@ same table, and a renamed artifact is updated in one place.
 
 | Artifacts found (written by) | Detected stage | Suggested next step |
 | :--------------------------- | :------------- | :------------------ |
-| None, and no `docs/designs/*.md` | Not started | `egm-brainstorm` for a new idea, or `egm-bootstrap` to document an existing codebase |
+| None, and no `docs/designs/*.md` | Not started | `egm-brainstorm` for a new idea, or `c4-bootstrap` to document an existing codebase |
 | `concepts_brief.md` (egm-brainstorm) | Ideation done | `egm-draft`, which reads `concepts_brief.md` as its first input |
 | `design_draft.md` (egm-draft), no matching `docs/designs/<feature>.md` | Draft in progress | Continue `egm-draft` until it writes `docs/designs/<feature>.md` |
-| `docs/designs/<feature>.md`, no review reports | Ready for review | `egm-review docs/designs/<feature>.md` |
-| `zoom_out_report.md`, `comprehension_report.md`, `critic_report.md`, `intermediate_zoom_out_report.md`, `implementation_readiness_report.md`, or `consolidated_review_report.md` (egm-review) | Review started; completion unknown | Ask whether the review of this target finished. If it did, `egm-resolve` on its findings. If not, continue the pending review |
-| `goldfish_review_report.md` (egm-resolve) without `Status: resolved` | Resolution in progress | Return to the resolve step that is waiting for an answer, or run `egm-resolve` again |
+| `docs/designs/<feature>.md`, no review reports | Ready for review | `c4-review docs/designs/<feature>.md` |
+| `zoom_out_report.md`, `comprehension_report.md`, `critic_report.md`, `intermediate_zoom_out_report.md`, `implementation_readiness_report.md`, or `consolidated_review_report.md` (c4-review) | Review started; completion unknown | Ask whether the review of this target finished. If it did, `c4-resolve` on its findings. If not, continue the pending review |
+| `goldfish_review_report.md` (c4-resolve) without `Status: resolved` | Resolution in progress | Return to the resolve step that is waiting for an answer, or run `c4-resolve` again |
 | `goldfish_review_report.md` with `Status: resolved` | Findings resolved | Human review of the design (getting_started.md, step 4); implement only after the checks below pass |
 
 **Before suggesting implementation.** A checked-in design or a resolved report
@@ -205,7 +205,7 @@ The reply is plain English and follows this shape:
 ### Rules: Pending Gates and Read-Only
 
 **Pending gates.** A user may run `/egm-ask` while another skill waits for an
-answer, for example at egm-resolve's resolution gate. That gate accepts free
+answer, for example at c4-resolve's resolution gate. That gate accepts free
 text, including custom instructions. `/egm-ask` does not answer, resume, or
 act on the pending gate. Its read-only rules end with its reply. The user
 answers the pending gate directly.
@@ -286,21 +286,21 @@ when the user asks for it.
 `skills/egm-ask/test_scenarios.yaml` uses the same scenario format as the other
 skills' suites and covers at least:
 
-1.  Empty workspace, no question: suggests `egm-brainstorm` or `egm-bootstrap`.
+1.  Empty workspace, no question: suggests `egm-brainstorm` or `c4-bootstrap`.
 2.  Only `concepts_brief.md` present: suggests `egm-draft`.
 3.  Review reports present for the current target: asks whether that review
-    finished before suggesting `egm-resolve`, and does not bypass a pending gate.
+    finished before suggesting `c4-resolve`, and does not bypass a pending gate.
 4.  `critic_report.md` present and the user says the review did not finish:
-    suggests continuing `egm-review`, not starting it again.
+    suggests continuing `c4-review`, not starting it again.
 5.  `concepts_brief.md` and `docs/designs/x.md` both present: names the latest
     stage and lists both files.
 6.  "Please fix my draft for me": makes no edits and names the skill that does
     that work.
 7.  Unrelated programming question: replies that it only covers EGM.
-8.  Called while an `egm-resolve` gate is pending: answers the question, makes
+8.  Called while an `c4-resolve` gate is pending: answers the question, makes
     no edits, and picks no gate option.
 9.  "Which skill compares my designs with code?": recommends
-    `egm-drift-report` and cites its `SKILL.md`.
+    `c4-drift-report` and cites its `SKILL.md`.
 10. Persona-read failure: cites `docs/claude.md`.
 11. Resolved report and two checked-in designs, and the user names neither:
     asks the user to confirm the design (the report's `**Target:**`, or which

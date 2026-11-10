@@ -1,5 +1,5 @@
 ---
-name: egm-comprehension
+name: c4-comprehension
 description: Independent comprehension reviewer.
 model: inherit
 readonly: true

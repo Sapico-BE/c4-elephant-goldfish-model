@@ -15,17 +15,26 @@
 
 Develop ideas with context and review documents with fresh eyes. EGM is an open-source plugin for AI assistants.
 
-This repository is a fork of the original [Elephant-Goldfish Model](https://github.com/google/elephant-goldfish-model). It adds the `egm-c4` skill, which takes a greenfield project through the [C4 model](https://c4model.com), and it replaces the original brainstorm and draft skills. The plugin is named `c4`, so its commands start with `/c4:` and do not clash with an installed original `egm` plugin.
+This repository is a fork of the original [Elephant-Goldfish Model](https://github.com/google/elephant-goldfish-model). It adds the `c4` skill, which takes a greenfield project through the [C4 model](https://c4model.com), and it replaces the original brainstorm and draft skills. The plugin is named `c4` and appears as **c4 Elephant-Goldfish Model** in plugin lists.
+
+You can install it next to the original `egm` plugin. Every name in this fork uses `c4` instead of `egm`, so the two plugins never share a command, skill, or reviewer name:
+
+| | Original EGM | This fork |
+| --- | --- | --- |
+| Plugin | `egm` | `c4` |
+| Skills | `egm-review`, `egm-resolve`, … | `c4`, `c4-review`, `c4-resolve`, `c4-review-loop`, `c4-bootstrap`, `c4-drift-report` |
+| Reviewers | `egm-design`, `egm-zoom-out`, … | `c4-design`, `c4-zoom-out`, … |
+| Claude Code command | `/egm:egm-review` | `/c4:c4-review` |
 
 **Elephant** holds your project context and drafts the specification. **Goldfish** reviewers examine the draft and referenced source material without the earlier conversation, helping expose unstated assumptions and blind spots. **You** make the architectural trade-offs and approve the specification before implementing.
 
-The built-in C4 design and review workflow targets software specifications. For other documents, choose reviewers and standards with `/egm-review-loop`. Bootstrap and drift reporting apply to software codebases.
+The built-in C4 design and review workflow targets software specifications. For other documents, choose reviewers and standards with `/c4-review-loop`. Bootstrap and drift reporting apply to software codebases.
 
 https://github.com/user-attachments/assets/93c799a2-10a3-4266-af02-eb79dd33a9a2
 
 ## Install
 
-Choose your coding agent. Install the complete plugin so its skills can read the reviewer prompts and document standards. Install from this repository: the published ChatGPT and Codex desktop listing installs the original EGM plugin, which does not include `egm-c4`.
+Choose your coding agent. Install the complete plugin so its skills can read the reviewer prompts and document standards. Install from this repository: the published ChatGPT and Codex desktop listing installs the original EGM plugin, which does not include `c4`.
 
 ### Antigravity CLI
 
@@ -49,33 +58,33 @@ codex plugin marketplace add Sapico-BE/c4-elephant-goldfish-model
 codex plugin add c4@c4
 ```
 
-Start a new session after installation. For **Claude Cowork** and **ChatGPT Work**, see the [setup guide](docs/harnesses.md).
+Start a new session after installation. The plugin shows up as **c4 Elephant-Goldfish Model**. For **Claude Cowork** and **ChatGPT Work**, see the [setup guide](docs/harnesses.md).
 
 ## Try your first design
 
 Open your project in your coding agent and choose a feature that needs design decisions. This example adds webhook delivery: what should happen when a delivery fails, or the same event arrives twice?
 
-The commands below are shown without a prefix. In Antigravity (agy CLI) and Claude Code, add the `/c4:` prefix, for example `/c4:egm-c4`. On agy CLI 1.4.10 an unprefixed name is completed to the prefixed command ([#220](https://github.com/google/elephant-goldfish-model/issues/220)), but 1.4.8 does not ([#196](https://github.com/google/elephant-goldfish-model/issues/196)), so keep the prefix. In Codex, select the corresponding EGM skill from the skill picker. The C4 workflow and review require a session that can create fresh subagents.
+The commands below are shown without a prefix. In Antigravity (agy CLI) and Claude Code, add the `/c4:` prefix, for example `/c4:c4` or `/c4:c4-review`. On agy CLI 1.4.10 an unprefixed name is completed to the prefixed command ([#220](https://github.com/google/elephant-goldfish-model/issues/220)), but 1.4.8 does not ([#196](https://github.com/google/elephant-goldfish-model/issues/196)), so keep the prefix. In Codex, select the corresponding `c4` skill from the skill picker. The C4 workflow and review require a session that can create fresh subagents.
 
-<img src="skills/egm-c4/assets/icon.svg" width="20" height="20" align="top" alt=""> **Design it with C4**
+<img src="skills/c4/assets/icon.svg" width="20" height="20" align="top" alt=""> **Design it with C4**
 
 ```text
-/egm-c4 Add webhook delivery to this project.
+/c4 Add webhook delivery to this project.
 ```
 
 The agent grills you on the problem, then drafts C1 (system context), C2 (containers), and C3 (components) documents under `docs/architecture/`. Fresh reviewers challenge each level, and you approve it before the next. Once the design is approved, the C4 code step writes a build plan and builds the project in test-first slices.
 
-Progress lives in a task ledger, so the work survives across sessions. Run `/c4:egm-c4` with no argument to resume the next ready task. Name a level (`c1`, `c2`, `c3 <container>`, or `c4`) to run it, or to reopen an approved level after confirming which later work becomes stale.
+Progress lives in a task ledger, so the work survives across sessions. Run `/c4:c4` with no argument to resume the next ready task. Name a level (`c1`, `c2`, `c3 <container>`, or `c4`) to run it, or to reopen an approved level after confirming which later work becomes stale.
 
-<img src="skills/egm-review/assets/icon.svg" width="20" height="20" align="top" alt=""> **Review a standalone document**
+<img src="skills/c4-review/assets/icon.svg" width="20" height="20" align="top" alt=""> **Review a standalone document**
 
 ```text
-/egm-review docs/designs/my-feature.md
+/c4-review docs/designs/my-feature.md
 ```
 
-Use `egm-review` for a design document you wrote yourself, outside the C4 flow. Fresh reviewers check the design, its clarity, its fit with the code, and its implementation plan. Choose which findings to address.
+Use `c4-review` for a design document you wrote yourself, outside the C4 flow. Fresh reviewers check the design, its clarity, its fit with the code, and its implementation plan. Choose which findings to address.
 
-When the code exists, run `egm-drift-report` to compare the checked-in documents with the current source.
+When the code exists, run `c4-drift-report` to compare the checked-in documents with the current source.
 
 See the [workflow guide](docs/getting_started.md) for the full process.
 
@@ -99,21 +108,21 @@ You can use each skill when you need it. You do not have to follow the full sequ
 <table>
   <thead><tr><th align="left">Skill</th><th align="left">Use it to…</th></tr></thead>
   <tbody>
-    <tr valign="top"><td width="160" valign="top"><img src="skills/egm-c4/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/egm-c4/SKILL.md">C4</a></td><td>Take a greenfield project through C1, C2, and C3 designs, then build it in test-first slices.</td></tr>
-    <tr valign="top"><td width="160" valign="top"><img src="skills/egm-resolve/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/egm-resolve/SKILL.md">Resolve</a></td><td>Work through review findings and agree on changes.</td></tr>
-    <tr valign="top"><td width="160" valign="top"><img src="skills/egm-bootstrap/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/egm-bootstrap/SKILL.md">Bootstrap</a></td><td>Create or update documentation for an existing codebase.</td></tr>
-    <tr valign="top"><td width="160" valign="top"><img src="skills/egm-review/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/egm-review/SKILL.md">Review</a></td><td>Review a design with fresh agents across five stages.</td></tr>
-    <tr valign="top"><td width="160" valign="top"><img src="skills/egm-review-loop/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/egm-review-loop/SKILL.md">Review&nbsp;loop</a></td><td>Run a configured group of reviewers for a specific review task.</td></tr>
-    <tr valign="top"><td width="160" valign="top"><img src="skills/egm-drift-report/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/egm-drift-report/SKILL.md">Drift&nbsp;report</a></td><td>Compare checked-in documents with the current source code.</td></tr>
+    <tr valign="top"><td width="160" valign="top"><img src="skills/c4/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/c4/SKILL.md">C4</a></td><td>Take a greenfield project through C1, C2, and C3 designs, then build it in test-first slices.</td></tr>
+    <tr valign="top"><td width="160" valign="top"><img src="skills/c4-resolve/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/c4-resolve/SKILL.md">Resolve</a></td><td>Work through review findings and agree on changes.</td></tr>
+    <tr valign="top"><td width="160" valign="top"><img src="skills/c4-bootstrap/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/c4-bootstrap/SKILL.md">Bootstrap</a></td><td>Create or update documentation for an existing codebase.</td></tr>
+    <tr valign="top"><td width="160" valign="top"><img src="skills/c4-review/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/c4-review/SKILL.md">Review</a></td><td>Review a design with fresh agents across five stages.</td></tr>
+    <tr valign="top"><td width="160" valign="top"><img src="skills/c4-review-loop/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/c4-review-loop/SKILL.md">Review&nbsp;loop</a></td><td>Run a configured group of reviewers for a specific review task.</td></tr>
+    <tr valign="top"><td width="160" valign="top"><img src="skills/c4-drift-report/assets/icon.svg" width="20" height="20" alt="" align="top">&nbsp;<a href="skills/c4-drift-report/SKILL.md">Drift&nbsp;report</a></td><td>Compare checked-in documents with the current source code.</td></tr>
   </tbody>
 </table>
 
 ## Learn more
 
 - [Getting started](docs/getting_started.md): the workflow and project layout.
-- [How egm-c4 works](docs/explainers/egm-c4.html): a visual walkthrough of the C4 flow, from grilling to test-first slices. Open the file in a browser; GitHub shows HTML as source.
+- [How c4 works](docs/explainers/c4.html): a visual walkthrough of the C4 flow, from grilling to test-first slices. Open the file in a browser; GitHub shows HTML as source.
 - [Setup](docs/harnesses.md): installation, agent capabilities, and known limits.
-- [C4 design](https://github.com/Sapico-BE/c4-elephant-goldfish-model/blob/main/docs/designs/c4.md): the design behind `egm-c4`, its task ledger, and its rounds.
+- [C4 design](https://github.com/Sapico-BE/c4-elephant-goldfish-model/blob/main/docs/designs/c4.md): the design behind `c4`, its task ledger, and its rounds.
 - [Architecture](https://github.com/Sapico-BE/c4-elephant-goldfish-model/blob/main/docs/designs/architecture.md): how skills and reviewers fit together.
 - [Testing](https://github.com/Sapico-BE/c4-elephant-goldfish-model/blob/main/TESTING.md): checks, execution records, and verification limits.
 - [Original EGM](https://github.com/google/elephant-goldfish-model): the upstream project this fork is based on.

@@ -16,7 +16,7 @@ codex plugin marketplace add Sapico-BE/c4-elephant-goldfish-model
 codex plugin add c4@c4
 ```
 
-Start a fresh session after installation. Select the installed `egm` skill
+Start a fresh session after installation. Select the installed `c4` skill
 from the available skills. Use its discovered absolute `SKILL.md` path;
 do not assume a particular cache directory, version, or checkout location.
 
@@ -41,7 +41,7 @@ path supplied by the skill inventory or installation metadata for those files;
 do not construct cloud resource identifiers for arbitrary supporting paths.
 If no installed path is available, report the missing capability instead of
 guessing a cache location. Read reviewer filenames and frontmatter from the
-bundle: a role such as `egm-design` maps to `agents/design_critic.md`, not
+bundle: a role such as `c4-design` maps to `agents/design_critic.md`, not
 `agents/design.md`. Confirm each resolved path before dispatch.
 
 ## Fresh-context reviewers

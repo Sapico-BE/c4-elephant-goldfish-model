@@ -30,9 +30,9 @@ Stage 2: use Closes #<issue> with pr-ready and link the merged design.
 
 <!-- List relevant checks, commands or evidence links, and results.
 Call out failures and meaningful checks not run, with the reason.
-For Stage 1, record egm-review, egm-resolve, and any remaining findings.
+For Stage 1, record c4-review, c4-resolve, and any remaining findings.
 For harness support, record host/version, installation, and evidence for
-egm-c4 and egm-review.
+c4 and c4-review.
 -->
 
 ## Human Accountability Affirmation

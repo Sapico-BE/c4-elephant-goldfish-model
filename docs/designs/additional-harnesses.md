@@ -87,8 +87,8 @@ Preserve the gates defined in the canonical skills:
 
 - `skills/egm-brainstorm/SKILL.md`: confirm readiness before Goldfish dispatch, then approve the brief before handoff.
 - `skills/egm-draft/SKILL.md`: confirm the intake and obtain approval to draft. Approve each section. Confirm the destination when none was supplied.
-- [Review](../../skills/egm-review/SKILL.md): select the preset when none was supplied. Preserve its required stage checkpoints and pause/resume choices.
-- [Resolve](../../skills/egm-resolve/SKILL.md): present proposed fixes and contested findings before applying edits approved by the user.
+- [Review](../../skills/c4-review/SKILL.md): select the preset when none was supplied. Preserve its required stage checkpoints and pause/resume choices.
+- [Resolve](../../skills/c4-resolve/SKILL.md): present proposed fixes and contested findings before applying edits approved by the user.
 
 Use plain chat when the host has no structured question tool. Wait for the
 human response wherever the selected workflow requires one. A noninteractive
@@ -125,7 +125,7 @@ Do not combine this mapping with V2 `subagent` or `permissions` interfaces.
 
 The Copilot CLI candidate targets version 1.0.82 and the root Agent Plugins 1.0
 `plugin.json`. Profiles live in `com.github.copilot/agents/*.agent.md`.
-Native IDs are `c4:egm` for the entry agent and `c4:<persona-name>` for reviewers.
+Native IDs are `c4:c4` for the entry agent and `c4:<persona-name>` for reviewers.
 Skills remain in `skills/*/SKILL.md`. The native session inventories found all
 eight profiles and seven enabled skills without a model request. Reviewers use
 `tools: [read, search]`, `include-custom-instructions: false`, and
@@ -154,7 +154,7 @@ Propose any required implementation separately after this assessment.
 Reuse the prompts and assertions in the existing skill suites:
 `skills/egm-brainstorm/test_scenarios.yaml`,
 `skills/egm-draft/test_scenarios.yaml`, and
-[review scenarios](../../skills/egm-review/test_scenarios.yaml).
+[review scenarios](../../skills/c4-review/test_scenarios.yaml).
 Use the marker probe and line-count workflow fixture in
 [`tests/integration/test_codex.py`](../../tests/integration/test_codex.py),
 plus the project-instruction and parent-marker probe in

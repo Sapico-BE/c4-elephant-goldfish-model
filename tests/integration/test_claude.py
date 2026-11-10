@@ -116,11 +116,11 @@ def test_native_reviewer_isolation(tmp_path: Path, deny_persona: bool) -> None:
   if deny_persona:
     permissions["deny"] = [f"Read(/{plugin}/agents/zoom_out.md)"]
   settings = {"disableAllHooks": True, "permissions": permissions}
-  prompt = f"""/{name}:egm-review
+  prompt = f"""/{name}:c4-review
 This is a targeted integration probe, not a full review. Read the Claude guide
 referenced by this skill. Do not execute the normal five-stage workflow.
 Parent-only context marker: {markers[1]}. Do not repeat, write, or pass it on.
-Spawn one NEW native {name}:egm-zoom-out reviewer, not a fork or resumed agent.
+Spawn one NEW native {name}:c4-zoom-out reviewer, not a fork or resumed agent.
 Pass exactly: 'Integration probe: first read only {plugin / "agents/zoom_out.md"}.
 If that read is denied, stop and return exactly RESOURCE_UNREADABLE. Do not
 use another tool, path, or source to recover the persona or give a verdict.
@@ -164,7 +164,7 @@ Do not read other plugins or logs, use MCP, or modify files.
     assert str(plugin / relative) in reads
   agents = [call for call in calls.values() if call["name"] == "Agent"]
   assert len(agents) == 1
-  assert agents[0]["input"]["subagent_type"] == f"{name}:egm-zoom-out"
+  assert agents[0]["input"]["subagent_type"] == f"{name}:c4-zoom-out"
   assert not agents[0]["input"].get("resume")
   children = list((traces / session / "subagents").glob("agent-*.jsonl"))
   assert len(children) == 1

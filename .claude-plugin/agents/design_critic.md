@@ -1,5 +1,5 @@
 ---
-name: egm-design
+name: c4-design
 description: Architecture and design critic.
 license: Apache-2.0
 tools: [Read, Grep, Glob]

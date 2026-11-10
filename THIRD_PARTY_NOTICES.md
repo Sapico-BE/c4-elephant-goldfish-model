@@ -4,7 +4,7 @@
 
 Source: https://github.com/mattpocock/skills
 
-Portions of the `egm-c4` skill are adapted from mattpocock/skills, which is
+Portions of the `c4` skill are adapted from mattpocock/skills, which is
 distributed under the MIT License:
 
     MIT License
@@ -31,7 +31,7 @@ distributed under the MIT License:
 
 Adapted files:
 
-- `skills/egm-c4/references/grilling.md`
-- `skills/egm-c4/references/domain-language.md`
-- `skills/egm-c4/references/c3-component.md`
-- `skills/egm-c4/references/c4-code.md`
+- `skills/c4/references/grilling.md`
+- `skills/c4/references/domain-language.md`
+- `skills/c4/references/c3-component.md`
+- `skills/c4/references/c4-code.md`

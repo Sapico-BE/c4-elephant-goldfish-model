@@ -82,8 +82,8 @@ This proposal has a separate scope. Issue #7 and the worked-example issue #58 re
 | Task group | Skills and commands |
 | --- | --- |
 | Develop an idea | Brainstorm (`/egm-brainstorm`), Draft (`/egm-draft`) |
-| Review a document | Review (`/egm-review`), Resolve findings (`/egm-resolve`), Custom review (`/egm-review-loop`) |
-| Work with code | Document a codebase (`/egm-bootstrap`), Check for drift (`/egm-drift-report`) |
+| Review a document | Review (`/c4-review`), Resolve findings (`/c4-resolve`), Custom review (`/c4-review-loop`) |
+| Work with code | Document a codebase (`/c4-bootstrap`), Check for drift (`/c4-drift-report`) |
 
 ### Search and copy documentation
 
@@ -414,5 +414,5 @@ The Zoom Out review finds no major issue. Comprehension findings pass a resoluti
 The readiness review identifies two file classifications. The draft now states both operations explicitly.
 The exact interface dimensions remain in this document to keep the selected visual target measurable.
 
-These bounded rubric reviews do not establish full `egm-review` completion or convergence.
+These bounded rubric reviews do not establish full `c4-review` completion or convergence.
 The full protocol and maintainer approval remain pending.

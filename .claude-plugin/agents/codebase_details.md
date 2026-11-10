@@ -1,5 +1,5 @@
 ---
-name: egm-codebase-details
+name: c4-codebase-details
 description: Technical accuracy and code reuse reviewer.
 license: Apache-2.0
 tools: [Read, Grep, Glob]

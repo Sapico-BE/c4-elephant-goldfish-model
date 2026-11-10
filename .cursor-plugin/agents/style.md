@@ -1,5 +1,5 @@
 ---
-name: egm-style
+name: c4-style
 description: Technical style reviewer.
 model: inherit
 readonly: true

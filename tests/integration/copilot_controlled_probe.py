@@ -72,7 +72,7 @@ def main() -> None:
                 elif not child and tool_results == 0:
                     call = tool_call('call_child', 'task', {
                         'description': 'Controlled child probe',
-                        'agent_type': 'c4:egm-zoom-out',
+                        'agent_type': 'c4:c4-zoom-out',
                         'mode': 'sync',
                         'name': 'controlled-probe',
                         'prompt': CHILD_TAG + ': read the canonical persona and reply UNKNOWN.',
@@ -129,7 +129,7 @@ def main() -> None:
             args = [
                 cli, '--no-auto-update', '--no-custom-instructions',
                 '--disable-builtin-mcps', '--plugin-dir', str(PACKAGE),
-                '--add-dir', str(PACKAGE), '--agent', 'c4:egm',
+                '--add-dir', str(PACKAGE), '--agent', 'c4:c4',
                 '--allow-all-tools', '--output-format', 'json',
                 '-p', f'Parent-only marker: {marker}. Invoke the controlled reviewer.',
             ]
@@ -158,7 +158,7 @@ def main() -> None:
             and event['data'].get('success')
             and event['data'].get('parentToolCallId') == 'call_child'
             and event['data'].get('toolCallId') == 'call_read'
-            and 'name: egm-zoom-out' in event['data'].get('result', {}).get('content', '')
+            and 'name: c4-zoom-out' in event['data'].get('result', {}).get('content', '')
             for event in events
         ), 'No successful child persona read'
         assert not (root / 'copilot-forbidden-write').exists(), 'Reviewer created a file'

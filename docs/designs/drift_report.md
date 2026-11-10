@@ -8,7 +8,7 @@
 
 ## Overview
 
-The **EGM Drift Detection Skill** (`/egm-drift-report`) audits checked-in design
+The **EGM Drift Detection Skill** (`/c4-drift-report`) audits checked-in design
 documents under `docs/designs/` and package `README.md` hierarchies against
 source code to identify and report architectural divergence.
 
@@ -39,12 +39,12 @@ problems:
 sequenceDiagram
     autonumber
     actor Human as Software Engineer / Gardener
-    participant DriftSkill as egm-drift-report Skill
+    participant DriftSkill as c4-drift-report Skill
     participant DesignDir as docs/designs/ Directory
     participant Codebase as Live Codebase
     participant Artifact as Artifact: {YYYY-MM-DD}_DRIFT_REPORT.md
 
-    Human->>DriftSkill: /egm-drift-report [path/to/designs]
+    Human->>DriftSkill: /c4-drift-report [path/to/designs]
     DriftSkill->>DesignDir: List all design specifications
     loop For Each Design Document (Sequential)
         DriftSkill->>DesignDir: Read doc & extract symbols, files, APIs
@@ -101,7 +101,7 @@ To keep documentation living and trustworthy, we recommend (but do not enforce)
 the following:
 
 *   **Weekly Gardener Rotation**: Teams running EGM incorporate
-    `/egm-drift-report` into their weekly build gardener or oncall checklist.
+    `/c4-drift-report` into their weekly build gardener or oncall checklist.
 *   **Two-Way Reconciliation**: Every drift detected is actionable:
     *   *If the code change was intentional*: Update the design document to
         reflect reality.
@@ -114,9 +114,9 @@ The drift detection skill is implemented across the following files:
 
 | File Path | Type | Purpose & Reason for Existence |
 | :-------- | :--- | :----------------------------- |
-| `skills/egm-drift-report/SKILL.md` | Skill Definition | Implements `/egm-drift-report` sequential document scanner, divergence heuristics analyzer, and report generator. |
-| `skills/egm-drift-report/TEST.md` | Test Plan | Points to `pytest tests/unit` and `TESTING.md` (frontmatter and link checks); no drift-specific tests. |
-| `skills/egm-drift-report/test_scenarios.yaml` | Evaluation Scenario | Single `detect_all_drift` scenario with a broad `required_pattern` assertion; `tests/unit/test_scenario_coverage.py` validates structure, but no in-repo runner executes the assertion. |
+| `skills/c4-drift-report/SKILL.md` | Skill Definition | Implements `/c4-drift-report` sequential document scanner, divergence heuristics analyzer, and report generator. |
+| `skills/c4-drift-report/TEST.md` | Test Plan | Points to `pytest tests/unit` and `TESTING.md` (frontmatter and link checks); no drift-specific tests. |
+| `skills/c4-drift-report/test_scenarios.yaml` | Evaluation Scenario | Single `detect_all_drift` scenario with a broad `required_pattern` assertion; `tests/unit/test_scenario_coverage.py` validates structure, but no in-repo runner executes the assertion. |
 
 ## References
 

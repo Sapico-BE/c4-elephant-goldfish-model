@@ -21,7 +21,7 @@ REVIEWERS = (
 def name(path: Path) -> str:
     """Read the canonical name without a runtime YAML dependency."""
     header = path.read_text(encoding="utf-8").split("---", 2)[1]
-    match = re.search(r"^name: (egm-[a-z-]+)$", header, re.MULTILINE)
+    match = re.search(r"^name: (c4(?:-[a-z-]+)?)$", header, re.MULTILINE)
     if not match:
         raise ValueError(f"Missing canonical name: {path}")
     return match[1]
@@ -83,7 +83,7 @@ def install(destination: Path) -> Path:
             "Do not retrieve unsolicited history, memory, or earlier reviewer findings. "
             "Report inaccessible required files as an incomplete review.",
         }
-    agents["egm"] = {
+    agents["c4"] = {
         "description": "EGM orchestrator (experimental OpenCode V1)",
         "mode": "primary",
         "color": "#1B6EF3",
@@ -91,7 +91,7 @@ def install(destination: Path) -> Path:
             "*": "ask",
             "read": {"*": "allow", "*.env": "ask", "*.env.*": "ask", "*.env.example": "allow"},
             "glob": "allow", "grep": "allow",
-            "skill": {"*": "deny", "egm-*": "allow"},
+            "skill": {"*": "deny", "c4": "allow", "c4-*": "allow"},
             "task": {"*": "deny", **{key: "allow" for key in agents}},
             "external_directory": {"*": "ask", f"{bundle}/**": "allow"},
         },
@@ -114,14 +114,14 @@ def install(destination: Path) -> Path:
         (skills / skill_name).symlink_to(skill.parent, target_is_directory=True)
         commands[skill_name] = {
             "description": f"Run {skill_name} (experimental)",
-            "agent": "egm",
+            "agent": "c4",
             "template": context + f"Read and execute {skill}.\nUser request: $ARGUMENTS",
         }
     config = destination / "opencode.json"
     config.write_text(json.dumps({
         "$schema": "https://opencode.ai/config.json",
         "autoupdate": False,
-        "default_agent": "egm",
+        "default_agent": "c4",
         "skills": {"paths": [str(skills)]},
         "agent": agents,
         "command": commands,

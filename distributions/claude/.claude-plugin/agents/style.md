@@ -1,5 +1,5 @@
 ---
-name: egm-style
+name: c4-style
 description: Technical writing reviewer.
 license: Apache-2.0
 tools: [Read, Grep, Glob]

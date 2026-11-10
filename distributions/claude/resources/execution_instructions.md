@@ -36,7 +36,7 @@
     resolution. You are strictly forbidden from planning or executing any
     file-writing/editing tool in the same turn as you discover a contradiction.
 
-**egm-c4 exceptions**: These apply only while the `egm-c4` skill runs and
+**c4 exceptions**: These apply only while the `c4` skill runs and
 override the rules above where they conflict.
 
 *   **Code writing**: Allowed only for implement, fix and merge rounds in the C4
@@ -51,7 +51,7 @@ override the rules above where they conflict.
     questions with recommended answers. Every other gate still asks one
     question.
 *   **Orchestrator writes**: The main session writes only the files listed
-    in the `egm-c4` SKILL.md: the ledger `docs/architecture/c4-tasks.md`; the
+    in the `c4` SKILL.md: the ledger `docs/architecture/c4-tasks.md`; the
     append-only answers files in `docs/architecture/decisions/`;
     `**Status:**` lines; replacement text the user approved at a resolve
     gate, applied verbatim; the user's gate decisions recorded verbatim in the

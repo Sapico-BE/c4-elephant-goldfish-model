@@ -1,5 +1,5 @@
 ---
-name: egm-bootstrap-orchestrator
+name: c4-bootstrap-orchestrator
 description: Orchestrates directory README documentation, partitions subtrees, and coordinates worker subagents.
 license: Apache-2.0
 ---
