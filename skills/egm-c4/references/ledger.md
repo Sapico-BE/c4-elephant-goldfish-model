@@ -52,6 +52,16 @@ Decision files are `docs/architecture/decisions/<stem>.tree.md` and
 The first `todo` or `stale` task, in ID order, whose dependencies are all
 `done`. An `in-progress` task left by an interrupted session is resumed first.
 
+**Slice batches.** `C4:slice-NN` tasks and the `C4` `drift` task also follow
+batches (`c4-code.md`). When a batch starts, the orchestrator adds `batch Bn`
+to the Notes of each member slice's `implement` task (`B1` is slice 01 alone).
+When the user approves the batch gate, it adds `Bn approved` to the same
+Notes. A batch is open from its start until it is approved, and at most one is
+open. While a batch is open, only tasks of its member slices are ready,
+including their `fix` chains. An `implement` with no batch label is ready only
+when no batch is open; the next batch then takes every such ready `implement`.
+`drift` is ready only when no batch is open.
+
 ## Status mapping
 
 Document Status follows the scope's highest-ID `approve` task; `approve` in
@@ -96,8 +106,10 @@ that scope's pending `readiness`, `review` and `approve` tasks (`todo`,
 `stale`, or the `approve` the user just rejected) to `done` with Notes
 `superseded by Txx`, naming the new task of the same type. When a `fix`
 chain is added for a slice, supersede that slice's pending `merge`, `verify`
-and `code-review` tasks the same way. Point any task that
-depended on a superseded task at its replacement. Because the Status mapping
+and `code-review` tasks the same way, and point every task that is not `done`
+and depends on the slice's latest `verify` or `code-review` (done or not:
+later slices' `implement`, the `drift` task) at the chain's new `code-review`.
+Point any task that depended on a superseded task at its replacement. Because the Status mapping
 reads the highest-ID `approve` task, a superseded `approve` never sets a
 document to `Approved`.
 

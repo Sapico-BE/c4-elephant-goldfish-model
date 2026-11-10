@@ -24,6 +24,9 @@ is empty:
 *   Code standards: formatter, linter and the conventions a reviewer checks.
 *   Integration branch: the branch slices merge into (default: the branch that
     is checked out when the plan is approved).
+*   Worktree root: where slice worktrees are created (suggest a sibling folder
+    of the project, which lies outside it), or `none` to run slices on slice
+    branches in the project checkout.
 *   Slice order: which CUJ the walking skeleton carries, and which CUJs follow.
 *   Slice granularity: too coarse or too fine; which tickets should be merged
     or split.
@@ -56,7 +59,10 @@ Whole project: `<command>`
 
 ## Code Standards
 
-## Integration Branch
+## Branches and Worktrees
+
+Integration branch: `<branch>`
+Worktree root: `<path>` or `none`
 
 ## Slices
 
@@ -137,6 +143,8 @@ user's point of view.
 *   Slice 01 is the walking skeleton and its Allowed Paths include the
     scaffolding.
 *   The Target Scope & File Boundary equals the union of all Allowed Paths.
+*   Branches and Worktrees names the integration branch and a worktree root
+    (or `none`).
 *   No open question blocks slice 01.
 
 ## Slice loop
@@ -149,35 +157,51 @@ depending on the one before. Each `implement` depends on the build plan's
 `approve` and on the last `code-review` of every ticket in Waits On. Then add
 one `C4` `drift` task that depends on every slice's last `code-review`.
 
-**Batches.** Slice 01 runs alone as the first batch. Each later batch is every
-slice whose `implement` is ready when the batch starts. Within a batch, run the
-tasks in ledger order, one round at a time. Each slice goes through:
+**Worktree root.** A worktree root outside the project needs the user's
+consent: at the build plan's `approve` gate, name the worktree root and say
+that slice rounds will write there; approval confirms it. No worktree exists before that approval. With worktree root
+`none`, or if the user declines worktrees, each round works on its slice branch
+in the project checkout and returns the checkout to the integration branch
+before it finishes; slices then run strictly one after another.
+
+**Batches.** Slice 01 runs alone as batch `B1`. Each later batch is every
+slice whose `implement` is ready, and in no batch, when the batch starts. The
+orchestrator records batch membership and gate approvals in the ledger, and
+next-ready follows them, by the batch rule in `ledger.md`, so batches survive a
+resumed session. Within a batch, run the tasks in ledger order, one round at a
+time. Each slice goes through:
 
 1.  **Implement.** A fresh implementer subagent works red-green at the
-    ticket's Test Seams on branch `c4/NN-<slice>`, in its own git worktree in a
-    sibling folder outside the project, created from the integration branch.
-    It commits its work on that branch.
+    ticket's Test Seams on branch `c4/NN-<slice>`, created from the integration
+    branch, in a worktree under the worktree root (or in the project checkout
+    when it is `none`). It commits its work on that branch.
 2.  **Path check.** The implement round's declared outputs are the ticket's
     Allowed Paths (see Path checks).
 3.  **Merge.** A fresh merge subagent merges the slice branch into the
-    integration branch, resolving conflicts only within the batch's Allowed
-    Paths, and removes the slice worktree. The branch stays.
+    integration branch with `--no-commit`, checks the staged paths against the
+    batch's Allowed Paths, and commits only when every path is inside them
+    (otherwise it aborts the merge and returns `needs_user`). It resolves
+    conflicts only within those paths and removes the slice worktree; the
+    branch stays.
 4.  **Verify.** A fresh verify subagent runs the plan's Build and Test Commands
     on the integration branch and returns `PASS` or `FAIL: <summary>`.
 5.  **Code review.** A fresh read-only subagent reviews the slice diff and
     returns `APPROVED` or `BLOCKING: <findings>`.
 
-A `FAIL`, a `BLOCKING` result or a path-check violation adds a `fix` chain by
-the ledger's adding and superseding rules. A `fix` round works on the slice
-branch in a new worktree; the chain's `merge`, `verify` and `code-review` then
-run again.
+A `FAIL`, a `BLOCKING` result or a path-check violation on the slice branch
+adds a `fix` chain by the ledger's adding and superseding rules; tasks that
+waited on the slice's old `code-review` (later slices' `implement`, the
+`drift` task) then wait on the chain's new one. A `fix` round works on the
+slice branch the way the implement round did; the chain's `merge`, `verify`
+and `code-review` then run again.
 
-**Batch gate.** When every slice in the batch has its last `code-review` done,
-show each slice's verify and code-review summaries and ask whether to start the
-next batch. Append a requested change to
+**Batch gate.** When every slice in the open batch has its last `code-review`
+done, show each slice's verify and code-review summaries and ask whether to
+start the next batch. On approval, record `Bn approved` as the ledger's batch
+rule says. Otherwise append the requested change to
 `docs/architecture/decisions/c4-plan.answers.md`, then add a `fix` chain for
 the slice that names the entry, or a build-plan `revise` when a ticket itself
-must change.
+must change; the batch stays open and the gate is asked again.
 
 ## Path checks
 
@@ -195,10 +219,21 @@ paths:
 
 Compare them with the allowed set: the ticket's Allowed Paths for `implement`
 and `fix`, the union of the batch's Allowed Paths for `merge`. A path outside
-it is a violation: show it to the user and add a `fix` chain whose round
-reverts the out-of-bounds changes. The slice does not merge until a path check
-passes. To keep such a change instead, the ticket's Allowed Paths must first
-change through a build-plan `revise`.
+it is a violation; show it to the user. What happens next depends on where the
+violation is:
+
+*   **On the slice branch or in the slice worktree:** add a `fix` chain whose
+    round reverts the out-of-bounds changes. The slice does not merge until a
+    path check passes. To keep such a change instead, the ticket's Allowed
+    Paths must first change through a build-plan `revise`.
+*   **Elsewhere** (changes left in the project checkout outside the slice
+    branch, or commits an `implement` or `fix` round made on the integration
+    branch): a `fix` round cannot reach them. Ask the SKILL.md keep-or-revert question and mark the task `blocked`
+    until the user has resolved every such path.
+
+A merge round checks its staged paths before committing, so an out-of-bounds
+merge is never committed; a merge commit that still shows one is handled as
+"elsewhere".
 
 ## Implement rounds: red-green
 

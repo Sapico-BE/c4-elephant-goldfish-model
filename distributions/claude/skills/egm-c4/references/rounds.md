@@ -144,8 +144,11 @@ replacement text verbatim.
 `docs/architecture/slices/NN-<slice>.md`, `docs/architecture/c4-build-plan.md`,
 the C3 documents the ticket touches, the code standards the build plan names.
 
-**Instructions:** Work red-green at the ticket's test seams on its own branch or
-worktree. Write only inside the ticket's allowed paths. Slice 01 is the walking
+**Instructions:** Work red-green at the ticket's test seams on branch
+`c4/NN-<slice>`, in a worktree under the build plan's worktree root, or in the
+project checkout when the root is `none` (then return the checkout to the
+integration branch before you finish). Commit your work on that branch. Write
+only inside the ticket's allowed paths. Slice 01 is the walking
 skeleton and may write the scaffolding its ticket lists.
 
 **Output files:** files inside the ticket's allowed paths.
@@ -160,9 +163,9 @@ contradiction.
 verification summary, the path-check violation, or the batch-gate change
 recorded in `c4-plan.answers.md`, plus the files they name.
 
-**Instructions:** Work on the slice branch in a new worktree. Fix only the
-listed findings, or revert the out-of-bounds changes. Stay inside the ticket's
-allowed paths.
+**Instructions:** Work on the slice branch as the implement round does. Fix
+only the listed findings, or revert the out-of-bounds changes. Stay inside
+the ticket's allowed paths.
 
 **Output files:** files inside the ticket's allowed paths.
 
@@ -174,9 +177,11 @@ paths or reveals a contradiction with a C3 interface.
 **Inputs:** the slice branch, the integration branch, the allowed paths of
 every ticket in the batch.
 
-**Instructions:** Merge the slice branch into the integration branch. Resolve
-conflicts only within the batch's allowed paths. Remove the slice worktree and
-keep the branch.
+**Instructions:** Merge the slice branch into the integration branch with
+`--no-commit`. Resolve conflicts only within the batch's allowed paths. Check
+the staged paths against those allowed paths; commit only if all are inside,
+otherwise abort the merge and return `needs_user`. Remove the slice worktree
+and keep the branch.
 
 **Output files:** files inside the batch's allowed paths.
 

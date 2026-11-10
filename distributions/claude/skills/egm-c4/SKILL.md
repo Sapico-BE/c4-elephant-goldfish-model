@@ -258,8 +258,8 @@ The loop is the same at every level:
 `Approved`, add C3 tasks for each container the C2 table marks `C3: required`
 (containers marked `C3: skip (<reason>)` get none), then the `C4` grill, draft,
 readiness, review and approve tasks for the build plan. C3 for a container
-runs only when C1 and C2 are `Approved`. The `C4` grill depends on every C3 `approve` task (on C2's when no container needs
-C3). Reconcile the C3 tasks each time C2 is approved again, as described in
+runs only when C1 and C2 are `Approved`. The `C4` grill depends on every C3
+`approve` task (on C2's when no container needs C3). Reconcile the C3 tasks each time C2 is approved again, as described in
 `references/ledger.md`, and keep the `C4` grill's dependencies in step.
 
 ## C4 code step
@@ -270,7 +270,9 @@ path checks, batch gates and the finish.
 1.  **Build plan.** Scope `C4` runs the Grilling loop and Level loop with the
     Build plan rows above. Its draft writes documents only:
     `docs/architecture/c4-build-plan.md` and tickets in
-    `docs/architecture/slices/`.
+    `docs/architecture/slices/`. At its `approve` gate, name the plan's
+    worktree root, which lies outside the project; approval confirms that
+    slice rounds write there.
 2.  **Slices.** No implement, fix or merge round runs before build-plan
     approval. On approval, add the slice and `drift` tasks. Slice 01, the
     walking skeleton, runs alone; later ready slices run in batches. Each
@@ -278,11 +280,13 @@ path checks, batch gates and the finish.
     fresh subagents.
 3.  **Path checks.** After each implement, fix and merge round, compare the
     changed paths with the ticket's Allowed Paths (the batch's for a merge).
-    Show a violation and add a `fix` chain that reverts it.
+    Show a violation; `references/c4-code.md` says whether it adds a `fix`
+    chain or blocks the task for your keep-or-revert question.
 4.  **Results.** A `FAIL` verify or `BLOCKING` code review proposes a `fix`;
     add the `fix` chain after the user confirms.
 5.  **Batch gate.** After each batch, show its results and ask whether to
-    start the next batch.
+    start the next batch. Record batch membership and approval in the ledger
+    by its batch rule (`references/ledger.md`), which next-ready follows.
 6.  **Finish.** When every slice is done, dispatch the `drift` round (it reads
     `egm-drift-report`'s SKILL.md). After the user settles each finding, set
     each fully implemented document to `Implemented`.
