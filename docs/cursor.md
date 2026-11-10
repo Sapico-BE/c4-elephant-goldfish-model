@@ -48,7 +48,7 @@ Do not disable an organization policy or overwrite an existing package.
 
    ```sh
    git diff --exit-code HEAD
-   egm_candidate="$HOME/.cursor/plugins/local/egm"
+   egm_candidate="$HOME/.cursor/plugins/local/c4"
    mkdir -p "$(dirname "$egm_candidate")"
    mkdir "$egm_candidate" && {
      cp -R .cursor-plugin skills agents resources docs LICENSE "$egm_candidate/" &&

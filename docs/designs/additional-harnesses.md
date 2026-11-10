@@ -125,7 +125,7 @@ Do not combine this mapping with V2 `subagent` or `permissions` interfaces.
 
 The Copilot CLI candidate targets version 1.0.82 and the root Agent Plugins 1.0
 `plugin.json`. Profiles live in `com.github.copilot/agents/*.agent.md`.
-Native IDs are `egm:egm` for the entry agent and `egm:<persona-name>` for reviewers.
+Native IDs are `c4:egm` for the entry agent and `c4:<persona-name>` for reviewers.
 Skills remain in `skills/*/SKILL.md`. The native session inventories found all
 eight profiles and seven enabled skills without a model request. Reviewers use
 `tools: [read, search]`, `include-custom-instructions: false`, and

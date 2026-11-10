@@ -12,8 +12,8 @@ For the desktop app, install the [published EGM plugin](https://chatgpt.com/plug
 For Codex CLI, install the whole plugin, including its personas and standards:
 
 ```sh
-codex plugin marketplace add google/elephant-goldfish-model
-codex plugin add egm@egm
+codex plugin marketplace add Sapico-BE/c4-elephant-goldfish-model
+codex plugin add c4@c4
 ```
 
 Start a fresh session after installation. Select the installed `egm` skill
@@ -123,8 +123,8 @@ Keep `.claude-plugin/` outside the OpenAI archive: its agent adapters belong
 to the Claude Code integration. Public directory plugins cannot include hooks.
 
 Enterprise, Business, and Edu workspaces can import the plugin via Admin > Plugins > Add > Import marketplace.
-Set the repository URL to `https://github.com/google/elephant-goldfish-model` and marketplace path to `.agents/plugins`.
-Skills are accessible via `@egm` for direct interaction.
+Set the repository URL to `https://github.com/Sapico-BE/c4-elephant-goldfish-model` and marketplace path to `.agents/plugins`.
+Skills are accessible via `@c4` for direct interaction.
 Check the native tools in the current chat before starting a Goldfish review.
 Some ChatGPT Work sessions expose native `spawn_agent` with `fork_turns: "none"`.
 Use the fresh-context instructions above when those tools are available. If

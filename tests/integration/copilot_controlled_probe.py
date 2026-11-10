@@ -72,7 +72,7 @@ def main() -> None:
                 elif not child and tool_results == 0:
                     call = tool_call('call_child', 'task', {
                         'description': 'Controlled child probe',
-                        'agent_type': 'egm:egm-zoom-out',
+                        'agent_type': 'c4:egm-zoom-out',
                         'mode': 'sync',
                         'name': 'controlled-probe',
                         'prompt': CHILD_TAG + ': read the canonical persona and reply UNKNOWN.',
@@ -129,7 +129,7 @@ def main() -> None:
             args = [
                 cli, '--no-auto-update', '--no-custom-instructions',
                 '--disable-builtin-mcps', '--plugin-dir', str(PACKAGE),
-                '--add-dir', str(PACKAGE), '--agent', 'egm:egm',
+                '--add-dir', str(PACKAGE), '--agent', 'c4:egm',
                 '--allow-all-tools', '--output-format', 'json',
                 '-p', f'Parent-only marker: {marker}. Invoke the controlled reviewer.',
             ]

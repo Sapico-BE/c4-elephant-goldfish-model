@@ -15,6 +15,8 @@
 
 Develop ideas with context and review documents with fresh eyes. EGM is an open-source plugin for AI assistants.
 
+This repository is a fork of the original [Elephant-Goldfish Model](https://github.com/google/elephant-goldfish-model). It adds the `egm-c4` skill, which takes a greenfield project through the [C4 model](https://c4model.com), and it replaces the original brainstorm and draft skills. The plugin is named `c4`, so its commands start with `/c4:` and do not clash with an installed original `egm` plugin.
+
 **Elephant** holds your project context and drafts the specification. **Goldfish** reviewers examine the draft and referenced source material without the earlier conversation, helping expose unstated assumptions and blind spots. **You** make the architectural trade-offs and approve the specification before implementing.
 
 The built-in C4 design and review workflow targets software specifications. For other documents, choose reviewers and standards with `/egm-review-loop`. Bootstrap and drift reporting apply to software codebases.
@@ -23,16 +25,12 @@ https://github.com/user-attachments/assets/93c799a2-10a3-4266-af02-eb79dd33a9a2
 
 ## Install
 
-Choose your coding agent. Install the complete plugin so its skills can read the reviewer prompts and document standards.
-
-### ChatGPT and Codex desktop
-
-Open the [published EGM plugin](https://chatgpt.com/plugins/plugins_6aeb90f47ec88191a3c107e01d3eb357) in the desktop app and install it. This listing is desktop-only. For Codex CLI, use the commands below.
+Choose your coding agent. Install the complete plugin so its skills can read the reviewer prompts and document standards. Install from this repository: the published ChatGPT and Codex desktop listing installs the original EGM plugin, which does not include `egm-c4`.
 
 ### Antigravity CLI
 
 ```sh
-agy plugin install https://github.com/google/elephant-goldfish-model
+agy plugin install https://github.com/Sapico-BE/c4-elephant-goldfish-model
 ```
 
 For the **Antigravity App** and **Antigravity for IDEs** (Visual Studio Code extension), run `/plugin` or see the [installation instructions](docs/harnesses.md#antigravity-app-and-antigravity-for-ides).
@@ -40,15 +38,15 @@ For the **Antigravity App** and **Antigravity for IDEs** (Visual Studio Code ext
 ### Claude Code
 
 ```sh
-claude plugin marketplace add google/elephant-goldfish-model
-claude plugin install egm@egm
+claude plugin marketplace add Sapico-BE/c4-elephant-goldfish-model
+claude plugin install c4@c4
 ```
 
 ### Codex CLI
 
 ```sh
-codex plugin marketplace add google/elephant-goldfish-model
-codex plugin add egm@egm
+codex plugin marketplace add Sapico-BE/c4-elephant-goldfish-model
+codex plugin add c4@c4
 ```
 
 Start a new session after installation. For **Claude Cowork** and **ChatGPT Work**, see the [setup guide](docs/harnesses.md).
@@ -57,7 +55,7 @@ Start a new session after installation. For **Claude Cowork** and **ChatGPT Work
 
 Open your project in your coding agent and choose a feature that needs design decisions. This example adds webhook delivery: what should happen when a delivery fails, or the same event arrives twice?
 
-The commands below are shown without a prefix. In Antigravity (agy CLI) and Claude Code, add the `/egm:` prefix, for example `/egm:egm-c4`. On agy CLI 1.4.10 an unprefixed name is completed to the prefixed command ([#220](https://github.com/google/elephant-goldfish-model/issues/220)), but 1.4.8 does not ([#196](https://github.com/google/elephant-goldfish-model/issues/196)), so keep the prefix. In Codex, select the corresponding EGM skill from the skill picker. The C4 workflow and review require a session that can create fresh subagents.
+The commands below are shown without a prefix. In Antigravity (agy CLI) and Claude Code, add the `/c4:` prefix, for example `/c4:egm-c4`. On agy CLI 1.4.10 an unprefixed name is completed to the prefixed command ([#220](https://github.com/google/elephant-goldfish-model/issues/220)), but 1.4.8 does not ([#196](https://github.com/google/elephant-goldfish-model/issues/196)), so keep the prefix. In Codex, select the corresponding EGM skill from the skill picker. The C4 workflow and review require a session that can create fresh subagents.
 
 <img src="skills/egm-c4/assets/icon.svg" width="20" height="20" align="top" alt=""> **Design it with C4**
 
@@ -65,7 +63,9 @@ The commands below are shown without a prefix. In Antigravity (agy CLI) and Clau
 /egm-c4 Add webhook delivery to this project.
 ```
 
-The agent grills you on the problem, then drafts C1 (system context), C2 (containers), and C3 (components) documents under `docs/architecture/`. Fresh reviewers challenge each level, and you approve it before the next. Once the design is approved, the agent builds the project in test-first slices.
+The agent grills you on the problem, then drafts C1 (system context), C2 (containers), and C3 (components) documents under `docs/architecture/`. Fresh reviewers challenge each level, and you approve it before the next. Once the design is approved, the C4 code step writes a build plan and builds the project in test-first slices.
+
+Progress lives in a task ledger, so the work survives across sessions. Run `/c4:egm-c4` with no argument to resume the next ready task. Name a level (`c1`, `c2`, `c3 <container>`, or `c4`) to run it, or to reopen an approved level after confirming which later work becomes stale.
 
 <img src="skills/egm-review/assets/icon.svg" width="20" height="20" align="top" alt=""> **Review a standalone document**
 
@@ -111,17 +111,20 @@ You can use each skill when you need it. You do not have to follow the full sequ
 ## Learn more
 
 - [Getting started](docs/getting_started.md): the workflow and project layout.
+- [How egm-c4 works](docs/explainers/egm-c4.html): a visual walkthrough of the C4 flow, from grilling to test-first slices. Open the file in a browser; GitHub shows HTML as source.
 - [Setup](docs/harnesses.md): installation, agent capabilities, and known limits.
-- [Architecture](https://github.com/google/elephant-goldfish-model/blob/main/docs/designs/architecture.md): how skills and reviewers fit together.
-- [Testing](https://github.com/google/elephant-goldfish-model/blob/main/TESTING.md): checks, execution records, and verification limits.
+- [C4 design](https://github.com/Sapico-BE/c4-elephant-goldfish-model/blob/main/docs/designs/c4.md): the design behind `egm-c4`, its task ledger, and its rounds.
+- [Architecture](https://github.com/Sapico-BE/c4-elephant-goldfish-model/blob/main/docs/designs/architecture.md): how skills and reviewers fit together.
+- [Testing](https://github.com/Sapico-BE/c4-elephant-goldfish-model/blob/main/TESTING.md): checks, execution records, and verification limits.
+- [Original EGM](https://github.com/google/elephant-goldfish-model): the upstream project this fork is based on.
 - [Dave Rensin’s original essay](https://medium.com/@drensin/elephants-goldfish-and-the-new-golden-age-of-software-engineering-c33641a48874): the ideas behind EGM.
 
 ## Contribute
 
-See the [accessibility statement](https://github.com/google/elephant-goldfish-model/blob/main/ACCESSIBILITY.md)
+See the [accessibility statement](https://github.com/Sapico-BE/c4-elephant-goldfish-model/blob/main/ACCESSIBILITY.md)
 for accessibility goals, known limits, and how to report barriers.
 
-Read [contributing](https://github.com/google/elephant-goldfish-model/blob/main/CONTRIBUTING.md) for PRs, [issues](https://github.com/google/elephant-goldfish-model/issues) for bugs, and [discussions](https://github.com/google/elephant-goldfish-model/discussions) for questions.
+Read [contributing](https://github.com/Sapico-BE/c4-elephant-goldfish-model/blob/main/CONTRIBUTING.md) for PRs. Issues and discussions for the shared skills and reviewers live in the original project: [issues](https://github.com/google/elephant-goldfish-model/issues) for bugs, and [discussions](https://github.com/google/elephant-goldfish-model/discussions) for questions.
 
 ## License
 

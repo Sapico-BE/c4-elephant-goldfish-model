@@ -15,7 +15,7 @@ same root. Keep hyphens in skill directory names; for example, read
 Follow the shared skill's workflow and human approval gates. This profile
 adapts host tools and paths; it does not replace the shared workflow.
 Use the eight registered EGM reviewer profiles for direct native delegation.
-Prefix canonical persona names with `egm:` when selecting native profiles.
-For example, `egm-design` maps to `egm:egm-design`.
+Prefix canonical persona names with `c4:` when selecting native profiles.
+For example, `egm-design` maps to `c4:egm-design`.
 Keep synthesis and artifact writes in this main session.
 Never substitute an inline review for a missing native reviewer.

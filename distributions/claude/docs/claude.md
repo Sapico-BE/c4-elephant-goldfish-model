@@ -11,12 +11,12 @@ must not be treated as verified Goldfish isolation environments.
 ## Invocation and resources
 
 ```sh
-claude plugin marketplace add google/elephant-goldfish-model
-claude plugin install egm@egm
+claude plugin marketplace add Sapico-BE/c4-elephant-goldfish-model
+claude plugin install c4@c4
 ```
 
-Enable the installed plugin with `claude plugin enable egm@egm`.
-Start messages with `/egm:egm-c4` or `/egm:egm-review`.
+Enable the installed plugin with `claude plugin enable c4@c4`.
+Start messages with `/c4:egm-c4` or `/c4:egm-review`.
 Skills retain `disable-model-invocation: true`: their absence from automatic
 skill discovery is expected. The `Skill` tool refuses these skills, so to run
 another EGM skill (for example `egm-review-loop` or `egm-resolve` during review
@@ -39,7 +39,7 @@ instructions file resolves outside the working directory, after following
 symbolic links, ask the user to confirm it before creating the folder or
 writing there. If they decline or no one can confirm, use the working directory
 and say why. Create the folder if it does not exist.
-In Claude Code, `egm:egm-synthesizer` may spawn reviewers (nesting is allowed
+In Claude Code, `c4:egm-synthesizer` may spawn reviewers (nesting is allowed
 up to 3 levels by default), or the main context may dispatch reviewers directly.
 In Claude Cowork, subagents cannot spawn further subagents, so dispatch
 reviewers directly from the main context instead of launching a synthesizer
@@ -83,22 +83,22 @@ Read(//absolute/plugin/path/skills/**)
 On Windows, write the absolute path either with a leading `//` and a lower-case
 drive letter without the colon, or as a native path:
 
-- `Read(//c/Users/<you>/.claude/plugins/cache/egm/egm/<version>/agents/**)`
-- `Read(C:\Users\<you>\.claude\plugins\cache\egm\egm\<version>\agents\**)`
+- `Read(//c/Users/<you>/.claude/plugins/cache/c4/c4/<version>/agents/**)`
+- `Read(C:\Users\<you>\.claude\plugins\cache\c4\c4\<version>\agents\**)`
 
 The form `//C:/Users/...` does not match, and the reads are still denied.
 
 A marketplace install lives in a version folder:
-`.../plugins/cache/<marketplace>/egm/<version>/`. A rule that names one version
+`.../plugins/cache/<marketplace>/c4/<version>/`. A rule that names one version
 stops matching after an update. Replacing only the version segment with `*` keeps
 matching across versions and still covers only this plugin's folders. For example,
 on Windows:
 
 ```text
-Read(//c/Users/<you>/.claude/plugins/cache/egm/egm/*/agents/**)
-Read(//c/Users/<you>/.claude/plugins/cache/egm/egm/*/docs/**)
-Read(//c/Users/<you>/.claude/plugins/cache/egm/egm/*/resources/**)
-Read(//c/Users/<you>/.claude/plugins/cache/egm/egm/*/skills/**)
+Read(//c/Users/<you>/.claude/plugins/cache/c4/c4/*/agents/**)
+Read(//c/Users/<you>/.claude/plugins/cache/c4/c4/*/docs/**)
+Read(//c/Users/<you>/.claude/plugins/cache/c4/c4/*/resources/**)
+Read(//c/Users/<you>/.claude/plugins/cache/c4/c4/*/skills/**)
 ```
 
 Replace the example path; do not copy a guessed cache location. These read rules
@@ -132,7 +132,7 @@ names. Keep the explicit adapter list rather than removing it to silence this no
 ## Reviewer isolation
 
 Spawn a new native Agent of the plugin's registered reviewer type for each
-independent review, for example `egm:egm-zoom-out`. Do not fork the conversation
+independent review, for example `c4:egm-zoom-out`. Do not fork the conversation
 or resume a previous reviewer. Provide only the task, target, persona/standard
 paths, and explicitly supplied Goldfish context; do not copy parent deliberation.
 
@@ -148,7 +148,7 @@ A plugin subagent's `tools` field cannot restrict Write to specific paths, and
 Claude Code ignores `hooks` and `permissionMode` in plugin subagents. The
 adapter's rule to write only the requested report or brief is therefore an
 instruction, not a host-enforced limit. Writes still follow the session's
-permission rules. When you spawn `egm:egm-synthesizer`, name the artifact
+permission rules. When you spawn `c4:egm-synthesizer`, name the artifact
 directory you are using in its task. Otherwise it never sees a line from the
 user's prompt, and it drops a folder outside the working directory that only
 agent instructions name. It has no shell, so it checks that path as written and
@@ -175,7 +175,7 @@ to avoid confusion with an already installed `egm` plugin. Validate it with
 ## Claude Cowork
 
 Claude Cowork uses the same `.claude-plugin` package as Claude Code.
-Install the plugin from claude.ai/plugins or the Cowork plugin panel via marketplace `google/elephant-goldfish-model`.
+Install the plugin from claude.ai/plugins or the Cowork plugin panel via marketplace `Sapico-BE/c4-elephant-goldfish-model`.
 For a candidate package, Customize > Plugins > Add plugin > Upload plugin
 accepts a ZIP containing the Claude manifest, adapters, and shared runtime files.
 Install it and choose **Try in chat**. Record whether the resulting task runs

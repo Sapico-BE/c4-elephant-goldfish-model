@@ -10,7 +10,7 @@ color: blue
 Read `${CLAUDE_PLUGIN_ROOT}/agents/synthesizer.md` before acting.
 Follow that canonical persona's instructions. This adapter defines your Claude
 tool restrictions: spawn reviewers with the Agent tool using the plugin's
-registered reviewer types (for example `egm:egm-zoom-out`), read files, and
+registered reviewer types (for example `c4:egm-zoom-out`), read files, and
 write the consolidated report. Write only the report or brief your task asks
 for, in the working directory or the folder an `EGM artifact directory:` line
 in your task or agent instructions names. If that line comes from agent
